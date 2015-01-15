@@ -23,7 +23,11 @@ public class Main {
         // create a resource config that scans for JAX-RS resources and providers
         // in com.example package
         final ResourceConfig rc = new ResourceConfig()
-        .packages("com.example", "jsonObjects")
+        .packages("com.example", 
+        		"jsonObjects",
+        		"jooq.generated",
+        		"jooq.generated.tables",
+        		"code")
         ;
 
         // create and start a new instance of grizzly http server
