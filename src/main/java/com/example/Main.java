@@ -27,8 +27,7 @@ public class Main {
         		"jsonObjects",
         		"jooq.generated",
         		"jooq.generated.tables",
-        		"code")
-        ;
+        		"code");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
