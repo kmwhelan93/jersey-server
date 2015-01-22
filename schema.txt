@@ -7,14 +7,19 @@ CREATE TABLE users (
 )ENGINE=InnoDB;
 
 CREATE TABLE bases (
-  base_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  username varchar(255),
-  prod_rate INT NOT NULL,
-  num_units INT NOT NULL,
+  username varchar(255) NOT NULL,
+  base_id INT NOT NULL AUTO_INCREMENT,
+  world_x INT NOT NULL,
+  world_y INT NOT NULL,
+  local_x INT NOT NULL,
+  local_y INT NOT NULL,
+  prod_rate INT,
+  num_units INT,
   is_home INT(1),
+  PRIMARY KEY (username, base_id),
   FOREIGN KEY(username) REFERENCES users(username)
 
-)ENGINE=InnoDB;
+)ENGINE=MyIsam;
 
 CREATE TABLE portals (
   portal_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

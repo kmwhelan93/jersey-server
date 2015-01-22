@@ -18,3 +18,15 @@ For production, database is located at stardock.cs.virginia.edu/cs4720cem6at
 For tests, database is located at localhost:3306/cs4720cem6at... so you need to run wamp or something
 	For each test, database is cleared and rebuilt every time
 NOTE: schema must be exactly the same on test and production server
+
+
+JOOQ
+You can generate the jooq files by utilizing the jooq.xml file.
+Note: before you use it, you need to set the <directory> property for your directory system
+To generate, run this command:
+Generate jar files with: mvn clean dependency:copy-dependencies
+java -classpath target/jooq-3.5.0.jar;target/jooq-meta-3.5.0.jar;target/jooq-codegen-3.5.0.jar;target/mysql-connector-java-5.1.34.jar;. org.jooq.util.GenerationTool jooq.xml
+
+
+COMMON MISTAKES I'VE ENCOUNTERED
+running multiple instances will produce strange behavior... make sure you clear all programs before running
