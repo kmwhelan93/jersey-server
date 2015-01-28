@@ -22,6 +22,11 @@ public class Tables {
 	public static final jooq.generated.tables.Bases BASES = jooq.generated.tables.Bases.BASES;
 
 	/**
+	 * The table cs4720cem6at.base_owners
+	 */
+	public static final jooq.generated.tables.BaseOwners BASE_OWNERS = jooq.generated.tables.BaseOwners.BASE_OWNERS;
+
+	/**
 	 * The table cs4720cem6at.users
 	 */
 	public static final jooq.generated.tables.Users USERS = jooq.generated.tables.Users.USERS;

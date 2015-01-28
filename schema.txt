@@ -9,16 +9,23 @@ CREATE TABLE users (
 CREATE TABLE bases (
   username varchar(255) NOT NULL,
   base_id INT NOT NULL AUTO_INCREMENT,
+  prod_rate INT NOT NULL,
+  PRIMARY KEY (base_id),
+  FOREIGN KEY (username) REFERENCES users(username)
+)ENGINE=InnoDB;
+
+CREATE TABLE base_owners (
+  username varchar(255) NOT NULL,
+  color_id INT NOT NULL AUTO_INCREMENT,
+  base_id INT NOT NULL,
   world_x INT NOT NULL,
   world_y INT NOT NULL,
   local_x INT NOT NULL,
   local_y INT NOT NULL,
-  prod_rate INT,
-  num_units INT,
-  is_home INT(1),
-  PRIMARY KEY (username, base_id),
-  FOREIGN KEY(username) REFERENCES users(username)
-
+  num_units INT DEFAULT 0,
+  PRIMARY KEY (username, color_id),
+  FOREIGN KEY (username) REFERENCES users(username),
+  FOREIGN KEY (base_id) REFERENCES bases(base_id)
 )ENGINE=MyIsam;
 
 CREATE TABLE portals (

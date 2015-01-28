@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records.BasesRecord> {
 
-	private static final long serialVersionUID = 1458616097;
+	private static final long serialVersionUID = -650614610;
 
 	/**
 	 * The reference instance of <code>cs4720cem6at.bases</code>
@@ -42,39 +42,9 @@ public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> BASE_ID = createField("base_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>cs4720cem6at.bases.world_x</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> WORLD_X = createField("world_x", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
-	 * The column <code>cs4720cem6at.bases.world_y</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> WORLD_Y = createField("world_y", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
-	 * The column <code>cs4720cem6at.bases.local_x</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> LOCAL_X = createField("local_x", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
-	 * The column <code>cs4720cem6at.bases.local_y</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> LOCAL_Y = createField("local_y", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
 	 * The column <code>cs4720cem6at.bases.prod_rate</code>.
 	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> PROD_RATE = createField("prod_rate", org.jooq.impl.SQLDataType.INTEGER, this, "");
-
-	/**
-	 * The column <code>cs4720cem6at.bases.num_units</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> NUM_UNITS = createField("num_units", org.jooq.impl.SQLDataType.INTEGER, this, "");
-
-	/**
-	 * The column <code>cs4720cem6at.bases.is_home</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> IS_HOME = createField("is_home", org.jooq.impl.SQLDataType.INTEGER, this, "");
+	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> PROD_RATE = createField("prod_rate", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * Create a <code>cs4720cem6at.bases</code> table reference
@@ -120,6 +90,14 @@ public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	@Override
 	public java.util.List<org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord>> getKeys() {
 		return java.util.Arrays.<org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord>>asList(jooq.generated.Keys.KEY_BASES_PRIMARY);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public java.util.List<org.jooq.ForeignKey<jooq.generated.tables.records.BasesRecord, ?>> getReferences() {
+		return java.util.Arrays.<org.jooq.ForeignKey<jooq.generated.tables.records.BasesRecord, ?>>asList(jooq.generated.Keys.BASES_IBFK_1);
 	}
 
 	/**

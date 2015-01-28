@@ -16,7 +16,7 @@ package jooq.generated;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Cs4720cem6at extends org.jooq.impl.SchemaImpl {
 
-	private static final long serialVersionUID = 1535603499;
+	private static final long serialVersionUID = -767935502;
 
 	/**
 	 * The reference instance of <code>cs4720cem6at</code>
@@ -40,6 +40,7 @@ public class Cs4720cem6at extends org.jooq.impl.SchemaImpl {
 	private final java.util.List<org.jooq.Table<?>> getTables0() {
 		return java.util.Arrays.<org.jooq.Table<?>>asList(
 			jooq.generated.tables.Bases.BASES,
+			jooq.generated.tables.BaseOwners.BASE_OWNERS,
 			jooq.generated.tables.Users.USERS);
 	}
 }
