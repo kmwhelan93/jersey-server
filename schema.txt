@@ -7,11 +7,9 @@ CREATE TABLE users (
 )ENGINE=InnoDB;
 
 CREATE TABLE bases (
-  username varchar(255) NOT NULL,
   base_id INT NOT NULL AUTO_INCREMENT,
   prod_rate INT NOT NULL,
-  PRIMARY KEY (base_id),
-  FOREIGN KEY (username) REFERENCES users(username)
+  PRIMARY KEY (base_id)
 )ENGINE=InnoDB;
 
 CREATE TABLE base_owners (
