@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records.BasesRecord> {
 
-	private static final long serialVersionUID = -650614610;
+	private static final long serialVersionUID = 1389214977;
 
 	/**
 	 * The reference instance of <code>cs4720cem6at.bases</code>
@@ -30,11 +30,6 @@ public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	public java.lang.Class<jooq.generated.tables.records.BasesRecord> getRecordType() {
 		return jooq.generated.tables.records.BasesRecord.class;
 	}
-
-	/**
-	 * The column <code>cs4720cem6at.bases.username</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.String> USERNAME = createField("username", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>cs4720cem6at.bases.base_id</code>.
@@ -90,14 +85,6 @@ public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	@Override
 	public java.util.List<org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord>> getKeys() {
 		return java.util.Arrays.<org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord>>asList(jooq.generated.Keys.KEY_BASES_PRIMARY);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public java.util.List<org.jooq.ForeignKey<jooq.generated.tables.records.BasesRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<jooq.generated.tables.records.BasesRecord, ?>>asList(jooq.generated.Keys.BASES_IBFK_1);
 	}
 
 	/**

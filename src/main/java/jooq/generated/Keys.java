@@ -36,7 +36,6 @@ public class Keys {
 	// FOREIGN KEY definitions
 	// -------------------------------------------------------------------------
 
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.BasesRecord, jooq.generated.tables.records.UsersRecord> BASES_IBFK_1 = ForeignKeys0.BASES_IBFK_1;
 
 	// -------------------------------------------------------------------------
 	// [#1459] distribute members to avoid static initialisers > 64kb
@@ -51,9 +50,5 @@ public class Keys {
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord> KEY_BASES_PRIMARY = createUniqueKey(jooq.generated.tables.Bases.BASES, jooq.generated.tables.Bases.BASES.BASE_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BaseOwnersRecord> KEY_BASE_OWNERS_PRIMARY = createUniqueKey(jooq.generated.tables.BaseOwners.BASE_OWNERS, jooq.generated.tables.BaseOwners.BASE_OWNERS.USERNAME, jooq.generated.tables.BaseOwners.BASE_OWNERS.COLOR_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = createUniqueKey(jooq.generated.tables.Users.USERS, jooq.generated.tables.Users.USERS.USERNAME);
-	}
-
-	private static class ForeignKeys0 extends org.jooq.impl.AbstractKeys {
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.BasesRecord, jooq.generated.tables.records.UsersRecord> BASES_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_USERS_PRIMARY, jooq.generated.tables.Bases.BASES, jooq.generated.tables.Bases.BASES.USERNAME);
 	}
 }
