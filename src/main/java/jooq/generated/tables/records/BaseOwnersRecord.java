@@ -16,115 +16,115 @@ package jooq.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BaseOwnersRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.generated.tables.records.BaseOwnersRecord> implements org.jooq.Record8<java.lang.String, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer> {
 
-	private static final long serialVersionUID = -1083970171;
+	private static final long serialVersionUID = 91409829;
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.username</code>.
+	 * Setter for <code>tutorme.base_owners.username</code>.
 	 */
 	public void setUsername(java.lang.String value) {
 		setValue(0, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.username</code>.
+	 * Getter for <code>tutorme.base_owners.username</code>.
 	 */
 	public java.lang.String getUsername() {
 		return (java.lang.String) getValue(0);
 	}
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.color_id</code>.
+	 * Setter for <code>tutorme.base_owners.color_id</code>.
 	 */
 	public void setColorId(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.color_id</code>.
+	 * Getter for <code>tutorme.base_owners.color_id</code>.
 	 */
 	public java.lang.Integer getColorId() {
 		return (java.lang.Integer) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.base_id</code>.
+	 * Setter for <code>tutorme.base_owners.base_id</code>.
 	 */
 	public void setBaseId(java.lang.Integer value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.base_id</code>.
+	 * Getter for <code>tutorme.base_owners.base_id</code>.
 	 */
 	public java.lang.Integer getBaseId() {
 		return (java.lang.Integer) getValue(2);
 	}
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.world_x</code>.
+	 * Setter for <code>tutorme.base_owners.world_x</code>.
 	 */
 	public void setWorldX(java.lang.Integer value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.world_x</code>.
+	 * Getter for <code>tutorme.base_owners.world_x</code>.
 	 */
 	public java.lang.Integer getWorldX() {
 		return (java.lang.Integer) getValue(3);
 	}
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.world_y</code>.
+	 * Setter for <code>tutorme.base_owners.world_y</code>.
 	 */
 	public void setWorldY(java.lang.Integer value) {
 		setValue(4, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.world_y</code>.
+	 * Getter for <code>tutorme.base_owners.world_y</code>.
 	 */
 	public java.lang.Integer getWorldY() {
 		return (java.lang.Integer) getValue(4);
 	}
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.local_x</code>.
+	 * Setter for <code>tutorme.base_owners.local_x</code>.
 	 */
 	public void setLocalX(java.lang.Integer value) {
 		setValue(5, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.local_x</code>.
+	 * Getter for <code>tutorme.base_owners.local_x</code>.
 	 */
 	public java.lang.Integer getLocalX() {
 		return (java.lang.Integer) getValue(5);
 	}
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.local_y</code>.
+	 * Setter for <code>tutorme.base_owners.local_y</code>.
 	 */
 	public void setLocalY(java.lang.Integer value) {
 		setValue(6, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.local_y</code>.
+	 * Getter for <code>tutorme.base_owners.local_y</code>.
 	 */
 	public java.lang.Integer getLocalY() {
 		return (java.lang.Integer) getValue(6);
 	}
 
 	/**
-	 * Setter for <code>cs4720cem6at.base_owners.num_units</code>.
+	 * Setter for <code>tutorme.base_owners.num_units</code>.
 	 */
 	public void setNumUnits(java.lang.Integer value) {
 		setValue(7, value);
 	}
 
 	/**
-	 * Getter for <code>cs4720cem6at.base_owners.num_units</code>.
+	 * Getter for <code>tutorme.base_owners.num_units</code>.
 	 */
 	public java.lang.Integer getNumUnits() {
 		return (java.lang.Integer) getValue(7);

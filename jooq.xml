@@ -3,9 +3,9 @@
   <!-- Configure the database connection here -->
   <jdbc>
     <driver>com.mysql.jdbc.Driver</driver>
-    <url>jdbc:mysql://stardock.cs.virginia.edu/cs4720cem6at</url>
-    <user>cs4720cem6at</user>
-    <password>kevinandcourtney</password>
+    <url>jdbc:mysql://stardock.cs.virginia.edu/tutorme</url>
+    <user>tutorme</user>
+    <password>findinggoodtutors</password>
   </jdbc>
 
   <generator>
@@ -20,7 +20,7 @@
 
       <!-- The database schema (or in the absence of schema support, in your RDBMS this
            can be the owner, user, database name) to be generated -->
-      <inputSchema>cs4720cem6at</inputSchema>
+      <inputSchema>tutorme</inputSchema>
 
       <!-- All elements that are generated from your schema
            (A Java regular expression. Use the pipe to separate several expressions)

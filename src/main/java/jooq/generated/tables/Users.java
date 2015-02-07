@@ -16,10 +16,10 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends org.jooq.impl.TableImpl<jooq.generated.tables.records.UsersRecord> {
 
-	private static final long serialVersionUID = 1744829615;
+	private static final long serialVersionUID = -1994690135;
 
 	/**
-	 * The reference instance of <code>cs4720cem6at.users</code>
+	 * The reference instance of <code>tutorme.users</code>
 	 */
 	public static final jooq.generated.tables.Users USERS = new jooq.generated.tables.Users();
 
@@ -32,29 +32,29 @@ public class Users extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	}
 
 	/**
-	 * The column <code>cs4720cem6at.users.username</code>.
+	 * The column <code>tutorme.users.username</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.UsersRecord, java.lang.String> USERNAME = createField("username", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
-	 * The column <code>cs4720cem6at.users.password</code>.
+	 * The column <code>tutorme.users.password</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.UsersRecord, java.lang.String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
-	 * The column <code>cs4720cem6at.users.gold</code>.
+	 * The column <code>tutorme.users.gold</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.UsersRecord, java.lang.Integer> GOLD = createField("gold", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
 	/**
-	 * Create a <code>cs4720cem6at.users</code> table reference
+	 * Create a <code>tutorme.users</code> table reference
 	 */
 	public Users() {
 		this("users", null);
 	}
 
 	/**
-	 * Create an aliased <code>cs4720cem6at.users</code> table reference
+	 * Create an aliased <code>tutorme.users</code> table reference
 	 */
 	public Users(java.lang.String alias) {
 		this(alias, jooq.generated.tables.Users.USERS);
@@ -65,7 +65,7 @@ public class Users extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	}
 
 	private Users(java.lang.String alias, org.jooq.Table<jooq.generated.tables.records.UsersRecord> aliased, org.jooq.Field<?>[] parameters) {
-		super(alias, jooq.generated.Cs4720cem6at.CS4720CEM6AT, aliased, parameters, "");
+		super(alias, jooq.generated.Tutorme.TUTORME, aliased, parameters, "");
 	}
 
 	/**

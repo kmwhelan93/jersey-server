@@ -24,8 +24,6 @@ public class WorldResources {
 		try {
 			System.out.println("Get Bases Request Received");
 			List<Base> bases = QueryService.getUserBases(username);
-			System.out.println(username);
-			System.out.println(bases);
 			return Response.ok().entity(new GenericEntity<List<Base>>(bases) {}).build();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -16,10 +16,10 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records.BasesRecord> {
 
-	private static final long serialVersionUID = 1389214977;
+	private static final long serialVersionUID = -933207504;
 
 	/**
-	 * The reference instance of <code>cs4720cem6at.bases</code>
+	 * The reference instance of <code>tutorme.bases</code>
 	 */
 	public static final jooq.generated.tables.Bases BASES = new jooq.generated.tables.Bases();
 
@@ -32,24 +32,24 @@ public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	}
 
 	/**
-	 * The column <code>cs4720cem6at.bases.base_id</code>.
+	 * The column <code>tutorme.bases.base_id</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> BASE_ID = createField("base_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>cs4720cem6at.bases.prod_rate</code>.
+	 * The column <code>tutorme.bases.prod_rate</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BasesRecord, java.lang.Integer> PROD_RATE = createField("prod_rate", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * Create a <code>cs4720cem6at.bases</code> table reference
+	 * Create a <code>tutorme.bases</code> table reference
 	 */
 	public Bases() {
 		this("bases", null);
 	}
 
 	/**
-	 * Create an aliased <code>cs4720cem6at.bases</code> table reference
+	 * Create an aliased <code>tutorme.bases</code> table reference
 	 */
 	public Bases(java.lang.String alias) {
 		this(alias, jooq.generated.tables.Bases.BASES);
@@ -60,7 +60,7 @@ public class Bases extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	}
 
 	private Bases(java.lang.String alias, org.jooq.Table<jooq.generated.tables.records.BasesRecord> aliased, org.jooq.Field<?>[] parameters) {
-		super(alias, jooq.generated.Cs4720cem6at.CS4720CEM6AT, aliased, parameters, "");
+		super(alias, jooq.generated.Tutorme.TUTORME, aliased, parameters, "");
 	}
 
 	/**
