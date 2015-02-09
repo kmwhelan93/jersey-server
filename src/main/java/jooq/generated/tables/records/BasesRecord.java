@@ -16,31 +16,31 @@ package jooq.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BasesRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.generated.tables.records.BasesRecord> implements org.jooq.Record2<java.lang.Integer, java.lang.Integer> {
 
-	private static final long serialVersionUID = -31204082;
+	private static final long serialVersionUID = 2086495848;
 
 	/**
-	 * Setter for <code>tutorme.bases.base_id</code>.
+	 * Setter for <code>maimon.bases.base_id</code>.
 	 */
 	public void setBaseId(java.lang.Integer value) {
 		setValue(0, value);
 	}
 
 	/**
-	 * Getter for <code>tutorme.bases.base_id</code>.
+	 * Getter for <code>maimon.bases.base_id</code>.
 	 */
 	public java.lang.Integer getBaseId() {
 		return (java.lang.Integer) getValue(0);
 	}
 
 	/**
-	 * Setter for <code>tutorme.bases.prod_rate</code>.
+	 * Setter for <code>maimon.bases.prod_rate</code>.
 	 */
 	public void setProdRate(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>tutorme.bases.prod_rate</code>.
+	 * Getter for <code>maimon.bases.prod_rate</code>.
 	 */
 	public java.lang.Integer getProdRate() {
 		return (java.lang.Integer) getValue(1);

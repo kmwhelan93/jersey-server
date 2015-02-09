@@ -16,45 +16,45 @@ package jooq.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.generated.tables.records.UsersRecord> implements org.jooq.Record3<java.lang.String, java.lang.String, java.lang.Integer> {
 
-	private static final long serialVersionUID = 270067998;
+	private static final long serialVersionUID = 179857162;
 
 	/**
-	 * Setter for <code>tutorme.users.username</code>.
+	 * Setter for <code>maimon.users.username</code>.
 	 */
 	public void setUsername(java.lang.String value) {
 		setValue(0, value);
 	}
 
 	/**
-	 * Getter for <code>tutorme.users.username</code>.
+	 * Getter for <code>maimon.users.username</code>.
 	 */
 	public java.lang.String getUsername() {
 		return (java.lang.String) getValue(0);
 	}
 
 	/**
-	 * Setter for <code>tutorme.users.password</code>.
+	 * Setter for <code>maimon.users.password</code>.
 	 */
 	public void setPassword(java.lang.String value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>tutorme.users.password</code>.
+	 * Getter for <code>maimon.users.password</code>.
 	 */
 	public java.lang.String getPassword() {
 		return (java.lang.String) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>tutorme.users.gold</code>.
+	 * Setter for <code>maimon.users.gold</code>.
 	 */
 	public void setGold(java.lang.Integer value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>tutorme.users.gold</code>.
+	 * Getter for <code>maimon.users.gold</code>.
 	 */
 	public java.lang.Integer getGold() {
 		return (java.lang.Integer) getValue(2);

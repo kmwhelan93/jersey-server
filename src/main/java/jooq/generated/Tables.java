@@ -4,7 +4,7 @@
 package jooq.generated;
 
 /**
- * Convenience access to all tables in tutorme
+ * Convenience access to all tables in maimon
  */
 @javax.annotation.Generated(
 	value = {
@@ -17,82 +17,17 @@ package jooq.generated;
 public class Tables {
 
 	/**
-	 * The table tutorme.bases
+	 * The table maimon.bases
 	 */
 	public static final jooq.generated.tables.Bases BASES = jooq.generated.tables.Bases.BASES;
 
 	/**
-	 * The table tutorme.base_owners
+	 * The table maimon.base_owners
 	 */
 	public static final jooq.generated.tables.BaseOwners BASE_OWNERS = jooq.generated.tables.BaseOwners.BASE_OWNERS;
 
 	/**
-	 * The table tutorme.belongsTo
-	 */
-	public static final jooq.generated.tables.Belongsto BELONGSTO = jooq.generated.tables.Belongsto.BELONGSTO;
-
-	/**
-	 * The table tutorme.course
-	 */
-	public static final jooq.generated.tables.Course COURSE = jooq.generated.tables.Course.COURSE;
-
-	/**
-	 * The table tutorme.endorses
-	 */
-	public static final jooq.generated.tables.Endorses ENDORSES = jooq.generated.tables.Endorses.ENDORSES;
-
-	/**
-	 * The table tutorme.lousgroup
-	 */
-	public static final jooq.generated.tables.Lousgroup LOUSGROUP = jooq.generated.tables.Lousgroup.LOUSGROUP;
-
-	/**
-	 * The table tutorme.manages
-	 */
-	public static final jooq.generated.tables.Manages MANAGES = jooq.generated.tables.Manages.MANAGES;
-
-	/**
-	 * The table tutorme.message
-	 */
-	public static final jooq.generated.tables.Message MESSAGE = jooq.generated.tables.Message.MESSAGE;
-
-	/**
-	 * The table tutorme.organization
-	 */
-	public static final jooq.generated.tables.Organization ORGANIZATION = jooq.generated.tables.Organization.ORGANIZATION;
-
-	/**
-	 * The table tutorme.rateCourses
-	 */
-	public static final jooq.generated.tables.Ratecourses RATECOURSES = jooq.generated.tables.Ratecourses.RATECOURSES;
-
-	/**
-	 * The table tutorme.rates
-	 */
-	public static final jooq.generated.tables.Rates RATES = jooq.generated.tables.Rates.RATES;
-
-	/**
-	 * The table tutorme.student
-	 */
-	public static final jooq.generated.tables.Student STUDENT = jooq.generated.tables.Student.STUDENT;
-
-	/**
-	 * The table tutorme.teaches
-	 */
-	public static final jooq.generated.tables.Teaches TEACHES = jooq.generated.tables.Teaches.TEACHES;
-
-	/**
-	 * The table tutorme.tutor
-	 */
-	public static final jooq.generated.tables.Tutor TUTOR = jooq.generated.tables.Tutor.TUTOR;
-
-	/**
-	 * The table tutorme.tutor2
-	 */
-	public static final jooq.generated.tables.Tutor2 TUTOR2 = jooq.generated.tables.Tutor2.TUTOR2;
-
-	/**
-	 * The table tutorme.users
+	 * The table maimon.users
 	 */
 	public static final jooq.generated.tables.Users USERS = jooq.generated.tables.Users.USERS;
 }

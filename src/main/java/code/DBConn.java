@@ -34,9 +34,9 @@ public class DBConn {
 	private Connection createConnection() {
 		Connection conn = null;
 
-		String userName = "tutorme";
-		String password = "findinggoodtutors";
-		String url = "jdbc:mysql://stardock.cs.virginia.edu/tutorme";
+		String userName = "maimon";
+		String password = "seniorthesis";
+		String url = "jdbc:mysql://stardock.cs.virginia.edu/maimon";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();

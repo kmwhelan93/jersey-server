@@ -61,7 +61,7 @@ public class HelloWorldTest {
 
 		String userName = "root";
 		String password = "";
-		String url = "jdbc:mysql://localhost:3306/cs4720cem6at";
+		String url = "jdbc:mysql://localhost:3306/maimon";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();

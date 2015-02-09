@@ -4,7 +4,7 @@
 package jooq.generated;
 
 /**
- * A class modelling foreign key relationships between tables of the <code>tutorme</code> 
+ * A class modelling foreign key relationships between tables of the <code>maimon</code> 
  * schema
  */
 @javax.annotation.Generated(
@@ -23,7 +23,6 @@ public class Keys {
 
 	public static final org.jooq.Identity<jooq.generated.tables.records.BasesRecord, java.lang.Integer> IDENTITY_BASES = Identities0.IDENTITY_BASES;
 	public static final org.jooq.Identity<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> IDENTITY_BASE_OWNERS = Identities0.IDENTITY_BASE_OWNERS;
-	public static final org.jooq.Identity<jooq.generated.tables.records.MessageRecord, java.lang.Integer> IDENTITY_MESSAGE = Identities0.IDENTITY_MESSAGE;
 
 	// -------------------------------------------------------------------------
 	// UNIQUE and PRIMARY KEY definitions
@@ -31,39 +30,12 @@ public class Keys {
 
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord> KEY_BASES_PRIMARY = UniqueKeys0.KEY_BASES_PRIMARY;
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.BaseOwnersRecord> KEY_BASE_OWNERS_PRIMARY = UniqueKeys0.KEY_BASE_OWNERS_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.BelongstoRecord> KEY_BELONGSTO_PRIMARY = UniqueKeys0.KEY_BELONGSTO_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.CourseRecord> KEY_COURSE_PRIMARY = UniqueKeys0.KEY_COURSE_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.EndorsesRecord> KEY_ENDORSES_PRIMARY = UniqueKeys0.KEY_ENDORSES_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.LousgroupRecord> KEY_LOUSGROUP_PRIMARY = UniqueKeys0.KEY_LOUSGROUP_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.ManagesRecord> KEY_MANAGES_PRIMARY = UniqueKeys0.KEY_MANAGES_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.MessageRecord> KEY_MESSAGE_PRIMARY = UniqueKeys0.KEY_MESSAGE_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.OrganizationRecord> KEY_ORGANIZATION_PRIMARY = UniqueKeys0.KEY_ORGANIZATION_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.RatecoursesRecord> KEY_RATECOURSES_PRIMARY = UniqueKeys0.KEY_RATECOURSES_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.RatesRecord> KEY_RATES_PRIMARY = UniqueKeys0.KEY_RATES_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.StudentRecord> KEY_STUDENT_PRIMARY = UniqueKeys0.KEY_STUDENT_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.TeachesRecord> KEY_TEACHES_PRIMARY = UniqueKeys0.KEY_TEACHES_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.TutorRecord> KEY_TUTOR_PRIMARY = UniqueKeys0.KEY_TUTOR_PRIMARY;
-	public static final org.jooq.UniqueKey<jooq.generated.tables.records.Tutor2Record> KEY_TUTOR2_PRIMARY = UniqueKeys0.KEY_TUTOR2_PRIMARY;
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = UniqueKeys0.KEY_USERS_PRIMARY;
 
 	// -------------------------------------------------------------------------
 	// FOREIGN KEY definitions
 	// -------------------------------------------------------------------------
 
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.BelongstoRecord, jooq.generated.tables.records.LousgroupRecord> BELONGSTO_IBFK_2 = ForeignKeys0.BELONGSTO_IBFK_2;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.BelongstoRecord, jooq.generated.tables.records.CourseRecord> BELONGSTO_IBFK_1 = ForeignKeys0.BELONGSTO_IBFK_1;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.EndorsesRecord, jooq.generated.tables.records.OrganizationRecord> ENDORSES_IBFK_1 = ForeignKeys0.ENDORSES_IBFK_1;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.EndorsesRecord, jooq.generated.tables.records.TutorRecord> ENDORSES_IBFK_2 = ForeignKeys0.ENDORSES_IBFK_2;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.ManagesRecord, jooq.generated.tables.records.OrganizationRecord> MANAGES_IBFK_1 = ForeignKeys0.MANAGES_IBFK_1;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.MessageRecord, jooq.generated.tables.records.StudentRecord> MESSAGE_IBFK_1 = ForeignKeys0.MESSAGE_IBFK_1;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.MessageRecord, jooq.generated.tables.records.StudentRecord> MESSAGE_IBFK_2 = ForeignKeys0.MESSAGE_IBFK_2;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatecoursesRecord, jooq.generated.tables.records.RatesRecord> RATECOURSES_IBFK_5 = ForeignKeys0.RATECOURSES_IBFK_5;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatecoursesRecord, jooq.generated.tables.records.RatesRecord> RATECOURSES_IBFK_6 = ForeignKeys0.RATECOURSES_IBFK_6;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatesRecord, jooq.generated.tables.records.StudentRecord> RATES_IBFK_1 = ForeignKeys0.RATES_IBFK_1;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatesRecord, jooq.generated.tables.records.TutorRecord> RATES_IBFK_2 = ForeignKeys0.RATES_IBFK_2;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.TeachesRecord, jooq.generated.tables.records.StudentRecord> TEACHES_IBFK_1 = ForeignKeys0.TEACHES_IBFK_1;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.TeachesRecord, jooq.generated.tables.records.CourseRecord> TEACHES_IBFK_2 = ForeignKeys0.TEACHES_IBFK_2;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.TutorRecord, jooq.generated.tables.records.StudentRecord> TUTOR_IBFK_1 = ForeignKeys0.TUTOR_IBFK_1;
 
 	// -------------------------------------------------------------------------
 	// [#1459] distribute members to avoid static initialisers > 64kb
@@ -72,42 +44,11 @@ public class Keys {
 	private static class Identities0 extends org.jooq.impl.AbstractKeys {
 		public static org.jooq.Identity<jooq.generated.tables.records.BasesRecord, java.lang.Integer> IDENTITY_BASES = createIdentity(jooq.generated.tables.Bases.BASES, jooq.generated.tables.Bases.BASES.BASE_ID);
 		public static org.jooq.Identity<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> IDENTITY_BASE_OWNERS = createIdentity(jooq.generated.tables.BaseOwners.BASE_OWNERS, jooq.generated.tables.BaseOwners.BASE_OWNERS.COLOR_ID);
-		public static org.jooq.Identity<jooq.generated.tables.records.MessageRecord, java.lang.Integer> IDENTITY_MESSAGE = createIdentity(jooq.generated.tables.Message.MESSAGE, jooq.generated.tables.Message.MESSAGE.ID);
 	}
 
 	private static class UniqueKeys0 extends org.jooq.impl.AbstractKeys {
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord> KEY_BASES_PRIMARY = createUniqueKey(jooq.generated.tables.Bases.BASES, jooq.generated.tables.Bases.BASES.BASE_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BaseOwnersRecord> KEY_BASE_OWNERS_PRIMARY = createUniqueKey(jooq.generated.tables.BaseOwners.BASE_OWNERS, jooq.generated.tables.BaseOwners.BASE_OWNERS.USERNAME, jooq.generated.tables.BaseOwners.BASE_OWNERS.COLOR_ID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BelongstoRecord> KEY_BELONGSTO_PRIMARY = createUniqueKey(jooq.generated.tables.Belongsto.BELONGSTO, jooq.generated.tables.Belongsto.BELONGSTO.COURSEID, jooq.generated.tables.Belongsto.BELONGSTO.INNERGROUP);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.CourseRecord> KEY_COURSE_PRIMARY = createUniqueKey(jooq.generated.tables.Course.COURSE, jooq.generated.tables.Course.COURSE.COURSEID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.EndorsesRecord> KEY_ENDORSES_PRIMARY = createUniqueKey(jooq.generated.tables.Endorses.ENDORSES, jooq.generated.tables.Endorses.ENDORSES.ORGTITLE, jooq.generated.tables.Endorses.ENDORSES.COMPID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.LousgroupRecord> KEY_LOUSGROUP_PRIMARY = createUniqueKey(jooq.generated.tables.Lousgroup.LOUSGROUP, jooq.generated.tables.Lousgroup.LOUSGROUP.INNERGROUP, jooq.generated.tables.Lousgroup.LOUSGROUP.OUTERGROUP);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.ManagesRecord> KEY_MANAGES_PRIMARY = createUniqueKey(jooq.generated.tables.Manages.MANAGES, jooq.generated.tables.Manages.MANAGES.COMPID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.MessageRecord> KEY_MESSAGE_PRIMARY = createUniqueKey(jooq.generated.tables.Message.MESSAGE, jooq.generated.tables.Message.MESSAGE.ID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.OrganizationRecord> KEY_ORGANIZATION_PRIMARY = createUniqueKey(jooq.generated.tables.Organization.ORGANIZATION, jooq.generated.tables.Organization.ORGANIZATION.ORGTITLE);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.RatecoursesRecord> KEY_RATECOURSES_PRIMARY = createUniqueKey(jooq.generated.tables.Ratecourses.RATECOURSES, jooq.generated.tables.Ratecourses.RATECOURSES.RATERID, jooq.generated.tables.Ratecourses.RATECOURSES.TUTORID, jooq.generated.tables.Ratecourses.RATECOURSES.COURSEID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.RatesRecord> KEY_RATES_PRIMARY = createUniqueKey(jooq.generated.tables.Rates.RATES, jooq.generated.tables.Rates.RATES.RATERID, jooq.generated.tables.Rates.RATES.TUTORID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.StudentRecord> KEY_STUDENT_PRIMARY = createUniqueKey(jooq.generated.tables.Student.STUDENT, jooq.generated.tables.Student.STUDENT.COMPID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.TeachesRecord> KEY_TEACHES_PRIMARY = createUniqueKey(jooq.generated.tables.Teaches.TEACHES, jooq.generated.tables.Teaches.TEACHES.COMPID, jooq.generated.tables.Teaches.TEACHES.COURSEID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.TutorRecord> KEY_TUTOR_PRIMARY = createUniqueKey(jooq.generated.tables.Tutor.TUTOR, jooq.generated.tables.Tutor.TUTOR.COMPID);
-		public static final org.jooq.UniqueKey<jooq.generated.tables.records.Tutor2Record> KEY_TUTOR2_PRIMARY = createUniqueKey(jooq.generated.tables.Tutor2.TUTOR2, jooq.generated.tables.Tutor2.TUTOR2.COMPID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = createUniqueKey(jooq.generated.tables.Users.USERS, jooq.generated.tables.Users.USERS.USERNAME);
-	}
-
-	private static class ForeignKeys0 extends org.jooq.impl.AbstractKeys {
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.BelongstoRecord, jooq.generated.tables.records.LousgroupRecord> BELONGSTO_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_LOUSGROUP_PRIMARY, jooq.generated.tables.Belongsto.BELONGSTO, jooq.generated.tables.Belongsto.BELONGSTO.INNERGROUP);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.BelongstoRecord, jooq.generated.tables.records.CourseRecord> BELONGSTO_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_COURSE_PRIMARY, jooq.generated.tables.Belongsto.BELONGSTO, jooq.generated.tables.Belongsto.BELONGSTO.COURSEID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.EndorsesRecord, jooq.generated.tables.records.OrganizationRecord> ENDORSES_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_ORGANIZATION_PRIMARY, jooq.generated.tables.Endorses.ENDORSES, jooq.generated.tables.Endorses.ENDORSES.ORGTITLE);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.EndorsesRecord, jooq.generated.tables.records.TutorRecord> ENDORSES_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_TUTOR_PRIMARY, jooq.generated.tables.Endorses.ENDORSES, jooq.generated.tables.Endorses.ENDORSES.COMPID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.ManagesRecord, jooq.generated.tables.records.OrganizationRecord> MANAGES_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_ORGANIZATION_PRIMARY, jooq.generated.tables.Manages.MANAGES, jooq.generated.tables.Manages.MANAGES.ORGTITLE);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.MessageRecord, jooq.generated.tables.records.StudentRecord> MESSAGE_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_STUDENT_PRIMARY, jooq.generated.tables.Message.MESSAGE, jooq.generated.tables.Message.MESSAGE.SENDERID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.MessageRecord, jooq.generated.tables.records.StudentRecord> MESSAGE_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_STUDENT_PRIMARY, jooq.generated.tables.Message.MESSAGE, jooq.generated.tables.Message.MESSAGE.RECEIVERID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatecoursesRecord, jooq.generated.tables.records.RatesRecord> RATECOURSES_IBFK_5 = createForeignKey(jooq.generated.Keys.KEY_RATES_PRIMARY, jooq.generated.tables.Ratecourses.RATECOURSES, jooq.generated.tables.Ratecourses.RATECOURSES.RATERID, jooq.generated.tables.Ratecourses.RATECOURSES.TUTORID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatecoursesRecord, jooq.generated.tables.records.RatesRecord> RATECOURSES_IBFK_6 = createForeignKey(jooq.generated.Keys.KEY_RATES_PRIMARY, jooq.generated.tables.Ratecourses.RATECOURSES, jooq.generated.tables.Ratecourses.RATECOURSES.RATERID, jooq.generated.tables.Ratecourses.RATECOURSES.TUTORID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatesRecord, jooq.generated.tables.records.StudentRecord> RATES_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_STUDENT_PRIMARY, jooq.generated.tables.Rates.RATES, jooq.generated.tables.Rates.RATES.RATERID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.RatesRecord, jooq.generated.tables.records.TutorRecord> RATES_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_TUTOR_PRIMARY, jooq.generated.tables.Rates.RATES, jooq.generated.tables.Rates.RATES.TUTORID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.TeachesRecord, jooq.generated.tables.records.StudentRecord> TEACHES_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_STUDENT_PRIMARY, jooq.generated.tables.Teaches.TEACHES, jooq.generated.tables.Teaches.TEACHES.COMPID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.TeachesRecord, jooq.generated.tables.records.CourseRecord> TEACHES_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_COURSE_PRIMARY, jooq.generated.tables.Teaches.TEACHES, jooq.generated.tables.Teaches.TEACHES.COURSEID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.TutorRecord, jooq.generated.tables.records.StudentRecord> TUTOR_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_STUDENT_PRIMARY, jooq.generated.tables.Tutor.TUTOR, jooq.generated.tables.Tutor.TUTOR.COMPID);
 	}
 }

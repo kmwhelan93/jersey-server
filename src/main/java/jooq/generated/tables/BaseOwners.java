@@ -16,10 +16,10 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BaseOwners extends org.jooq.impl.TableImpl<jooq.generated.tables.records.BaseOwnersRecord> {
 
-	private static final long serialVersionUID = -1915668185;
+	private static final long serialVersionUID = 609024164;
 
 	/**
-	 * The reference instance of <code>tutorme.base_owners</code>
+	 * The reference instance of <code>maimon.base_owners</code>
 	 */
 	public static final jooq.generated.tables.BaseOwners BASE_OWNERS = new jooq.generated.tables.BaseOwners();
 
@@ -32,54 +32,54 @@ public class BaseOwners extends org.jooq.impl.TableImpl<jooq.generated.tables.re
 	}
 
 	/**
-	 * The column <code>tutorme.base_owners.username</code>.
+	 * The column <code>maimon.base_owners.username</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.String> USERNAME = createField("username", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
-	 * The column <code>tutorme.base_owners.color_id</code>.
+	 * The column <code>maimon.base_owners.color_id</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> COLOR_ID = createField("color_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>tutorme.base_owners.base_id</code>.
+	 * The column <code>maimon.base_owners.base_id</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> BASE_ID = createField("base_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>tutorme.base_owners.world_x</code>.
+	 * The column <code>maimon.base_owners.world_x</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> WORLD_X = createField("world_x", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>tutorme.base_owners.world_y</code>.
+	 * The column <code>maimon.base_owners.world_y</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> WORLD_Y = createField("world_y", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>tutorme.base_owners.local_x</code>.
+	 * The column <code>maimon.base_owners.local_x</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> LOCAL_X = createField("local_x", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>tutorme.base_owners.local_y</code>.
+	 * The column <code>maimon.base_owners.local_y</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> LOCAL_Y = createField("local_y", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>tutorme.base_owners.num_units</code>.
+	 * The column <code>maimon.base_owners.num_units</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> NUM_UNITS = createField("num_units", org.jooq.impl.SQLDataType.INTEGER.defaulted(true), this, "");
 
 	/**
-	 * Create a <code>tutorme.base_owners</code> table reference
+	 * Create a <code>maimon.base_owners</code> table reference
 	 */
 	public BaseOwners() {
 		this("base_owners", null);
 	}
 
 	/**
-	 * Create an aliased <code>tutorme.base_owners</code> table reference
+	 * Create an aliased <code>maimon.base_owners</code> table reference
 	 */
 	public BaseOwners(java.lang.String alias) {
 		this(alias, jooq.generated.tables.BaseOwners.BASE_OWNERS);
@@ -90,7 +90,7 @@ public class BaseOwners extends org.jooq.impl.TableImpl<jooq.generated.tables.re
 	}
 
 	private BaseOwners(java.lang.String alias, org.jooq.Table<jooq.generated.tables.records.BaseOwnersRecord> aliased, org.jooq.Field<?>[] parameters) {
-		super(alias, jooq.generated.Tutorme.TUTORME, aliased, parameters, "");
+		super(alias, jooq.generated.Maimon.MAIMON, aliased, parameters, "");
 	}
 
 	/**
