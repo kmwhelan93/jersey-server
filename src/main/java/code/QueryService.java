@@ -13,6 +13,7 @@ import sqlTableObjects.Base;
 
 import com.google.common.collect.Lists;
 
+import jooq.generated.tables.records.BasesRecord;
 import jsonObjects.Point;
 import static jooq.generated.Tables.*;
 
@@ -31,6 +32,27 @@ public class QueryService {
 					new Point(r.getValue(BASE_OWNERS.LOCAL_X), r.getValue(BASE_OWNERS.LOCAL_Y))));
 		}
 		return baseLocations;
+	}
+	
+	public static int createBase(int prodRate) {
+		BasesRecord basesRecord =  create.insertInto(BASES, BASES.PROD_RATE)
+			.values(prodRate)
+			.returning(BASES.BASE_ID)
+			.fetchOne();
+		return basesRecord.getBaseId();
+	}
+	
+	public static boolean captureBase(
+			String username,
+			int baseId,
+			int worldX,
+			int worldY,
+			int localX,
+			int localY) {
+		int result = create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y)
+			.values(username, baseId, worldX, worldY, localX, localY)
+			.execute();
+		return result == 0;
 	}
 	
 	public static void main (String[] args) {
