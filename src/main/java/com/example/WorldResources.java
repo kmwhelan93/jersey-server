@@ -3,6 +3,7 @@ package com.example;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
@@ -15,6 +16,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+
+
+
+import jsonObjects.Point;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +31,8 @@ import code.QueryService;
 @Path("world/")
 @Produces(MediaType.APPLICATION_JSON)
 public class WorldResources {
+	
+	private static Random random = new Random();
 	
 	@POST
 	@Path("bases")
@@ -42,12 +50,47 @@ public class WorldResources {
 	@POST
 	@Path("bases/create")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createBase(@BeanParam TestInfo testInfo) {
-		System.out.println("create base request received");
-		System.out.println(testInfo.score);
-		
+	public Response createBase(Base referenceBase) {
+		System.out.println("createBase Request Received");
+		String username = referenceBase.username;
+		List<Base> bases = QueryService.getUserBases(username);
+		int magnitude = 1;
+		Base toAdd = null;
+		outer: while (true) {
+			int initialDirection = random.nextInt(4);
+			for (int i = 0; i < 4; i++) {
+				int direction = (i + initialDirection) % 4;
+				Point p = Point.getPoint(direction).scale(magnitude).add(referenceBase.world);
+				Base newBase = new Base(username, p, Point.getRandomDirection());
+				if (!bases.contains(newBase)) {
+					toAdd = newBase;
+					break outer;
+				}
+				
+			}
+			magnitude++;
+		}
+		QueryService.persistNewBase(toAdd);
 		return Response.ok().build();
 	}
+	
+	@POST
+	@Path("clear")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response clearWorld(Base avoid) {
+		System.out.println("clear request received");
+		// clear everything but this base
+		List<Base> bases = QueryService.getUserBases(avoid.username);
+		for (Base b : bases) {
+			if (!b.equals(avoid)) {
+				QueryService.disownBase(b.baseId);
+			}
+		}
+	
+		return Response.ok().build();
+	}
+	
+	
 	
 	@POST
 	@Path("test")

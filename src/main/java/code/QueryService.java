@@ -19,7 +19,7 @@ import static jooq.generated.Tables.*;
 
 public class QueryService {
 	private static DSLContext create = DSL.using(DBConn.getInstance().getConnection(), SQLDialect.MYSQL);
-	
+	private static int DEFAULT_PROD_RATE = 200;
 	public static List<Base> getUserBases(String username) {
 		Result<Record> results = create.select().from(BASE_OWNERS).where(BASE_OWNERS.USERNAME.equal(username)).fetch();
 		List<Base> baseLocations = Lists.newArrayList();
@@ -42,6 +42,10 @@ public class QueryService {
 		return basesRecord.getBaseId();
 	}
 	
+	public static boolean captureBase(Base b) {
+		return captureBase(b.username, b.baseId, b.world.x, b.world.y, b.local.x, b.local.y);
+	}
+	
 	public static boolean captureBase(
 			String username,
 			int baseId,
@@ -49,10 +53,24 @@ public class QueryService {
 			int worldY,
 			int localX,
 			int localY) {
+		disownBase(baseId);
 		int result = create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y)
 			.values(username, baseId, worldX, worldY, localX, localY)
 			.execute();
 		return result == 0;
+	}
+	
+	public static void persistNewBase(Base b) {
+		if (b.baseId == -1) {
+			b.baseId = createBase(DEFAULT_PROD_RATE);
+		}
+		captureBase(b);
+	}
+	
+	public static void disownBase(int baseId) {
+		create.delete(BASE_OWNERS)
+			.where(BASE_OWNERS.BASE_ID.equal(baseId))
+			.execute();
 	}
 	
 	public static void main (String[] args) {
