@@ -23,6 +23,7 @@ public class Keys {
 
 	public static final org.jooq.Identity<jooq.generated.tables.records.BasesRecord, java.lang.Integer> IDENTITY_BASES = Identities0.IDENTITY_BASES;
 	public static final org.jooq.Identity<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> IDENTITY_BASE_OWNERS = Identities0.IDENTITY_BASE_OWNERS;
+	public static final org.jooq.Identity<jooq.generated.tables.records.PortalsRecord, java.lang.Integer> IDENTITY_PORTALS = Identities0.IDENTITY_PORTALS;
 
 	// -------------------------------------------------------------------------
 	// UNIQUE and PRIMARY KEY definitions
@@ -30,12 +31,16 @@ public class Keys {
 
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord> KEY_BASES_PRIMARY = UniqueKeys0.KEY_BASES_PRIMARY;
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.BaseOwnersRecord> KEY_BASE_OWNERS_PRIMARY = UniqueKeys0.KEY_BASE_OWNERS_PRIMARY;
+	public static final org.jooq.UniqueKey<jooq.generated.tables.records.PortalsRecord> KEY_PORTALS_PRIMARY = UniqueKeys0.KEY_PORTALS_PRIMARY;
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = UniqueKeys0.KEY_USERS_PRIMARY;
 
 	// -------------------------------------------------------------------------
 	// FOREIGN KEY definitions
 	// -------------------------------------------------------------------------
 
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.UsersRecord> PORTALS_IBFK_1 = ForeignKeys0.PORTALS_IBFK_1;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_2 = ForeignKeys0.PORTALS_IBFK_2;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_3 = ForeignKeys0.PORTALS_IBFK_3;
 
 	// -------------------------------------------------------------------------
 	// [#1459] distribute members to avoid static initialisers > 64kb
@@ -44,11 +49,19 @@ public class Keys {
 	private static class Identities0 extends org.jooq.impl.AbstractKeys {
 		public static org.jooq.Identity<jooq.generated.tables.records.BasesRecord, java.lang.Integer> IDENTITY_BASES = createIdentity(jooq.generated.tables.Bases.BASES, jooq.generated.tables.Bases.BASES.BASE_ID);
 		public static org.jooq.Identity<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> IDENTITY_BASE_OWNERS = createIdentity(jooq.generated.tables.BaseOwners.BASE_OWNERS, jooq.generated.tables.BaseOwners.BASE_OWNERS.COLOR_ID);
+		public static org.jooq.Identity<jooq.generated.tables.records.PortalsRecord, java.lang.Integer> IDENTITY_PORTALS = createIdentity(jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.PORTAL_ID);
 	}
 
 	private static class UniqueKeys0 extends org.jooq.impl.AbstractKeys {
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord> KEY_BASES_PRIMARY = createUniqueKey(jooq.generated.tables.Bases.BASES, jooq.generated.tables.Bases.BASES.BASE_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BaseOwnersRecord> KEY_BASE_OWNERS_PRIMARY = createUniqueKey(jooq.generated.tables.BaseOwners.BASE_OWNERS, jooq.generated.tables.BaseOwners.BASE_OWNERS.USERNAME, jooq.generated.tables.BaseOwners.BASE_OWNERS.COLOR_ID);
+		public static final org.jooq.UniqueKey<jooq.generated.tables.records.PortalsRecord> KEY_PORTALS_PRIMARY = createUniqueKey(jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.PORTAL_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = createUniqueKey(jooq.generated.tables.Users.USERS, jooq.generated.tables.Users.USERS.USERNAME);
+	}
+
+	private static class ForeignKeys0 extends org.jooq.impl.AbstractKeys {
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.UsersRecord> PORTALS_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_USERS_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.USERNAME);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.BASE_ID1);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_3 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.BASE_ID2);
 	}
 }

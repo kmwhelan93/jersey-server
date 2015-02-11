@@ -29,13 +29,12 @@ CREATE TABLE base_owners (
 CREATE TABLE portals (
   portal_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   username varchar(255),
-  base_id INT NOT NULL,
+  base_id1 INT NOT NULL,
+  base_id2 INT NOT NULL,
   flow_rate INT NOT NULL,
-  conn_portal_id INT,
   FOREIGN KEY(username) REFERENCES users(username),
-  FOREIGN KEY(base_id) REFERENCES bases(base_id),
-  FOREIGN KEY(conn_portal_id) REFERENCES portals(portal_id)
-
+  FOREIGN KEY(base_id1) REFERENCES bases(base_id),
+  FOREIGN KEY(base_id2) REFERENCES bases(base_id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE wormholes (

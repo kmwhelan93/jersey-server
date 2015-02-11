@@ -27,6 +27,11 @@ public class Tables {
 	public static final jooq.generated.tables.BaseOwners BASE_OWNERS = jooq.generated.tables.BaseOwners.BASE_OWNERS;
 
 	/**
+	 * The table maimon.portals
+	 */
+	public static final jooq.generated.tables.Portals PORTALS = jooq.generated.tables.Portals.PORTALS;
+
+	/**
 	 * The table maimon.users
 	 */
 	public static final jooq.generated.tables.Users USERS = jooq.generated.tables.Users.USERS;

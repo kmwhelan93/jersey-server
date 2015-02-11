@@ -10,6 +10,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import sqlTableObjects.Base;
+import sqlTableObjects.Portal;
 
 import com.google.common.collect.Lists;
 
@@ -71,6 +72,14 @@ public class QueryService {
 		create.delete(BASE_OWNERS)
 			.where(BASE_OWNERS.BASE_ID.equal(baseId))
 			.execute();
+	}
+	
+	//////////// PORTALS ///////////////
+	
+	public static List<Portal> getPortals(String username) {
+		create.select()
+			.from();
+		return null;
 	}
 	
 	public static void main (String[] args) {

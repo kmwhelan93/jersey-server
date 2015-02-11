@@ -16,7 +16,7 @@ package jooq.generated;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Maimon extends org.jooq.impl.SchemaImpl {
 
-	private static final long serialVersionUID = -840759110;
+	private static final long serialVersionUID = -1207656884;
 
 	/**
 	 * The reference instance of <code>maimon</code>
@@ -41,6 +41,7 @@ public class Maimon extends org.jooq.impl.SchemaImpl {
 		return java.util.Arrays.<org.jooq.Table<?>>asList(
 			jooq.generated.tables.Bases.BASES,
 			jooq.generated.tables.BaseOwners.BASE_OWNERS,
+			jooq.generated.tables.Portals.PORTALS,
 			jooq.generated.tables.Users.USERS);
 	}
 }
