@@ -16,5 +16,15 @@ public class Portal {
 		this.base2 = base2;
 		this.flowRate = flowRate;
 	}
+
+	@Override
+	public String toString() {
+		return "Portal [portalId=" + portalId + ", username=" + username
+				+ ", base1=" + base1 + ", base2=" + base2 + ", flowRate="
+				+ flowRate + "]";
+	}
+	
+	
+	
 	
 }

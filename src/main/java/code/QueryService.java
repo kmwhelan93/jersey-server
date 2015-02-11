@@ -14,6 +14,7 @@ import sqlTableObjects.Portal;
 
 import com.google.common.collect.Lists;
 
+import jooq.generated.tables.BaseOwners;
 import jooq.generated.tables.records.BasesRecord;
 import jsonObjects.Point;
 import static jooq.generated.Tables.*;
@@ -25,14 +26,17 @@ public class QueryService {
 		Result<Record> results = create.select().from(BASE_OWNERS).where(BASE_OWNERS.USERNAME.equal(username)).fetch();
 		List<Base> baseLocations = Lists.newArrayList();
 		for (Record r : results) {
-			baseLocations.add(new Base(
-					r.getValue(BASE_OWNERS.USERNAME),
-					r.getValue(BASE_OWNERS.COLOR_ID),
-					r.getValue(BASE_OWNERS.BASE_ID),
-					new Point(r.getValue(BASE_OWNERS.WORLD_X), r.getValue(BASE_OWNERS.WORLD_Y)),
-					new Point(r.getValue(BASE_OWNERS.LOCAL_X), r.getValue(BASE_OWNERS.LOCAL_Y))));
+			baseLocations.add(getBase(r, BASE_OWNERS));
 		}
 		return baseLocations;
+	}
+	
+	private static Base getBase(Record r, BaseOwners b) {
+		return new Base(r.getValue(b.USERNAME),
+				r.getValue(b.COLOR_ID),
+				r.getValue(b.BASE_ID),
+				new Point(r.getValue(b.WORLD_X), r.getValue(b.WORLD_Y)),
+				new Point(r.getValue(b.LOCAL_X), r.getValue(b.LOCAL_Y)));
 	}
 	
 	public static int createBase(int prodRate) {
@@ -77,10 +81,32 @@ public class QueryService {
 	//////////// PORTALS ///////////////
 	
 	public static List<Portal> getPortals(String username) {
-		create.select()
-			.from();
-		return null;
+		ArrayList<Portal> retVal = Lists.newArrayList();
+		BaseOwners base1 = BASE_OWNERS.as("base1");
+		BaseOwners base2 = BASE_OWNERS.as("base2");
+		Result<Record> records = create.select()
+			.from(PORTALS
+					.join(base1)
+						.on(base1.BASE_ID.equal(PORTALS.BASE_ID1))
+					.join(base2)
+						.on(base2.BASE_ID.equal(PORTALS.BASE_ID2))
+					)
+			.fetch();
+		for (Record r : records) {
+			retVal.add(getPortal(r, base1, base2));
+		}
+		return retVal;
 	}
+	
+	private static Portal getPortal(Record r, BaseOwners base1, BaseOwners base2) {
+		return new Portal(r.getValue(PORTALS.PORTAL_ID), 
+				r.getValue(PORTALS.USERNAME),
+				getBase(r, base1),
+				getBase(r, base2),
+				r.getValue(PORTALS.FLOW_RATE));
+	}
+	
+
 
 	/*public static boolean createPortal(String username, int baseId1, int baseId2) {
 		// TODO: Add portals table to database
@@ -102,6 +128,6 @@ public class QueryService {
 	}*/
 	
 	public static void main (String[] args) {
-		System.out.println(getUserBases("kmw8sf"));
+		System.out.println(getPortals("kmw8sf"));
 	}
 }
