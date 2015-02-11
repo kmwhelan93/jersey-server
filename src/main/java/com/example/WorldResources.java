@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sqlTableObjects.Base;
+import sqlTableObjects.Portal;
 import code.QueryService;
 
 @Path("world/")
@@ -71,6 +72,7 @@ public class WorldResources {
 			magnitude++;
 		}
 		QueryService.persistNewBase(toAdd);
+		// QueryService.createPortal(referenceBase.baseId, toAdd.baseId);
 		return Response.ok().build();
 	}
 	
@@ -90,7 +92,18 @@ public class WorldResources {
 		return Response.ok().build();
 	}
 	
-	
+	/*@POST
+	@Path("portals")
+	public Response getPortals(@FormParam("username") String username) {
+		try {
+			System.out.println("Get Portals Request Received");
+			List<Portal> portals = QueryService.getUserPortals(username);
+			return Response.ok().entity(new GenericEntity<List<Portal>>(portals) {}).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}*/
 	
 	@POST
 	@Path("test")
