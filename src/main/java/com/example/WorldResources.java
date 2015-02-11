@@ -34,6 +34,7 @@ import code.QueryService;
 public class WorldResources {
 	
 	private static Random random = new Random();
+	private static ObjectMapper mapper = new ObjectMapper();
 	
 	@POST
 	@Path("bases")
@@ -41,8 +42,21 @@ public class WorldResources {
 		try {
 			System.out.println("Get Bases Request Received");
 			List<Base> bases = QueryService.getUserBases(username);
-			return Response.ok().entity(new GenericEntity<List<Base>>(bases) {}).build();
+			return Response.ok().entity(mapper.writeValueAsString(bases)).build();
 		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}
+	
+	@POST
+	@Path("portals")
+	public Response getPortals(@FormParam("username") String username) {
+		try {
+			System.out.println("Get Portals Request Received");
+			List<Portal> portals = QueryService.getPortals(username);
+			return Response.ok().entity(mapper.writeValueAsString(portals)).build();
+		} catch(Exception e) {
 			e.printStackTrace();
 			return Response.ok().build();
 		}
