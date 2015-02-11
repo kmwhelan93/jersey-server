@@ -81,6 +81,25 @@ public class QueryService {
 			.from();
 		return null;
 	}
+
+	/*public static boolean createPortal(String username, int baseId1, int baseId2) {
+		// TODO: Add portals table to database
+		create.insertInto(PORTALS, PORTALS.username, PORTALS.baseId1, PORTALS.baseId2)
+			.values(username, baseId1, baseId2)
+			.execute();
+	}*/
+	
+	/*public static List<Portal> getUserPortals(String username) {
+		Result<Record> results = create.select().from(PORTALS).where(PORTALS.USERNAME.equal(username)).fetch();
+		List<Portal> portals = Lists.newArrayList();
+		for (Record r : results) {
+			portals.add(new Portal(
+					r.getValue(PORTALS.USERNAME),
+					r.getValue(PORTALS.BASE_ID1),
+					r.getValue(PORTALS.BASE_ID2);
+		}
+		return portals;
+	}*/
 	
 	public static void main (String[] args) {
 		System.out.println(getUserBases("kmw8sf"));

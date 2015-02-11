@@ -6,10 +6,6 @@ public class Portal {
 	public Base base1;
 	public Base base2;
 	int flowRate;
-	
-	public Portal() {
-		
-	}
 
 	public Portal(int portalId, String username, Base base1, Base base2,
 			int flowRate) {
@@ -20,6 +16,5 @@ public class Portal {
 		this.base2 = base2;
 		this.flowRate = flowRate;
 	}
-	
 	
 }
