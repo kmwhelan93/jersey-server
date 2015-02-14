@@ -106,26 +106,18 @@ public class QueryService {
 				r.getValue(PORTALS.FLOW_RATE));
 	}
 	
-
-
-	/*public static boolean createPortal(String username, int baseId1, int baseId2) {
-		// TODO: Add portals table to database
-		create.insertInto(PORTALS, PORTALS.username, PORTALS.baseId1, PORTALS.baseId2)
-			.values(username, baseId1, baseId2)
-			.execute();
-	}*/
+	public static boolean createPortal(String username, int baseId1, int baseId2) {
+		int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE)
+				.values(username, baseId1, baseId2, 10)
+				.execute();
+		return result == 1;
+	}
 	
-	/*public static List<Portal> getUserPortals(String username) {
-		Result<Record> results = create.select().from(PORTALS).where(PORTALS.USERNAME.equal(username)).fetch();
-		List<Portal> portals = Lists.newArrayList();
-		for (Record r : results) {
-			portals.add(new Portal(
-					r.getValue(PORTALS.USERNAME),
-					r.getValue(PORTALS.BASE_ID1),
-					r.getValue(PORTALS.BASE_ID2);
-		}
-		return portals;
-	}*/
+	public static void disownPortals(String username) {
+		create.delete(PORTALS)
+			.where(PORTALS.USERNAME.equal(username))
+			.execute();
+	}
 	
 	public static void main (String[] args) {
 		System.out.println(getPortals("kmw8sf"));
