@@ -51,7 +51,7 @@ public class WorldResources {
 	
 	@POST
 	@Path("portals")
-	public Response getPortals(@FormParam("username") String username) {
+	public Response getPortals(String username) {
 		try {
 			System.out.println("Get Portals Request Received");
 			List<Portal> portals = QueryService.getPortals(username);
