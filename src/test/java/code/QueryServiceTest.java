@@ -92,9 +92,7 @@ public class QueryServiceTest {
 	public void testCaptureBase() {
 		int baseId = QueryService.createBase(10);
 		QueryService.captureBase("kevin", baseId, -1, -1, 1, 1);
-		
-		System.out.println(baseId);
-		
+				
 		List<Base> bases = Lists.newArrayList(new Base("kevin", 1, 1, new Point(0, 0), new Point(1, 0)),
 				new Base("kevin", 2, 2, new Point(1, 0), new Point(-1, -1)),
 				new Base("kevin", 3, 3, new Point(1, 1), new Point(0, -1)),
@@ -102,6 +100,14 @@ public class QueryServiceTest {
 				new Base("kevin", 5, baseId, new Point(-1, -1), new Point(1, 1)));
 		
 		assertThat(QueryService.getUserBases("kevin"), equalTo(bases));
+	}
+	
+	@Test
+	public void testPersistNewBase() {
+		Base newBase = new Base("kevin", -1, -1, new Point(-1, -1), new Point(1, 1));
+		int baseId = QueryService.persistNewBase(newBase);
+		assertThat(baseId, greaterThan(0));
+		assertThat(QueryService.getUserBases("kevin").get(4), equalTo(new Base("kevin", 5, baseId, new Point(-1, -1), new Point(1, 1))));
 	}
 
 	public Connection createKevinDBConnection() {

@@ -85,10 +85,7 @@ public class WorldResources {
 			}
 			magnitude++;
 		}
-		System.out.println(toAdd);
-		QueryService.persistNewBase(toAdd);
-		System.out.println(toAdd.baseId);
-		System.out.println(referenceBase.baseId);
+		int baseId = QueryService.persistNewBase(toAdd);
 		System.out.println(QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId));
 		return Response.ok().build();
 	}

@@ -69,14 +69,16 @@ public class QueryService {
 		return result == 0;
 	}
 	
-	public static void persistNewBase(Base b) {
+	public static int persistNewBase(Base b) {
 		try {
 			if (b.baseId == -1) {
 				b.baseId = createBase(DEFAULT_PROD_RATE);
 			}
 			captureBase(b);
+			return b.baseId;
 		} catch(Exception e) {
 			e.printStackTrace();
+			return -1;
 		}
 	}
 	
