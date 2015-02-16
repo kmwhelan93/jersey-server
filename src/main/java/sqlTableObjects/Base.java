@@ -34,24 +34,27 @@ public class Base {
 
 
 
+	
+
 	@Override
 	public String toString() {
-		return "Base [world=" + world + "]";
+		return "Base [username=" + username + ", colorId=" + colorId
+				+ ", baseId=" + baseId + ", world=" + world + ", local="
+				+ local + "]";
 	}
-
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + baseId;
+		result = prime * result + colorId;
+		result = prime * result + ((local == null) ? 0 : local.hashCode());
 		result = prime * result
 				+ ((username == null) ? 0 : username.hashCode());
 		result = prime * result + ((world == null) ? 0 : world.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -62,6 +65,15 @@ public class Base {
 		if (getClass() != obj.getClass())
 			return false;
 		Base other = (Base) obj;
+		if (baseId != other.baseId)
+			return false;
+		if (colorId != other.colorId)
+			return false;
+		if (local == null) {
+			if (other.local != null)
+				return false;
+		} else if (!local.equals(other.local))
+			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -74,6 +86,10 @@ public class Base {
 			return false;
 		return true;
 	}
+
+
+
+	
 	
 	
 	

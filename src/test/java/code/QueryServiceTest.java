@@ -8,6 +8,9 @@ import static org.mockito.Mockito.when;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
+
+import jsonObjects.Point;
 
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -15,9 +18,15 @@ import org.jooq.impl.DSL;
 import org.junit.Before;
 import org.junit.Test;
 
+import sqlTableObjects.Base;
+
+import com.google.common.collect.Lists;
+
 import static jooq.generated.Tables.*;
 import code.DBConn;
 import code.HelloWorld;
+
+import static org.hamcrest.Matchers.*;
 
 public class QueryServiceTest {
 	public HelloWorld hw;
@@ -64,8 +73,35 @@ public class QueryServiceTest {
 	}
 
 	@Test
-	public void test() {
-		System.out.println(QueryService.getUserBases("kevin"));
+	public void testGetUserBases() {
+		// todo fill this out
+		List<Base> bases = Lists.newArrayList(new Base("kevin", 1, 1, new Point(0, 0), new Point(1, 0)),
+				new Base("kevin", 2, 2, new Point(1, 0), new Point(-1, -1)),
+				new Base("kevin", 3, 3, new Point(1, 1), new Point(0, -1)),
+				new Base("kevin", 4, 4, new Point(-1, 0), new Point(0, 0)));
+		assertThat(QueryService.getUserBases("kevin"), equalTo(bases));
+	}
+	
+	@Test
+	public void testCreateBase() {
+		int baseId = QueryService.createBase(10);
+		assertThat(baseId, greaterThan(0));
+	}
+	
+	@Test
+	public void testCaptureBase() {
+		int baseId = QueryService.createBase(10);
+		QueryService.captureBase("kevin", baseId, -1, -1, 1, 1);
+		
+		System.out.println(baseId);
+		
+		List<Base> bases = Lists.newArrayList(new Base("kevin", 1, 1, new Point(0, 0), new Point(1, 0)),
+				new Base("kevin", 2, 2, new Point(1, 0), new Point(-1, -1)),
+				new Base("kevin", 3, 3, new Point(1, 1), new Point(0, -1)),
+				new Base("kevin", 4, 4, new Point(-1, 0), new Point(0, 0)),
+				new Base("kevin", 5, baseId, new Point(-1, -1), new Point(1, 1)));
+		
+		assertThat(QueryService.getUserBases("kevin"), equalTo(bases));
 	}
 
 	public Connection createKevinDBConnection() {

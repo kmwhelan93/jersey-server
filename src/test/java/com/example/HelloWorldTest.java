@@ -29,12 +29,21 @@ public class HelloWorldTest {
 		hw.dbConn = mockedConn;
 		conn = this.createKevinDBConnection();
 		when(mockedConn.getConnection()).thenReturn(conn);
+		this.clearTables();
 		this.configureUsers();
+		
+	}
+	
+	public void clearTables() {
+		DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+		create.deleteQuery(PORTALS).execute();
+		create.deleteQuery(BASE_OWNERS).execute();
+		create.deleteQuery(BASES).execute();
+		create.deleteQuery(USERS).execute();
 	}
 	
 	public void configureUsers() {
 		DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-		create.deleteQuery(USERS).execute();
 		create.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD).values("kevin", "kevin").execute();
 	}
 
