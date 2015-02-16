@@ -20,7 +20,7 @@ import jsonObjects.Point;
 import static jooq.generated.Tables.*;
 
 public class QueryService {
-	private static DSLContext create = DSL.using(DBConn.getInstance().getConnection(), SQLDialect.MYSQL);
+	public static DSLContext create = DSL.using(DBConn.getInstance().getConnection(), SQLDialect.MYSQL);
 	private static int DEFAULT_PROD_RATE = 200;
 	public static List<Base> getUserBases(String username) {
 		Result<Record> results = create.select().from(BASE_OWNERS).where(BASE_OWNERS.USERNAME.equal(username)).fetch();
@@ -40,11 +40,15 @@ public class QueryService {
 	}
 	
 	public static int createBase(int prodRate) {
-		BasesRecord basesRecord =  create.insertInto(BASES, BASES.PROD_RATE)
-			.values(prodRate)
-			.returning(BASES.BASE_ID)
-			.fetchOne();
-		return basesRecord.getBaseId();
+		try {
+			BasesRecord basesRecord =  create.insertInto(BASES, BASES.PROD_RATE)
+				.values(prodRate)
+				.returning(BASES.BASE_ID)
+				.fetchOne();
+			return basesRecord.getBaseId();
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 	
 	public static boolean captureBase(Base b) {
@@ -66,10 +70,14 @@ public class QueryService {
 	}
 	
 	public static void persistNewBase(Base b) {
-		if (b.baseId == -1) {
-			b.baseId = createBase(DEFAULT_PROD_RATE);
+		try {
+			if (b.baseId == -1) {
+				b.baseId = createBase(DEFAULT_PROD_RATE);
+			}
+			captureBase(b);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		captureBase(b);
 	}
 	
 	public static void disownBase(int baseId) {
@@ -107,10 +115,15 @@ public class QueryService {
 	}
 	
 	public static boolean createPortal(String username, int baseId1, int baseId2) {
-		int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE)
-				.values(username, baseId1, baseId2, 10)
-				.execute();
-		return result == 1;
+		try {
+			int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE)
+					.values(username, baseId1, baseId2, 10)
+					.execute();
+			return result == 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public static void disownPortals(String username) {

@@ -7,9 +7,8 @@ CREATE TABLE users (
 )ENGINE=InnoDB;
 
 CREATE TABLE bases (
-  base_id INT NOT NULL AUTO_INCREMENT,
-  prod_rate INT NOT NULL,
-  PRIMARY KEY (base_id)
+  base_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  prod_rate INT NOT NULL
 )ENGINE=InnoDB;
 
 CREATE TABLE base_owners (
