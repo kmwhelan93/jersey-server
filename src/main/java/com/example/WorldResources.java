@@ -25,7 +25,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import sqlTableObjects.Base;
+import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
 import code.QueryService;
 
@@ -41,7 +41,7 @@ public class WorldResources {
 	public Response getBases(@FormParam("username") String username) {
 		try {
 			System.out.println("Get Bases Request Received");
-			List<Base> bases = QueryService.getUserBases(username);
+			List<BaseObj> bases = QueryService.getUserBases(username);
 			return Response.ok().entity(mapper.writeValueAsString(bases)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,18 +65,18 @@ public class WorldResources {
 	@POST
 	@Path("bases/create")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createBase(Base referenceBase) {
+	public Response createBase(BaseObj referenceBase) {
 		System.out.println("createBase Request Received");
 		String username = referenceBase.username;
-		List<Base> bases = QueryService.getUserBases(username);
+		List<BaseObj> bases = QueryService.getUserBases(username);
 		int magnitude = 1;
-		Base toAdd = null;
+		BaseObj toAdd = null;
 		outer: while (true) {
 			int initialDirection = random.nextInt(4);
 			for (int i = 0; i < 4; i++) {
 				int direction = (i + initialDirection) % 4;
 				Point p = Point.getPoint(direction).scale(magnitude).add(referenceBase.world);
-				Base newBase = new Base(username, p, Point.getRandomDirection());
+				BaseObj newBase = new BaseObj(username, p, Point.getRandomDirection());
 				if (!bases.contains(newBase)) {
 					toAdd = newBase;
 					break outer;
@@ -93,11 +93,11 @@ public class WorldResources {
 	@POST
 	@Path("clear")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response clearWorld(Base avoid) {
+	public Response clearWorld(BaseObj avoid) {
 		System.out.println("clear request received");
 		// clear everything but this base
-		List<Base> bases = QueryService.getUserBases(avoid.username);
-		for (Base b : bases) {
+		List<BaseObj> bases = QueryService.getUserBases(avoid.username);
+		for (BaseObj b : bases) {
 			if (!b.equals(avoid)) {
 				QueryService.disownBase(b.baseId);
 			}

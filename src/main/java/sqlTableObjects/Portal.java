@@ -3,11 +3,11 @@ package sqlTableObjects;
 public class Portal {
 	public int portalId;
 	public String username;
-	public Base base1;
-	public Base base2;
+	public BaseObj base1;
+	public BaseObj base2;
 	int flowRate;
 
-	public Portal(int portalId, String username, Base base1, Base base2,
+	public Portal(int portalId, String username, BaseObj base1, BaseObj base2,
 			int flowRate) {
 		super();
 		this.portalId = portalId;

@@ -18,7 +18,7 @@ import org.jooq.impl.DSL;
 import org.junit.Before;
 import org.junit.Test;
 
-import sqlTableObjects.Base;
+import sqlTableObjects.BaseObj;
 
 import com.google.common.collect.Lists;
 
@@ -52,18 +52,18 @@ public class QueryServiceTest {
 		create.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD).values("kevin", "kevin").execute();
 		
 		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(1, 10).execute();
-		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(2, 10).execute();
-		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(3, 10).execute();
-		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(4, 10).execute();
+		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(2, 11).execute();
+		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(3, 12).execute();
+		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(4, 13).execute();
 		
 		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 1, 1, 0, 0, 1, 0, 10).execute();
+			.values("kevin", 1, 1, 0, 0, 1, 0, 100).execute();
 		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 2, 2, 1, 0, -1, -1, 10).execute();
+			.values("kevin", 2, 2, 1, 0, -1, -1, 101).execute();
 		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 3, 3, 1, 1, 0, -1, 10).execute();
+			.values("kevin", 3, 3, 1, 1, 0, -1, 102).execute();
 		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 4, 4, -1, 0, 0, 0, 10).execute();
+			.values("kevin", 4, 4, -1, 0, 0, 0, 103).execute();
 		
 		create.insertInto(PORTALS, PORTALS.PORTAL_ID, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE)
 			.values(1, "kevin", 3, 2, 10).execute();
@@ -75,10 +75,10 @@ public class QueryServiceTest {
 	@Test
 	public void testGetUserBases() {
 		// todo fill this out
-		List<Base> bases = Lists.newArrayList(new Base("kevin", 1, 1, new Point(0, 0), new Point(1, 0)),
-				new Base("kevin", 2, 2, new Point(1, 0), new Point(-1, -1)),
-				new Base("kevin", 3, 3, new Point(1, 1), new Point(0, -1)),
-				new Base("kevin", 4, 4, new Point(-1, 0), new Point(0, 0)));
+		List<BaseObj> bases = Lists.newArrayList(new BaseObj("kevin", 1, 1, new Point(0, 0), new Point(1, 0), 10, 100),
+				new BaseObj("kevin", 2, 2, new Point(1, 0), new Point(-1, -1), 11, 101),
+				new BaseObj("kevin", 3, 3, new Point(1, 1), new Point(0, -1), 12, 102),
+				new BaseObj("kevin", 4, 4, new Point(-1, 0), new Point(0, 0), 13, 103));
 		assertThat(QueryService.getUserBases("kevin"), equalTo(bases));
 	}
 	
@@ -90,24 +90,24 @@ public class QueryServiceTest {
 	
 	@Test
 	public void testCaptureBase() {
-		int baseId = QueryService.createBase(10);
-		QueryService.captureBase("kevin", baseId, -1, -1, 1, 1);
+		int baseId = QueryService.createBase(14);
+		QueryService.captureBase("kevin", baseId, -1, -1, 1, 1, 104);
 				
-		List<Base> bases = Lists.newArrayList(new Base("kevin", 1, 1, new Point(0, 0), new Point(1, 0)),
-				new Base("kevin", 2, 2, new Point(1, 0), new Point(-1, -1)),
-				new Base("kevin", 3, 3, new Point(1, 1), new Point(0, -1)),
-				new Base("kevin", 4, 4, new Point(-1, 0), new Point(0, 0)),
-				new Base("kevin", 5, baseId, new Point(-1, -1), new Point(1, 1)));
+		List<BaseObj> bases = Lists.newArrayList(new BaseObj("kevin", 1, 1, new Point(0, 0), new Point(1, 0), 10, 100),
+				new BaseObj("kevin", 2, 2, new Point(1, 0), new Point(-1, -1), 11, 101),
+				new BaseObj("kevin", 3, 3, new Point(1, 1), new Point(0, -1), 12, 102),
+				new BaseObj("kevin", 4, 4, new Point(-1, 0), new Point(0, 0), 13, 103),
+				new BaseObj("kevin", 5, baseId, new Point(-1, -1), new Point(1, 1), 14, 104));
 		
 		assertThat(QueryService.getUserBases("kevin"), equalTo(bases));
 	}
 	
 	@Test
 	public void testPersistNewBase() {
-		Base newBase = new Base("kevin", -1, -1, new Point(-1, -1), new Point(1, 1));
+		BaseObj newBase = new BaseObj("kevin", -1, -1, new Point(-1, -1), new Point(1, 1), 14, 10);
 		int baseId = QueryService.persistNewBase(newBase);
 		assertThat(baseId, greaterThan(0));
-		assertThat(QueryService.getUserBases("kevin").get(4), equalTo(new Base("kevin", 5, baseId, new Point(-1, -1), new Point(1, 1))));
+		assertThat(QueryService.getUserBases("kevin").get(4), equalTo(new BaseObj("kevin", 5, baseId, new Point(-1, -1), new Point(1, 1), 14, 10)));
 	}
 
 	public Connection createKevinDBConnection() {

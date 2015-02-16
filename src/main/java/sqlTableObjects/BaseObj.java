@@ -2,25 +2,28 @@ package sqlTableObjects;
 
 import jsonObjects.Point;
 
-public class Base {
+public class BaseObj {
 	public String username;
 	public int colorId = -1;
 	public int baseId = -1;
 	public Point world;
 	public Point local;
+	public int prodRate;
+	public int units;
 	
 	
-	
-	public Base(String username, int colorId, int baseId, Point world, Point local) {
+	public BaseObj(String username, int colorId, int baseId, Point world, Point local, int prodRate, int units) {
 		super();
 		this.username = username;
 		this.colorId = colorId;
 		this.baseId = baseId;
 		this.world = world;
 		this.local = local;
+		this.prodRate = prodRate;
+		this.units = units;
 	}
 	
-	public Base(String username, Point world, Point local) {
+	public BaseObj(String username, Point world, Point local) {
 		this.username = username;
 		this.world = world;
 		this.local = local;
@@ -28,19 +31,15 @@ public class Base {
 
 
 
-	public Base() {
+	public BaseObj() {
 		
 	}
-
-
-
-	
 
 	@Override
 	public String toString() {
 		return "Base [username=" + username + ", colorId=" + colorId
 				+ ", baseId=" + baseId + ", world=" + world + ", local="
-				+ local + "]";
+				+ local + ", prodRate=" + prodRate + ", units=" + units + "]";
 	}
 
 	@Override
@@ -50,6 +49,8 @@ public class Base {
 		result = prime * result + baseId;
 		result = prime * result + colorId;
 		result = prime * result + ((local == null) ? 0 : local.hashCode());
+		result = prime * result + prodRate;
+		result = prime * result + units;
 		result = prime * result
 				+ ((username == null) ? 0 : username.hashCode());
 		result = prime * result + ((world == null) ? 0 : world.hashCode());
@@ -64,7 +65,7 @@ public class Base {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Base other = (Base) obj;
+		BaseObj other = (BaseObj) obj;
 		if (baseId != other.baseId)
 			return false;
 		if (colorId != other.colorId)
@@ -73,6 +74,10 @@ public class Base {
 			if (other.local != null)
 				return false;
 		} else if (!local.equals(other.local))
+			return false;
+		if (prodRate != other.prodRate)
+			return false;
+		if (units != other.units)
 			return false;
 		if (username == null) {
 			if (other.username != null)
@@ -86,6 +91,12 @@ public class Base {
 			return false;
 		return true;
 	}
+
+
+
+	
+
+	
 
 
 
