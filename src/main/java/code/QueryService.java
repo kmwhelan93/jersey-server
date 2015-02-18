@@ -148,6 +148,19 @@ public class QueryService {
 			.execute();
 	}
 	
+	public static boolean portalExists(String username, int baseId1, int baseId2) {
+		Result<Record> results = create.select()
+			.from(PORTALS)
+			.where(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId1).and(PORTALS.BASE_ID2.equal(baseId2))))
+			.or(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId2).and(PORTALS.BASE_ID2.equal(baseId1))))
+			.fetch();
+			
+		if (results.isNotEmpty()) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static void main (String[] args) {
 		System.out.println(getPortals("kmw8sf"));
 	}

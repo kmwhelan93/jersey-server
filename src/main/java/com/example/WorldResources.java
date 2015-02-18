@@ -98,7 +98,12 @@ public class WorldResources {
 		System.out.println("Create Portals Request Received");
 		// NOTE: This method consumes the data like this because I don't think
 		// it is capable of receiving a BaseObj[]
-		QueryService.createPortal(username, baseId1, baseId2);
+		if (!QueryService.portalExists(username, baseId1, baseId2)) {
+			QueryService.createPortal(username, baseId1, baseId2);
+		}
+		else {
+			System.out.println("Portal already exists");
+		}
 		return Response.ok().build();
 	}
 	
