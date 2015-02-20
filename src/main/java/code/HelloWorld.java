@@ -27,7 +27,7 @@ public class HelloWorld {
 		String retVal = "";
 		for (Record r : result) {
 			String username = r.getValue(USERS.USERNAME);
-			Integer gold = r.getValue(USERS.GOLD);
+			double gold = r.getValue(USERS.GOLD);
 			retVal += "USER: " + username + ", gold: " + gold + "\n";
 		}
 		if (retVal.equals("")) {

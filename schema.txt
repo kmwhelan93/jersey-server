@@ -1,9 +1,8 @@
 CREATE TABLE users (
   username varchar(255) PRIMARY KEY,
   password varchar(255),
-  gold INT
-
-
+  gold float,
+  last_update varchar(32)
 )ENGINE=InnoDB;
 
 CREATE TABLE bases (

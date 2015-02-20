@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends org.jooq.impl.TableImpl<jooq.generated.tables.records.UsersRecord> {
 
-	private static final long serialVersionUID = -649208465;
+	private static final long serialVersionUID = -1745999784;
 
 	/**
 	 * The reference instance of <code>maimon.users</code>
@@ -44,7 +44,12 @@ public class Users extends org.jooq.impl.TableImpl<jooq.generated.tables.records
 	/**
 	 * The column <code>maimon.users.gold</code>.
 	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.UsersRecord, java.lang.Integer> GOLD = createField("gold", org.jooq.impl.SQLDataType.INTEGER, this, "");
+	public final org.jooq.TableField<jooq.generated.tables.records.UsersRecord, java.lang.Double> GOLD = createField("gold", org.jooq.impl.SQLDataType.FLOAT, this, "");
+
+	/**
+	 * The column <code>maimon.users.last_update</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.UsersRecord, java.lang.String> LAST_UPDATE = createField("last_update", org.jooq.impl.SQLDataType.VARCHAR.length(32).nullable(false), this, "");
 
 	/**
 	 * Create a <code>maimon.users</code> table reference
