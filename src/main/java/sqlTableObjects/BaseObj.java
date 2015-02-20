@@ -1,5 +1,7 @@
 package sqlTableObjects;
 
+import java.util.List;
+
 import jsonObjects.Point;
 
 public class BaseObj {
@@ -27,6 +29,14 @@ public class BaseObj {
 		this.username = username;
 		this.world = world;
 		this.local = local;
+	}
+	
+	public boolean isSpaceOccupied(List<BaseObj> bases) {
+		for (BaseObj b : bases) {
+			if (this.world.equals(b.world))
+				return true;
+		}
+		return false;
 	}
 
 

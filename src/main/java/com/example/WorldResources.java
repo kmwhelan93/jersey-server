@@ -64,7 +64,7 @@ public class WorldResources {
 				int direction = (i + initialDirection) % 4;
 				Point p = Point.getPoint(direction).scale(magnitude).add(referenceBase.world);
 				BaseObj newBase = new BaseObj(username, p, Point.getRandomDirection());
-				if (!bases.contains(newBase)) {
+				if (!newBase.isSpaceOccupied(bases)) {
 					toAdd = newBase;
 					break outer;
 				}
