@@ -17,6 +17,7 @@ import com.google.common.collect.Lists;
 import jooq.generated.tables.BaseOwners;
 import jooq.generated.tables.Bases;
 import jooq.generated.tables.records.BasesRecord;
+import jsonObjects.GoldInfo;
 import jsonObjects.Point;
 import static jooq.generated.Tables.*;
 
@@ -162,11 +163,11 @@ public class QueryService {
 	}
 	
 	// USER
-	public static double getGold(String username) {
+	public static GoldInfo getGold(String username) {
 		Record r = create.select()
 			.from(USERS)
 			.where(USERS.USERNAME.equal(username)).fetchOne();
-		return r.getValue(USERS.GOLD);
+		return new GoldInfo(r.getValue(USERS.GOLD), r.getValue(USERS.LAST_UPDATE));
 	}
 	
 	public static void syncGold(String username, double gold, long lastUpdate) {

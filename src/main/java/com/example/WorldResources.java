@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 
 
 
+
 import jsonObjects.Point;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
+import code.GameLogicService;
 import code.QueryService;
 
 @Path("world/")
@@ -64,6 +66,7 @@ public class WorldResources {
 				int direction = (i + initialDirection) % 4;
 				Point p = Point.getPoint(direction).scale(magnitude).add(referenceBase.world);
 				BaseObj newBase = new BaseObj(username, p, Point.getRandomDirection());
+				newBase.prodRate = random.nextInt(200) + 10;
 				if (!newBase.isSpaceOccupied(bases)) {
 					toAdd = newBase;
 					break outer;

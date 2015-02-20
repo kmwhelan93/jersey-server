@@ -8,6 +8,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import code.GameLogicService;
+import code.QueryService;
+import jsonObjects.GoldInfo;
 import jsonObjects.GoldSync;
 
 
@@ -18,6 +21,7 @@ public class SyncResource {
 	@Path("gold")
 	@GET
 	public Response syncGold() {
-		return Response.ok().entity(new GoldSync(10, 1)).build();
+		GoldSync gs = GameLogicService.syncGold("kmw8sf");
+		return Response.ok().entity(gs).build();
 	}
 }
