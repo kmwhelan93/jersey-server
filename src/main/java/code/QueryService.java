@@ -161,6 +161,22 @@ public class QueryService {
 		return false;
 	}
 	
+	// USER
+	public static double getGold(String username) {
+		Record r = create.select()
+			.from(USERS)
+			.where(USERS.USERNAME.equal(username)).fetchOne();
+		return r.getValue(USERS.GOLD);
+	}
+	
+	public static void syncGold(String username, double gold, long lastUpdate) {
+		create.update(USERS)
+			.set(USERS.GOLD, gold)
+			.set(USERS.LAST_UPDATE, lastUpdate)
+			.where(USERS.USERNAME.equal(username))
+			.execute();
+	}
+	
 	public static void main (String[] args) {
 		System.out.println(getPortals("kmw8sf"));
 	}

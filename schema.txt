@@ -2,7 +2,7 @@ CREATE TABLE users (
   username varchar(255) PRIMARY KEY,
   password varchar(255),
   gold float,
-  last_update varchar(32)
+  last_update BIGINT
 )ENGINE=InnoDB;
 
 CREATE TABLE bases (
