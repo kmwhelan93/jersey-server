@@ -8,16 +8,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import jsonObjects.GoldSync;
+
 
 @Path("sync")
 @Produces(MediaType.APPLICATION_JSON)
 public class SyncResource {
-
+	
 	@Path("gold")
-	@Produces(MediaType.TEXT_PLAIN)
 	@GET
 	public Response syncGold() {
-		System.out.println("Sync Gold Request Received");
-		return Response.ok().entity("10").build();
+		return Response.ok().entity(new GoldSync(10, 1)).build();
 	}
 }
