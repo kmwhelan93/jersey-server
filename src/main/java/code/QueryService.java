@@ -162,6 +162,31 @@ public class QueryService {
 		return false;
 	}
 	
+	// TROOPS
+	public static int getNumTroops(String username, int baseId) {
+		Result<Record> results = create.select()
+				.from(BASE_OWNERS)
+				.join(BASES)
+					.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+				.where(BASE_OWNERS.USERNAME.equal(username))
+				.and(BASES.BASE_ID.equal(baseId)).fetch();
+		if (results.size() == 1) {
+			return results.get(0).getValue(BASE_OWNERS.NUM_UNITS);
+		}
+		return -1;
+	}
+	
+	public static void moveTroops(String username, int baseId1, int baseId2, int numTroops) {
+		create.update(BASE_OWNERS)
+			.set(BASE_OWNERS.NUM_UNITS, getNumTroops(username, baseId1) - numTroops)
+			.where(BASE_OWNERS.BASE_ID.equal(baseId1))
+			.execute();
+		create.update(BASE_OWNERS)
+			.set(BASE_OWNERS.NUM_UNITS, getNumTroops(username, baseId2) + numTroops)
+			.where(BASE_OWNERS.BASE_ID.equal(baseId2))
+			.execute();
+	}
+	
 	// USER
 	public static GoldInfo getGold(String username) {
 		Record r = create.select()

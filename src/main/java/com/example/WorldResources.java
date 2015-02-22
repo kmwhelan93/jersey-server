@@ -96,8 +96,8 @@ public class WorldResources {
 	@POST
 	@Path("portals/create")
 	public Response createPortals(@FormParam("username") String username, 
-			@FormParam("baseId1")int baseId1, 
-			@FormParam("baseId2")int baseId2) {
+			@FormParam("baseId1") int baseId1, 
+			@FormParam("baseId2") int baseId2) {
 		System.out.println("Create Portals Request Received");
 		// NOTE: This method consumes the data like this because I don't think
 		// it is capable of receiving a BaseObj[]
@@ -108,6 +108,32 @@ public class WorldResources {
 			System.out.println("Portal already exists");
 		}
 		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("troops/move")
+	public Response moveTroops(@FormParam("username") String username,
+			@FormParam("baseId1") int baseId1,
+			@FormParam("baseId2") int baseId2,
+			@FormParam("numTroops") int numTroops) {
+		System.out.println("Move Troops Request Received");
+		// Check portal exists between bases
+		if (QueryService.portalExists(username, baseId1, baseId2)) {
+			// Check that base1 has units >= numTroops
+			if (QueryService.getNumTroops(username, baseId1) >= numTroops) {
+				// Move troops
+				QueryService.moveTroops(username, baseId1, baseId2, numTroops);
+				return Response.ok().build();
+			}
+			else {
+				System.out.println("Not enough troops");
+				return Response.ok().build();
+			}
+		}
+		else {
+			System.out.println("No portal exists between bases");
+			return Response.ok().build();
+		}
 	}
 	
 	@POST
