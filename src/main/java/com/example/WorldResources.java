@@ -77,7 +77,7 @@ public class WorldResources {
 		}
 		int baseId = QueryService.persistNewBase(toAdd);
 		QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId);
-		return Response.ok().build();
+		return Response.ok().entity("Base created!").build();
 	}
 	
 	@POST
@@ -103,11 +103,12 @@ public class WorldResources {
 		// it is capable of receiving a BaseObj[]
 		if (!QueryService.portalExists(username, baseId1, baseId2)) {
 			QueryService.createPortal(username, baseId1, baseId2);
+			return Response.ok().entity("Poral created!").build();
 		}
 		else {
 			System.out.println("Portal already exists");
+			return Response.ok().entity("Portal already exists").build();
 		}
-		return Response.ok().build();
 	}
 	
 	@POST
@@ -123,16 +124,16 @@ public class WorldResources {
 			if (QueryService.getNumTroops(username, baseId1) >= numTroops) {
 				// Move troops
 				QueryService.moveTroops(username, baseId1, baseId2, numTroops);
-				return Response.ok().build();
+				return Response.ok().entity("Units moved!").build();
 			}
 			else {
 				System.out.println("Not enough troops");
-				return Response.ok().build();
+				return Response.ok().entity("Not enough units").build();
 			}
 		}
 		else {
 			System.out.println("No portal exists between bases");
-			return Response.ok().build();
+			return Response.ok().entity("No portal exists between bases").build();
 		}
 	}
 	
