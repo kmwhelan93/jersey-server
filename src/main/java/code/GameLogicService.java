@@ -1,7 +1,6 @@
 package code;
 
 import java.util.List;
-
 import jsonObjects.GoldInfo;
 import jsonObjects.GoldSync;
 import sqlTableObjects.BaseObj;

@@ -116,6 +116,7 @@ public class QueryService {
 					.join(bases2)
 						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
 					)
+			//.where(PORTALS.TIME_FINISHED.lessOrEqual(System.currentTimeMillis()))
 			.fetch();
 		for (Record r : records) {
 			retVal.add(getPortal(r, bases1, baseOwner1, bases2, baseOwner2));
@@ -123,18 +124,44 @@ public class QueryService {
 		return retVal;
 	}
 	
+//	public static List<Portal> getUnfinishedPortals(String username) {
+//		ArrayList<Portal> retVal = Lists.newArrayList();
+//		Bases bases1 = BASES.as("base1");
+//		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
+//		Bases bases2 = BASES.as("base2");
+//		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
+//		Result<Record> records = create.select()
+//			.from(PORTALS
+//					.join(baseOwner1)
+//						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
+//					.join(bases1)
+//						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
+//					.join(baseOwner2)
+//						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
+//					.join(bases2)
+//						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
+//					)
+//			.where(PORTALS.TIME_FINISHED.greaterThan(System.currentTimeMillis()))
+//			.fetch();
+//		for (Record r : records) {
+//			retVal.add(getPortal(r, bases1, baseOwner1, bases2, baseOwner2));
+//		}
+//		return retVal;
+//	}
+	
 	private static Portal getPortal(Record r, Bases bases1, BaseOwners baseOwner1, Bases bases2, BaseOwners baseOwner2) {
 		return new Portal(r.getValue(PORTALS.PORTAL_ID), 
 				r.getValue(PORTALS.USERNAME),
 				getBase(r, bases1, baseOwner1),
 				getBase(r, bases2, baseOwner2),
-				r.getValue(PORTALS.FLOW_RATE));
+				r.getValue(PORTALS.FLOW_RATE),
+				r.getValue(PORTALS.TIME_FINISHED));
 	}
 	
-	public static boolean createPortal(String username, int baseId1, int baseId2) {
+	public static boolean createPortal(String username, int baseId1, int baseId2, long timeFinished) {
 		try {
-			int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE)
-					.values(username, baseId1, baseId2, 10)
+			int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE, PORTALS.TIME_FINISHED)
+					.values(username, baseId1, baseId2, 10, timeFinished)
 					.execute();
 			return result == 1;
 		} catch (Exception e) {
@@ -154,6 +181,7 @@ public class QueryService {
 			.from(PORTALS)
 			.where(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId1).and(PORTALS.BASE_ID2.equal(baseId2))))
 			.or(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId2).and(PORTALS.BASE_ID2.equal(baseId1))))
+			.and(PORTALS.TIME_FINISHED.lessOrEqual(System.currentTimeMillis()))
 			.fetch();
 			
 		if (results.isNotEmpty()) {

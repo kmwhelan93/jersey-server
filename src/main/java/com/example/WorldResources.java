@@ -76,7 +76,7 @@ public class WorldResources {
 			magnitude++;
 		}
 		int baseId = QueryService.persistNewBase(toAdd);
-		QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId);
+		QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId, System.currentTimeMillis());
 		return Response.ok().entity("Base created!").build();
 	}
 	
@@ -93,17 +93,31 @@ public class WorldResources {
 		}
 	}
 	
+//	@POST
+//	@Path("portals/unfinished")
+//	public Response getUnfinishedPortals(String username) {
+//		try {
+//			System.out.println("Get Portals Request Received");
+//			List<Portal> portals = QueryService.getUnfinishedPortals(username);
+//			return Response.ok().entity(mapper.writeValueAsString(portals)).build();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			return Response.ok().build();
+//		}
+//	}
+	
 	@POST
 	@Path("portals/create")
 	public Response createPortals(@FormParam("username") String username, 
 			@FormParam("baseId1") int baseId1, 
-			@FormParam("baseId2") int baseId2) {
+			@FormParam("baseId2") int baseId2,
+			@FormParam("timeFinished") long timeFinished) {
 		System.out.println("Create Portals Request Received");
 		// NOTE: This method consumes the data like this because I don't think
 		// it is capable of receiving a BaseObj[]
 		if (!QueryService.portalExists(username, baseId1, baseId2)) {
-			QueryService.createPortal(username, baseId1, baseId2);
-			return Response.ok().entity("Poral created!").build();
+			QueryService.createPortal(username, baseId1, baseId2, timeFinished);
+			return Response.ok().entity("Portal creation started!").build();
 		}
 		else {
 			System.out.println("Portal already exists");
