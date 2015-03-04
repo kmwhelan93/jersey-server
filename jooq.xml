@@ -38,8 +38,8 @@
       <packageName>jooq.generated</packageName>
 
       <!-- The destination directory of your generated classes -->
-      <!--  <directory>C:\Documents\Capstone\jersey-server\src\main\java\</directory> -->
-      <directory>C:\Users\Courtney\Documents\Seventh Semester\Capstone\jersey-server\src\main\java\</directory>
+      <directory>C:\Documents\Capstone\jersey-server\src\main\java\</directory>
+      <!--  <directory>C:\Users\Courtney\Documents\Seventh Semester\Capstone\jersey-server\src\main\java\</directory> -->
     </target>
   </generator>
 </configuration>
