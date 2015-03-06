@@ -47,6 +47,17 @@ public class QueryService {
 				r.getValue(b.NUM_UNITS));
 	}
 	
+	private static Point getBaseWorldLoc(String username, int baseId) {
+		Result<Record> results = create.select()
+				.from(BASE_OWNERS)
+				.join(BASES)
+					.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+				.where(BASE_OWNERS.USERNAME.equal(username))
+				.and(BASE_OWNERS.BASE_ID.equal(baseId)).fetch();
+		return new Point(results.get(0).getValue(BASE_OWNERS.WORLD_X), 
+				results.get(0).getValue(BASE_OWNERS.WORLD_Y));
+	}
+	
 	public static int createBase(int prodRate) {
 		try {
 			BasesRecord basesRecord =  create.insertInto(BASES, BASES.PROD_RATE)
@@ -97,6 +108,26 @@ public class QueryService {
 			.execute();
 	}
 	
+	public static int[] getValidBaseIds(String username, int base1Id) {
+		Point refBaseWorldLoc = getBaseWorldLoc(username, base1Id);
+		Result<Record> records = create.select()
+			.from(BASE_OWNERS)
+			.join(BASES)
+				.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+			.where(BASE_OWNERS.USERNAME.equal(username))
+			.and(BASE_OWNERS.WORLD_X.minus(refBaseWorldLoc.x).abs().lessOrEqual(1))
+			.and(BASE_OWNERS.WORLD_Y.minus(refBaseWorldLoc.y).abs().lessOrEqual(1))
+			.and(BASE_OWNERS.BASE_ID.notEqual(base1Id)).fetch();
+		int[] validBaseIds = new int[records.size() + 1];
+		int i = 0;
+		for (Record r : records) {
+			validBaseIds[i] = r.getValue(BASE_OWNERS.BASE_ID);
+			i++;
+		}
+		validBaseIds[i] = base1Id;
+		return validBaseIds;
+	}
+	
 	//////////// PORTALS ///////////////
 	
 	public static List<Portal> getPortals(String username) {
@@ -123,31 +154,6 @@ public class QueryService {
 		}
 		return retVal;
 	}
-	
-//	public static List<Portal> getUnfinishedPortals(String username) {
-//		ArrayList<Portal> retVal = Lists.newArrayList();
-//		Bases bases1 = BASES.as("base1");
-//		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
-//		Bases bases2 = BASES.as("base2");
-//		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
-//		Result<Record> records = create.select()
-//			.from(PORTALS
-//					.join(baseOwner1)
-//						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
-//					.join(bases1)
-//						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
-//					.join(baseOwner2)
-//						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
-//					.join(bases2)
-//						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
-//					)
-//			.where(PORTALS.TIME_FINISHED.greaterThan(System.currentTimeMillis()))
-//			.fetch();
-//		for (Record r : records) {
-//			retVal.add(getPortal(r, bases1, baseOwner1, bases2, baseOwner2));
-//		}
-//		return retVal;
-//	}
 	
 	private static Portal getPortal(Record r, Bases bases1, BaseOwners baseOwner1, Bases bases2, BaseOwners baseOwner2) {
 		return new Portal(r.getValue(PORTALS.PORTAL_ID), 

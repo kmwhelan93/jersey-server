@@ -81,6 +81,21 @@ public class WorldResources {
 	}
 	
 	@POST
+	@Path("bases/valid")
+	public Response getValidBaseIds(@FormParam("username") String username,
+			@FormParam("base1Id") int base1Id) {
+		int[] validBaseIds = QueryService.getValidBaseIds(username, base1Id);
+		String baseIds = "";
+		if (validBaseIds.length > 0) {
+			baseIds += validBaseIds[0] + "";
+			for (int i = 1; i < validBaseIds.length; i++) {
+				baseIds += ";" + validBaseIds[i];
+			}
+		}
+		return Response.ok().entity(baseIds).build();
+	}
+	
+	@POST
 	@Path("portals")
 	public Response getPortals(String username) {
 		try {
@@ -92,19 +107,6 @@ public class WorldResources {
 			return Response.ok().build();
 		}
 	}
-	
-//	@POST
-//	@Path("portals/unfinished")
-//	public Response getUnfinishedPortals(String username) {
-//		try {
-//			System.out.println("Get Portals Request Received");
-//			List<Portal> portals = QueryService.getUnfinishedPortals(username);
-//			return Response.ok().entity(mapper.writeValueAsString(portals)).build();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			return Response.ok().build();
-//		}
-//	}
 	
 	@POST
 	@Path("portals/create")
