@@ -128,28 +128,45 @@ public class WorldResources {
 	}
 	
 	@POST
-	@Path("troops/move")
-	public Response moveTroops(@FormParam("username") String username,
-			@FormParam("baseId1") int baseId1,
+	@Path("troops/startMove")
+	public Response getPortal(@FormParam("username") String username, 
+			@FormParam("baseId1") int baseId1, 
 			@FormParam("baseId2") int baseId2,
 			@FormParam("numTroops") int numTroops) {
-		System.out.println("Move Troops Request Received");
-		// Check portal exists between bases
-		if (QueryService.portalExists(username, baseId1, baseId2)) {
-			// Check that base1 has units >= numTroops
-			if (QueryService.getNumTroops(username, baseId1) >= numTroops) {
-				// Move troops
-				QueryService.moveTroops(username, baseId1, baseId2, numTroops);
-				return Response.ok().entity("Units moved!").build();
-			}
-			else {
-				System.out.println("Not enough troops");
-				return Response.ok().entity("Not enough units").build();
-			}
+		// Update move info in Portals table and return portal
+		try {
+			Portal p = QueryService.getAndUpdatePortal(username, baseId1, baseId2, numTroops);
+			return Response.ok().entity(mapper.writeValueAsString(p)).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
 		}
-		else {
-			System.out.println("No portal exists between bases");
-			return Response.ok().entity("No portal exists between bases").build();
+	}
+	
+	@POST
+	@Path("troops/restartMove")
+	public Response restartMove(@FormParam("username") String username) {
+		// Get all portals with troops to move
+		try {
+			Portal[] p = QueryService.getMovePortals(username);
+			return Response.ok().entity(mapper.writeValueAsString(p)).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}
+	
+	@POST
+	@Path("troops/finishMove")
+	public Response finishMove(@FormParam("username") String username, 
+			@FormParam("portalId") int portalId) {
+		// Update move info in Portals table
+		try {
+			QueryService.updatePortalForMove(username, portalId, 0);
+			return Response.ok().entity("Units moved!").build();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
 		}
 	}
 	

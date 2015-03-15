@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Portals extends org.jooq.impl.TableImpl<jooq.generated.tables.records.PortalsRecord> {
 
-	private static final long serialVersionUID = 546285313;
+	private static final long serialVersionUID = -1112564726;
 
 	/**
 	 * The reference instance of <code>maimon.portals</code>
@@ -52,14 +52,24 @@ public class Portals extends org.jooq.impl.TableImpl<jooq.generated.tables.recor
 	public final org.jooq.TableField<jooq.generated.tables.records.PortalsRecord, java.lang.Integer> BASE_ID2 = createField("base_id2", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
+	 * The column <code>maimon.portals.time_finished</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.PortalsRecord, java.lang.Long> TIME_FINISHED = createField("time_finished", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
+
+	/**
 	 * The column <code>maimon.portals.flow_rate</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.PortalsRecord, java.lang.Integer> FLOW_RATE = createField("flow_rate", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>maimon.portals.time_finished</code>.
+	 * The column <code>maimon.portals.troops_to_move</code>.
 	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.PortalsRecord, java.lang.Long> TIME_FINISHED = createField("time_finished", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
+	public final org.jooq.TableField<jooq.generated.tables.records.PortalsRecord, java.lang.Integer> TROOPS_TO_MOVE = createField("troops_to_move", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>maimon.portals.last_move_update</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.PortalsRecord, java.lang.Long> LAST_MOVE_UPDATE = createField("last_move_update", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
 	/**
 	 * Create a <code>maimon.portals</code> table reference
