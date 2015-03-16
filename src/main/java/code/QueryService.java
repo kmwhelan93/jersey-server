@@ -160,14 +160,85 @@ public class QueryService {
 				r.getValue(PORTALS.USERNAME),
 				getBase(r, bases1, baseOwner1),
 				getBase(r, bases2, baseOwner2),
+				r.getValue(PORTALS.TIME_FINISHED),
 				r.getValue(PORTALS.FLOW_RATE),
-				r.getValue(PORTALS.TIME_FINISHED));
+				r.getValue(PORTALS.TROOPS_TO_MOVE),
+				r.getValue(PORTALS.LAST_MOVE_UPDATE));
+	}
+	
+	public static Portal getAndUpdatePortal(String username, int baseId1, int baseId2, int numTroops) {
+		// Get portal
+		Bases bases1 = BASES.as("base1");
+		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
+		Bases bases2 = BASES.as("base2");
+		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
+		Result<Record> records = create.select()
+			.from(PORTALS
+					.join(baseOwner1)
+						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
+					.join(bases1)
+						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
+					.join(baseOwner2)
+						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
+					.join(bases2)
+						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
+					)
+				.where(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId1).and(PORTALS.BASE_ID2.equal(baseId2))))
+				.or(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId2).and(PORTALS.BASE_ID2.equal(baseId1))))
+				.and(PORTALS.TIME_FINISHED.lessOrEqual(System.currentTimeMillis()))
+				.fetch();
+		Portal p = getPortal(records.get(0), bases1, baseOwner1, bases2, baseOwner2);
+		// Portal p = new Portal(records.get(0).getValue(PORTALS.PORTAL_ID), username, null, null, 
+				//records.get(0).getValue(PORTALS.FLOW_RATE),
+				//records.get(0).getValue(PORTALS.TIME_FINISHED));
+		
+		// Update "troops_to_move" and "last_move_update" values
+		if (p.base1.baseId == baseId2) {
+			numTroops *= -1;
+		}
+		updatePortalForMove(username, p.portalId, numTroops);
+		return p;
+	}
+	
+	public static boolean updatePortalForMove(String username, int portalId, int numTroops) {
+		int result = create.update(PORTALS)
+				.set(PORTALS.TROOPS_TO_MOVE, numTroops)
+				.set(PORTALS.LAST_MOVE_UPDATE, System.currentTimeMillis())
+				.where(PORTALS.USERNAME.equal(username).and(PORTALS.PORTAL_ID.equal(portalId)))
+				.execute();
+		return true;
+	}
+	
+	public static Portal[] getMovePortals(String username) {
+		// Get portals
+		Bases bases1 = BASES.as("base1");
+		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
+		Bases bases2 = BASES.as("base2");
+		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
+		Result<Record> records = create.select()
+			.from(PORTALS
+					.join(baseOwner1)
+						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
+					.join(bases1)
+						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
+					.join(baseOwner2)
+						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
+					.join(bases2)
+						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
+					)
+			.where(PORTALS.USERNAME.equal(username).and((PORTALS.TROOPS_TO_MOVE.notEqual(0))))
+			.fetch();
+		Portal[] p = new Portal[records.size()];
+		for (int i = 0; i < records.size(); i++) {
+			p[i] = getPortal(records.get(0), bases1, baseOwner1, bases2, baseOwner2);
+		}
+		return p;
 	}
 	
 	public static boolean createPortal(String username, int baseId1, int baseId2, long timeFinished) {
 		try {
-			int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE, PORTALS.TIME_FINISHED)
-					.values(username, baseId1, baseId2, 10, timeFinished)
+			int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.TIME_FINISHED, PORTALS.FLOW_RATE, PORTALS.LAST_MOVE_UPDATE)
+					.values(username, baseId1, baseId2, timeFinished, 10, System.currentTimeMillis())
 					.execute();
 			return result == 1;
 		} catch (Exception e) {
