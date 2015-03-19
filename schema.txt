@@ -38,7 +38,13 @@ CREATE TABLE portals (
 CREATE TABLE wormholes (
   wormhole_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   base_id INT NOT NULL,
-  FOREIGN KEY(base_id) REFERENCES bases(base_id)
+  owner varchar(255),
+  relative_coord_x INT DEFAULT 1,
+  relative_coord_y INT DEFAULT 1,
+  connected_wormhole_id INT,
+  FOREIGN KEY(base_id) REFERENCES bases(base_id),
+  FOREIGN KEY(owner) REFERENCES users(username),
+  FOREIGN KEY(connected_wormhole_id) REFERENCES wormholes(wormhole_id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE wormhole_connections (

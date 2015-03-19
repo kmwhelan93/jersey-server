@@ -35,4 +35,9 @@ public class Tables {
 	 * The table maimon.users
 	 */
 	public static final jooq.generated.tables.Users USERS = jooq.generated.tables.Users.USERS;
+
+	/**
+	 * The table maimon.wormholes
+	 */
+	public static final jooq.generated.tables.Wormholes WORMHOLES = jooq.generated.tables.Wormholes.WORMHOLES;
 }
