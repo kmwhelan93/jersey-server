@@ -11,6 +11,7 @@ import org.jooq.impl.DSL;
 
 import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
+import sqlTableObjects.WormHoleObj;
 
 import com.google.common.collect.Lists;
 
@@ -267,6 +268,34 @@ public class QueryService {
 		return false;
 	}
 	
+	///////////////////////////
+	///////// WORMHOLES////////
+	///////////////////////////
+	
+	public static List<WormHoleObj> getWormholes(String username) {
+		Result<Record> results = create.select()
+			.from(WORMHOLES)
+			.join(BASES)
+						.on(BASES.BASE_ID.equal(WORMHOLES.BASE_ID))
+					.join(BASE_OWNERS)
+						.on(BASE_OWNERS.BASE_ID.equal(WORMHOLES.BASE_ID))
+			.where(WORMHOLES.OWNER.equal(username)).fetch();
+		List<WormHoleObj> wormholes = Lists.newArrayList();
+		for (Record r : results) {
+			wormholes.add(getWormHole(r));
+		}
+		return wormholes;
+	}
+	
+	public static WormHoleObj getWormHole(Record r) {
+		return new WormHoleObj(
+				r.getValue(WORMHOLES.WORMHOLE_ID),
+				getBase(r, BASES, BASE_OWNERS),
+				r.getValue(WORMHOLES.OWNER),
+				new Point(r.getValue(WORMHOLES.RELATIVE_COORD_X), r.getValue(WORMHOLES.RELATIVE_COORD_Y)),
+				r.getValue(WORMHOLES.CONNECTED_WORMHOLE_ID));
+	}
+	
 	// TROOPS
 	public static int getNumTroops(String username, int baseId) {
 		Result<Record> results = create.select()
@@ -309,6 +338,6 @@ public class QueryService {
 	}
 	
 	public static void main (String[] args) {
-		System.out.println(getPortals("kmw8sf"));
+		System.out.println(getWormholes("kmw8sf"));
 	}
 }
