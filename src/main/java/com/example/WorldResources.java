@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 
 
 
+
 import jsonObjects.Point;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
+import sqlTableObjects.WormHoleObj;
 import code.GameLogicService;
 import code.QueryService;
 
@@ -195,6 +197,19 @@ public class WorldResources {
 		System.out.println("Test hit");
 		
 		return Response.ok().entity(ti).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}
+	
+	@POST
+	@Path("wormholes")
+	public Response getWormHoles(@FormParam("username") String username) {
+		try {
+			System.out.println("Get WormHoles Request Received for " + username);
+			List<WormHoleObj> wormholes = QueryService.getWormholes(username.trim());
+			return Response.ok().entity(mapper.writeValueAsString(wormholes)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.ok().build();

@@ -279,7 +279,7 @@ public class QueryService {
 						.on(BASES.BASE_ID.equal(WORMHOLES.BASE_ID))
 					.join(BASE_OWNERS)
 						.on(BASE_OWNERS.BASE_ID.equal(WORMHOLES.BASE_ID))
-			.where(WORMHOLES.OWNER.equal(username)).fetch();
+			.where(BASE_OWNERS.USERNAME.equal(username)).fetch();
 		List<WormHoleObj> wormholes = Lists.newArrayList();
 		for (Record r : results) {
 			wormholes.add(getWormHole(r));
@@ -291,7 +291,6 @@ public class QueryService {
 		return new WormHoleObj(
 				r.getValue(WORMHOLES.WORMHOLE_ID),
 				getBase(r, BASES, BASE_OWNERS),
-				r.getValue(WORMHOLES.OWNER),
 				new Point(r.getValue(WORMHOLES.RELATIVE_COORD_X), r.getValue(WORMHOLES.RELATIVE_COORD_Y)),
 				r.getValue(WORMHOLES.CONNECTED_WORMHOLE_ID));
 	}

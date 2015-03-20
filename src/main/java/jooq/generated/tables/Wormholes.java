@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Wormholes extends org.jooq.impl.TableImpl<jooq.generated.tables.records.WormholesRecord> {
 
-	private static final long serialVersionUID = -205440397;
+	private static final long serialVersionUID = 1967792823;
 
 	/**
 	 * The reference instance of <code>maimon.wormholes</code>
@@ -40,11 +40,6 @@ public class Wormholes extends org.jooq.impl.TableImpl<jooq.generated.tables.rec
 	 * The column <code>maimon.wormholes.base_id</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.WormholesRecord, java.lang.Integer> BASE_ID = createField("base_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
-	 * The column <code>maimon.wormholes.owner</code>.
-	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.WormholesRecord, java.lang.String> OWNER = createField("owner", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
 	 * The column <code>maimon.wormholes.relative_coord_x</code>.
@@ -112,7 +107,7 @@ public class Wormholes extends org.jooq.impl.TableImpl<jooq.generated.tables.rec
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, ?>>asList(jooq.generated.Keys.WORMHOLES_IBFK_1, jooq.generated.Keys.WORMHOLES_IBFK_2, jooq.generated.Keys.WORMHOLES_IBFK_3);
+		return java.util.Arrays.<org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, ?>>asList(jooq.generated.Keys.WORMHOLES_IBFK_1, jooq.generated.Keys.WORMHOLES_IBFK_2);
 	}
 
 	/**

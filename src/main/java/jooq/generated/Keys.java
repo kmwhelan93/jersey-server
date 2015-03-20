@@ -44,8 +44,7 @@ public class Keys {
 	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_2 = ForeignKeys0.PORTALS_IBFK_2;
 	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_3 = ForeignKeys0.PORTALS_IBFK_3;
 	public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.BasesRecord> WORMHOLES_IBFK_1 = ForeignKeys0.WORMHOLES_IBFK_1;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.UsersRecord> WORMHOLES_IBFK_2 = ForeignKeys0.WORMHOLES_IBFK_2;
-	public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.WormholesRecord> WORMHOLES_IBFK_3 = ForeignKeys0.WORMHOLES_IBFK_3;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.WormholesRecord> WORMHOLES_IBFK_2 = ForeignKeys0.WORMHOLES_IBFK_2;
 
 	// -------------------------------------------------------------------------
 	// [#1459] distribute members to avoid static initialisers > 64kb
@@ -71,7 +70,6 @@ public class Keys {
 		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.BASE_ID1);
 		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_3 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.BASE_ID2);
 		public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.BasesRecord> WORMHOLES_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Wormholes.WORMHOLES, jooq.generated.tables.Wormholes.WORMHOLES.BASE_ID);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.UsersRecord> WORMHOLES_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_USERS_PRIMARY, jooq.generated.tables.Wormholes.WORMHOLES, jooq.generated.tables.Wormholes.WORMHOLES.OWNER);
-		public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.WormholesRecord> WORMHOLES_IBFK_3 = createForeignKey(jooq.generated.Keys.KEY_WORMHOLES_PRIMARY, jooq.generated.tables.Wormholes.WORMHOLES, jooq.generated.tables.Wormholes.WORMHOLES.CONNECTED_WORMHOLE_ID);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.WormholesRecord, jooq.generated.tables.records.WormholesRecord> WORMHOLES_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_WORMHOLES_PRIMARY, jooq.generated.tables.Wormholes.WORMHOLES, jooq.generated.tables.Wormholes.WORMHOLES.CONNECTED_WORMHOLE_ID);
 	}
 }
