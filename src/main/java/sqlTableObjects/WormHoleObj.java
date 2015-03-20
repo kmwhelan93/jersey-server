@@ -3,10 +3,10 @@ package sqlTableObjects;
 import jsonObjects.Point;
 
 public class WormHoleObj {
-	public int wormhole_id;
-	public BaseObj base;
-	public Point relative_coords;
-	public int connected_wormhole_id;
+	public int wormholeId;
+	public BaseObj b;
+	public Point relativeCoords;
+	public int connectedWormholeId;
 	
 	public WormHoleObj() {
 		
@@ -15,28 +15,28 @@ public class WormHoleObj {
 	public WormHoleObj(int wormhole_id, BaseObj base,
 			Point relative_coords, int connected_wormhole_id) {
 		super();
-		this.wormhole_id = wormhole_id;
-		this.base = base;
-		this.relative_coords = relative_coords;
-		this.connected_wormhole_id = connected_wormhole_id;
+		this.wormholeId = wormhole_id;
+		this.b = base;
+		this.relativeCoords = relative_coords;
+		this.connectedWormholeId = connected_wormhole_id;
 	}
 
 	@Override
 	public String toString() {
-		return "WormHoleObj [wormhole_id=" + wormhole_id + ", base=" + base
-				+ ", relative_coords=" + relative_coords
-				+ ", connected_wormhole_id=" + connected_wormhole_id + "]";
+		return "WormHoleObj [wormhole_id=" + wormholeId + ", base=" + b
+				+ ", relative_coords=" + relativeCoords
+				+ ", connected_wormhole_id=" + connectedWormholeId + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((base == null) ? 0 : base.hashCode());
-		result = prime * result + connected_wormhole_id;
+		result = prime * result + ((b == null) ? 0 : b.hashCode());
+		result = prime * result + connectedWormholeId;
 		result = prime * result
-				+ ((relative_coords == null) ? 0 : relative_coords.hashCode());
-		result = prime * result + wormhole_id;
+				+ ((relativeCoords == null) ? 0 : relativeCoords.hashCode());
+		result = prime * result + wormholeId;
 		return result;
 	}
 
@@ -49,19 +49,19 @@ public class WormHoleObj {
 		if (getClass() != obj.getClass())
 			return false;
 		WormHoleObj other = (WormHoleObj) obj;
-		if (base == null) {
-			if (other.base != null)
+		if (b == null) {
+			if (other.b != null)
 				return false;
-		} else if (!base.equals(other.base))
+		} else if (!b.equals(other.b))
 			return false;
-		if (connected_wormhole_id != other.connected_wormhole_id)
+		if (connectedWormholeId != other.connectedWormholeId)
 			return false;
-		if (relative_coords == null) {
-			if (other.relative_coords != null)
+		if (relativeCoords == null) {
+			if (other.relativeCoords != null)
 				return false;
-		} else if (!relative_coords.equals(other.relative_coords))
+		} else if (!relativeCoords.equals(other.relativeCoords))
 			return false;
-		if (wormhole_id != other.wormhole_id)
+		if (wormholeId != other.wormholeId)
 			return false;
 		return true;
 	}
