@@ -20,6 +20,13 @@ public class WormHoleObj {
 		this.relativeCoords = relative_coords;
 		this.connectedWormholeId = connected_wormhole_id;
 	}
+	public WormHoleObj(BaseObj base,
+			Point relative_coords, int connected_wormhole_id) {
+		super();
+		this.b = base;
+		this.relativeCoords = relative_coords;
+		this.connectedWormholeId = connected_wormhole_id;
+	}
 
 	@Override
 	public String toString() {

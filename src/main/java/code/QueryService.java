@@ -313,6 +313,14 @@ public class QueryService {
 				r.getValue(WORMHOLES.CONNECTED_WORMHOLE_ID));
 	}
 	
+	public static int persistNewWormHole(WormHoleObj wormhole) {
+		int wormholeId = create.insertInto(WORMHOLES, WORMHOLES.BASE_ID, WORMHOLES.RELATIVE_COORD_X, WORMHOLES.RELATIVE_COORD_Y, WORMHOLES.CONNECTED_WORMHOLE_ID)
+			.values(wormhole.b.baseId, wormhole.relativeCoords.x, wormhole.relativeCoords.y, wormhole.connectedWormholeId)
+			.returning(WORMHOLES.WORMHOLE_ID)
+			.fetchOne().getWormholeId();
+		return wormholeId;
+	}
+	
 	// TROOPS
 	public static int getNumTroops(String username, int baseId) {
 		Result<Record> results = create.select()

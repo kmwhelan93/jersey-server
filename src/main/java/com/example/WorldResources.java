@@ -79,6 +79,12 @@ public class WorldResources {
 		}
 		int baseId = QueryService.persistNewBase(toAdd);
 		QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId, System.currentTimeMillis());
+		
+		List<WormHoleObj> newWormholes = GameLogicService.createNewWormholes(toAdd);
+		System.out.println(newWormholes);
+		for (WormHoleObj wormhole : newWormholes) {
+			QueryService.persistNewWormHole(wormhole);
+		}
 		return Response.ok().entity("Base created!").build();
 	}
 	
