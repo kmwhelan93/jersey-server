@@ -148,7 +148,6 @@ public class QueryService {
 					.join(bases2)
 						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
 					)
-			//.where(PORTALS.TIME_FINISHED.lessOrEqual(System.currentTimeMillis()))
 			.fetch();
 		for (Record r : records) {
 			retVal.add(getPortal(r, bases1, baseOwner1, bases2, baseOwner2));
@@ -165,6 +164,28 @@ public class QueryService {
 				r.getValue(PORTALS.FLOW_RATE),
 				r.getValue(PORTALS.TROOPS_TO_MOVE),
 				r.getValue(PORTALS.LAST_MOVE_UPDATE));
+	}
+	
+	private static Portal getPortalById(String username, int portalId) {
+		Bases bases1 = BASES.as("base1");
+		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
+		Bases bases2 = BASES.as("base2");
+		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
+		Result<Record> records = create.select()
+			.from(PORTALS
+					.join(baseOwner1)
+						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
+					.join(bases1)
+						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
+					.join(baseOwner2)
+						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
+					.join(bases2)
+						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
+					)
+			.where(PORTALS.USERNAME.equal(username))
+			.and(PORTALS.PORTAL_ID.equal(portalId))
+			.fetch();
+		return getPortal(records.get(0), bases1, baseOwner1, bases2, baseOwner2);
 	}
 	
 	public static Portal getAndUpdatePortal(String username, int baseId1, int baseId2, int numTroops) {
@@ -189,9 +210,6 @@ public class QueryService {
 				.and(PORTALS.TIME_FINISHED.lessOrEqual(System.currentTimeMillis()))
 				.fetch();
 		Portal p = getPortal(records.get(0), bases1, baseOwner1, bases2, baseOwner2);
-		// Portal p = new Portal(records.get(0).getValue(PORTALS.PORTAL_ID), username, null, null, 
-				//records.get(0).getValue(PORTALS.FLOW_RATE),
-				//records.get(0).getValue(PORTALS.TIME_FINISHED));
 		
 		// Update "troops_to_move" and "last_move_update" values
 		if (p.base1.baseId == baseId2) {
@@ -201,13 +219,12 @@ public class QueryService {
 		return p;
 	}
 	
-	public static boolean updatePortalForMove(String username, int portalId, int numTroops) {
-		int result = create.update(PORTALS)
+	public static void updatePortalForMove(String username, int portalId, int numTroops) {
+		create.update(PORTALS)
 				.set(PORTALS.TROOPS_TO_MOVE, numTroops)
 				.set(PORTALS.LAST_MOVE_UPDATE, System.currentTimeMillis())
 				.where(PORTALS.USERNAME.equal(username).and(PORTALS.PORTAL_ID.equal(portalId)))
 				.execute();
-		return true;
 	}
 	
 	public static Portal[] getMovePortals(String username) {
@@ -227,11 +244,12 @@ public class QueryService {
 					.join(bases2)
 						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
 					)
-			.where(PORTALS.USERNAME.equal(username).and((PORTALS.TROOPS_TO_MOVE.notEqual(0))))
+			.where(PORTALS.USERNAME.equal(username))
+			.and(PORTALS.TROOPS_TO_MOVE.notEqual(0))
 			.fetch();
 		Portal[] p = new Portal[records.size()];
 		for (int i = 0; i < records.size(); i++) {
-			p[i] = getPortal(records.get(0), bases1, baseOwner1, bases2, baseOwner2);
+			p[i] = getPortal(records.get(i), bases1, baseOwner1, bases2, baseOwner2);
 		}
 		return p;
 	}
@@ -310,14 +328,23 @@ public class QueryService {
 		return -1;
 	}
 	
+	public static void finishMoveTroops(String username, int portalId) {
+		// Get portal
+		Portal p = getPortalById(username, portalId);
+		moveTroops(username, p.base1.baseId, p.base2.baseId, p.troopsToMove);
+		updatePortalForMove(username, portalId, 0);
+	}
+	
 	public static void moveTroops(String username, int baseId1, int baseId2, int numTroops) {
 		create.update(BASE_OWNERS)
-			.set(BASE_OWNERS.NUM_UNITS, getNumTroops(username, baseId1) - numTroops)
+			.set(BASE_OWNERS.NUM_UNITS, BASE_OWNERS.NUM_UNITS.minus(numTroops))
 			.where(BASE_OWNERS.BASE_ID.equal(baseId1))
+			.and(BASE_OWNERS.USERNAME.equal(username))
 			.execute();
 		create.update(BASE_OWNERS)
-			.set(BASE_OWNERS.NUM_UNITS, getNumTroops(username, baseId2) + numTroops)
+			.set(BASE_OWNERS.NUM_UNITS, BASE_OWNERS.NUM_UNITS.plus(numTroops))
 			.where(BASE_OWNERS.BASE_ID.equal(baseId2))
+			.and(BASE_OWNERS.USERNAME.equal(username))
 			.execute();
 	}
 	

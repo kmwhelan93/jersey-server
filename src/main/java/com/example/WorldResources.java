@@ -162,7 +162,7 @@ public class WorldResources {
 			@FormParam("portalId") int portalId) {
 		// Update move info in Portals table
 		try {
-			QueryService.updatePortalForMove(username, portalId, 0);
+			QueryService.finishMoveTroops(username, portalId);
 			return Response.ok().entity("Units moved!").build();
 		} catch(Exception e) {
 			e.printStackTrace();
