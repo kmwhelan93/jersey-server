@@ -45,7 +45,9 @@ public class QueryService {
 				new Point(r.getValue(b.WORLD_X), r.getValue(b.WORLD_Y)),
 				new Point(r.getValue(b.LOCAL_X), r.getValue(b.LOCAL_Y)),
 				r.getValue(bases.PROD_RATE),
-				r.getValue(b.NUM_UNITS));
+				r.getValue(b.NUM_UNITS),
+				r.getValue(b.UNITS_TO_ADD),
+				r.getValue(b.LAST_UPDATED));
 	}
 	
 	private static Point getBaseWorldLoc(String username, int baseId) {
@@ -322,9 +324,35 @@ public class QueryService {
 	}
 	
 	// TROOPS
-	public static void addTroops(String username, int baseId, int numTroops) {
+	public static void startAddTroops(String username, int baseId, int numTroops) {
+		create.update(BASE_OWNERS)
+			.set(BASE_OWNERS.UNITS_TO_ADD, numTroops)
+			.set(BASE_OWNERS.LAST_UPDATED, System.currentTimeMillis())
+			.where(BASE_OWNERS.BASE_ID.equal(baseId))
+			.and(BASE_OWNERS.USERNAME.equal(username))
+			.execute();
+	}
+	
+	public static List<BaseObj> getAddTroopsBases(String username) {
+		Result<Record> results = create.select()
+				.from(BASE_OWNERS)
+				.join(BASES)
+					.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+				.where(BASE_OWNERS.USERNAME.equal(username))
+				.and(BASE_OWNERS.UNITS_TO_ADD.notEqual(0)).fetch();
+		List<BaseObj> baseLocations = Lists.newArrayList();
+		for (Record r : results) {
+			baseLocations.add(getBase(r, BASES, BASE_OWNERS));
+		}
+		return baseLocations;
+	}
+	
+	public static void finishAddTroops(String username, int baseId) {
+		int numTroops = getNumTroopsToAdd(username, baseId);
 		create.update(BASE_OWNERS)
 			.set(BASE_OWNERS.NUM_UNITS, BASE_OWNERS.NUM_UNITS.plus(numTroops))
+			.set(BASE_OWNERS.UNITS_TO_ADD, 0)
+			.set(BASE_OWNERS.LAST_UPDATED, System.currentTimeMillis())
 			.where(BASE_OWNERS.BASE_ID.equal(baseId))
 			.and(BASE_OWNERS.USERNAME.equal(username))
 			.execute();
@@ -339,6 +367,19 @@ public class QueryService {
 				.and(BASES.BASE_ID.equal(baseId)).fetch();
 		if (results.size() == 1) {
 			return results.get(0).getValue(BASE_OWNERS.NUM_UNITS);
+		}
+		return -1;
+	}
+	
+	public static int getNumTroopsToAdd(String username, int baseId) {
+		Result<Record> results = create.select()
+				.from(BASE_OWNERS)
+				.join(BASES)
+					.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+				.where(BASE_OWNERS.USERNAME.equal(username))
+				.and(BASES.BASE_ID.equal(baseId)).fetch();
+		if (results.size() == 1) {
+			return results.get(0).getValue(BASE_OWNERS.UNITS_TO_ADD);
 		}
 		return -1;
 	}

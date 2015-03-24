@@ -138,16 +138,37 @@ public class WorldResources {
 	}
 	
 	@POST
-	@Path("troops/buy")
-	public Response buyTroops(@FormParam("username") String username,
+	@Path("troops/startBuy")
+	public Response startBuyTroops(@FormParam("username") String username,
 			@FormParam("baseId") int baseId,
 			@FormParam("numTroops") int numTroops,
 			@FormParam("costPerTroop") int costPerTroop) {
 		// Update base's num units
-		QueryService.addTroops(username, baseId, numTroops);
+		QueryService.startAddTroops(username, baseId, numTroops);
 		// Update user's gold (WILL STILL NEED TO sync/gold FROM CLIENT)
 		QueryService.decrementGold(username, numTroops * costPerTroop);
 		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("troops/finishBuy")
+	public Response finishBuyTroops(@FormParam("username") String username,
+			@FormParam("baseId") int baseId) {
+		QueryService.finishAddTroops(username, baseId);
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("troops/restartAdd")
+	public Response restartAdd(@FormParam("username") String username) {
+		// Get all bases with troops to add
+		try {
+			List<BaseObj> b = QueryService.getAddTroopsBases(username);
+			return Response.ok().entity(mapper.writeValueAsString(b)).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
 	}
 	
 	@POST

@@ -12,8 +12,25 @@ public class BaseObj {
 	public Point local;
 	public int prodRate;
 	public int units;
+	public int unitsToAdd;
+	public long lastUpdated;
 	
 	
+	public BaseObj(String username, int colorId, int baseId, Point world, Point local, int prodRate, int units,
+			int unitsToAdd, long lastUpdated) {
+		super();
+		this.username = username;
+		this.colorId = colorId;
+		this.baseId = baseId;
+		this.world = world;
+		this.local = local;
+		this.prodRate = prodRate;
+		this.units = units;
+		this.unitsToAdd = unitsToAdd;
+		this.lastUpdated = lastUpdated;
+	}
+	
+	// for tests
 	public BaseObj(String username, int colorId, int baseId, Point world, Point local, int prodRate, int units) {
 		super();
 		this.username = username;
@@ -23,6 +40,8 @@ public class BaseObj {
 		this.local = local;
 		this.prodRate = prodRate;
 		this.units = units;
+		this.unitsToAdd = 0;
+		this.lastUpdated = 0;
 	}
 	
 	public BaseObj(String username, Point world, Point local) {
@@ -49,7 +68,8 @@ public class BaseObj {
 	public String toString() {
 		return "Base [username=" + username + ", colorId=" + colorId
 				+ ", baseId=" + baseId + ", world=" + world + ", local="
-				+ local + ", prodRate=" + prodRate + ", units=" + units + "]";
+				+ local + ", prodRate=" + prodRate + ", units=" + units + 
+				", unitsToAdd=" + unitsToAdd + ", lastUpdated=" + lastUpdated + "]";
 	}
 
 	@Override
