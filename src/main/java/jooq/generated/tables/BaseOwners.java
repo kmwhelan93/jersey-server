@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BaseOwners extends org.jooq.impl.TableImpl<jooq.generated.tables.records.BaseOwnersRecord> {
 
-	private static final long serialVersionUID = 609024164;
+	private static final long serialVersionUID = -1872621155;
 
 	/**
 	 * The reference instance of <code>maimon.base_owners</code>
@@ -70,6 +70,16 @@ public class BaseOwners extends org.jooq.impl.TableImpl<jooq.generated.tables.re
 	 * The column <code>maimon.base_owners.num_units</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> NUM_UNITS = createField("num_units", org.jooq.impl.SQLDataType.INTEGER.defaulted(true), this, "");
+
+	/**
+	 * The column <code>maimon.base_owners.units_to_add</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Integer> UNITS_TO_ADD = createField("units_to_add", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>maimon.base_owners.last_updated</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.BaseOwnersRecord, java.lang.Long> LAST_UPDATED = createField("last_updated", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
 	/**
 	 * Create a <code>maimon.base_owners</code> table reference
