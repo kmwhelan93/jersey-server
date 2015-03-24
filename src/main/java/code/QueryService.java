@@ -322,6 +322,14 @@ public class QueryService {
 	}
 	
 	// TROOPS
+	public static void addTroops(String username, int baseId, int numTroops) {
+		create.update(BASE_OWNERS)
+			.set(BASE_OWNERS.NUM_UNITS, BASE_OWNERS.NUM_UNITS.plus(numTroops))
+			.where(BASE_OWNERS.BASE_ID.equal(baseId))
+			.and(BASE_OWNERS.USERNAME.equal(username))
+			.execute();
+	}
+	
 	public static int getNumTroops(String username, int baseId) {
 		Result<Record> results = create.select()
 				.from(BASE_OWNERS)
@@ -356,6 +364,14 @@ public class QueryService {
 	}
 	
 	// USER
+	public static void decrementGold(String username, double amount) {
+		// No need to update USERS.LAST_UPDATE (just used for accumulation of gold over time, hasn't changed)
+		create.update(USERS)
+			.set(USERS.GOLD, USERS.GOLD.minus(amount))
+			.where(USERS.USERNAME.equal(username))
+			.execute();
+	}
+	
 	public static GoldInfo getGold(String username) {
 		Record r = create.select()
 			.from(USERS)

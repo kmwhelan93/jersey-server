@@ -121,18 +121,33 @@ public class WorldResources {
 	public Response createPortals(@FormParam("username") String username, 
 			@FormParam("baseId1") int baseId1, 
 			@FormParam("baseId2") int baseId2,
-			@FormParam("timeFinished") long timeFinished) {
+			@FormParam("timeFinished") long timeFinished,
+			@FormParam("cost") int cost) {
 		System.out.println("Create Portals Request Received");
 		// NOTE: This method consumes the data like this because I don't think
 		// it is capable of receiving a BaseObj[]
 		if (!QueryService.portalExists(username, baseId1, baseId2)) {
 			QueryService.createPortal(username, baseId1, baseId2, timeFinished);
+			QueryService.decrementGold(username, cost);
 			return Response.ok().entity("Portal creation started!").build();
 		}
 		else {
 			System.out.println("Portal already exists");
 			return Response.ok().entity("Portal already exists").build();
 		}
+	}
+	
+	@POST
+	@Path("troops/buy")
+	public Response buyTroops(@FormParam("username") String username,
+			@FormParam("baseId") int baseId,
+			@FormParam("numTroops") int numTroops,
+			@FormParam("costPerTroop") int costPerTroop) {
+		// Update base's num units
+		QueryService.addTroops(username, baseId, numTroops);
+		// Update user's gold (WILL STILL NEED TO sync/gold FROM CLIENT)
+		QueryService.decrementGold(username, numTroops * costPerTroop);
+		return Response.ok().build();
 	}
 	
 	@POST
