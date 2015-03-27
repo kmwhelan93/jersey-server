@@ -91,7 +91,7 @@ public class QueryServiceTest {
 	@Test
 	public void testCaptureBase() {
 		int baseId = QueryService.createBase(14);
-		QueryService.captureBase("kevin", baseId, -1, -1, 1, 1, 104);
+		QueryService.captureBase("kevin", baseId, -1, -1, 1, 1, 104, 0);
 				
 		List<BaseObj> bases = Lists.newArrayList(new BaseObj("kevin", 1, 1, new Point(0, 0), new Point(1, 0), 10, 100),
 				new BaseObj("kevin", 2, 2, new Point(1, 0), new Point(-1, -1), 11, 101),

@@ -74,7 +74,7 @@ public class QueryService {
 	}
 	
 	public static boolean captureBase(BaseObj b) {
-		return captureBase(b.username, b.baseId, b.world.x, b.world.y, b.local.x, b.local.y, b.units);
+		return captureBase(b.username, b.baseId, b.world.x, b.world.y, b.local.x, b.local.y, b.units, b.lastUpdated);
 	}
 	
 	public static boolean captureBase(
@@ -84,10 +84,11 @@ public class QueryService {
 			int worldY,
 			int localX,
 			int localY,
-			int units) {
+			int units,
+			long lastUpdated) {
 		disownBase(baseId);
-		int result = create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values(username, baseId, worldX, worldY, localX, localY, units)
+		int result = create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS, BASE_OWNERS.LAST_UPDATED)
+			.values(username, baseId, worldX, worldY, localX, localY, units, lastUpdated)
 			.execute();
 		return result == 0;
 	}

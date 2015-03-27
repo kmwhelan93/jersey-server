@@ -77,6 +77,7 @@ public class WorldResources {
 			}
 			magnitude++;
 		}
+		toAdd.lastUpdated = System.currentTimeMillis();
 		int baseId = QueryService.persistNewBase(toAdd);
 		QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId, System.currentTimeMillis());
 		
