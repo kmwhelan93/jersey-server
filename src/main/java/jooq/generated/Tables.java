@@ -17,6 +17,11 @@ package jooq.generated;
 public class Tables {
 
 	/**
+	 * The table maimon.attacks
+	 */
+	public static final jooq.generated.tables.Attacks ATTACKS = jooq.generated.tables.Attacks.ATTACKS;
+
+	/**
 	 * The table maimon.bases
 	 */
 	public static final jooq.generated.tables.Bases BASES = jooq.generated.tables.Bases.BASES;

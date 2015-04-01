@@ -45,13 +45,24 @@ CREATE TABLE wormholes (
   FOREIGN KEY(connected_wormhole_id) REFERENCES wormholes(wormhole_id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE wormhole_connections (
-  wormhole_id1 INT NOT NULL,
-  wormhole_id2 INT NOT NULL,
-  init_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(wormhole_id1) REFERENCES wormholes(wormhole_id),
-  FOREIGN KEY(wormhole_id2) REFERENCES wormholes(wormhole_id)
+CREATE TABLE attacks (
+  attacker varchar(255),
+  attacker_base_id INT,
+  attacker_wormhole_id INT,
+  defender varchar(255),
+  defender_base_id INT,
+  defender_wormhole_id INT,
+  time_iniated BIGINT,
+  last_update BIGINT,
+  num_units INT,
+  FOREIGN KEY(attacker) REFERENCES users(username),
+  FOREIGN KEY(attacker_base_id) REFERENCES bases(base_id),
+  FOREIGN KEY(attacker_wormhole_id) REFERENCES wormholes(wormhole_id),
+  FOREIGN KEY(defender) REFERENCES users(username),
+  FOREIGN KEY(defender_base_id) REFERENCES bases(base_id),
+  FOREIGN KEY(defender_wormhole_id) REFERENCES wormholes(wormhole_id)
 ) ENGINE=InnoDB;
+
 
 CREATE TABLE vessels (
   vessel_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

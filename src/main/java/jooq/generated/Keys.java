@@ -40,6 +40,12 @@ public class Keys {
 	// FOREIGN KEY definitions
 	// -------------------------------------------------------------------------
 
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.UsersRecord> ATTACKS_IBFK_1 = ForeignKeys0.ATTACKS_IBFK_1;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.BasesRecord> ATTACKS_IBFK_2 = ForeignKeys0.ATTACKS_IBFK_2;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.WormholesRecord> ATTACKS_IBFK_3 = ForeignKeys0.ATTACKS_IBFK_3;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.UsersRecord> ATTACKS_IBFK_4 = ForeignKeys0.ATTACKS_IBFK_4;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.BasesRecord> ATTACKS_IBFK_5 = ForeignKeys0.ATTACKS_IBFK_5;
+	public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.WormholesRecord> ATTACKS_IBFK_6 = ForeignKeys0.ATTACKS_IBFK_6;
 	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.UsersRecord> PORTALS_IBFK_1 = ForeignKeys0.PORTALS_IBFK_1;
 	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_2 = ForeignKeys0.PORTALS_IBFK_2;
 	public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_3 = ForeignKeys0.PORTALS_IBFK_3;
@@ -66,6 +72,12 @@ public class Keys {
 	}
 
 	private static class ForeignKeys0 extends org.jooq.impl.AbstractKeys {
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.UsersRecord> ATTACKS_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_USERS_PRIMARY, jooq.generated.tables.Attacks.ATTACKS, jooq.generated.tables.Attacks.ATTACKS.ATTACKER);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.BasesRecord> ATTACKS_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Attacks.ATTACKS, jooq.generated.tables.Attacks.ATTACKS.ATTACKER_BASE_ID);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.WormholesRecord> ATTACKS_IBFK_3 = createForeignKey(jooq.generated.Keys.KEY_WORMHOLES_PRIMARY, jooq.generated.tables.Attacks.ATTACKS, jooq.generated.tables.Attacks.ATTACKS.ATTACKER_WORMHOLE_ID);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.UsersRecord> ATTACKS_IBFK_4 = createForeignKey(jooq.generated.Keys.KEY_USERS_PRIMARY, jooq.generated.tables.Attacks.ATTACKS, jooq.generated.tables.Attacks.ATTACKS.DEFENDER);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.BasesRecord> ATTACKS_IBFK_5 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Attacks.ATTACKS, jooq.generated.tables.Attacks.ATTACKS.DEFENDER_BASE_ID);
+		public static final org.jooq.ForeignKey<jooq.generated.tables.records.AttacksRecord, jooq.generated.tables.records.WormholesRecord> ATTACKS_IBFK_6 = createForeignKey(jooq.generated.Keys.KEY_WORMHOLES_PRIMARY, jooq.generated.tables.Attacks.ATTACKS, jooq.generated.tables.Attacks.ATTACKS.DEFENDER_WORMHOLE_ID);
 		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.UsersRecord> PORTALS_IBFK_1 = createForeignKey(jooq.generated.Keys.KEY_USERS_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.USERNAME);
 		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_2 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.BASE_ID1);
 		public static final org.jooq.ForeignKey<jooq.generated.tables.records.PortalsRecord, jooq.generated.tables.records.BasesRecord> PORTALS_IBFK_3 = createForeignKey(jooq.generated.Keys.KEY_BASES_PRIMARY, jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.BASE_ID2);
