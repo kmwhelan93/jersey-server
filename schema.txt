@@ -19,6 +19,8 @@ CREATE TABLE base_owners (
   local_x INT NOT NULL,
   local_y INT NOT NULL,
   num_units INT DEFAULT 0,
+  units_to_add INT DEFAULT 0,
+  last_updated BIGINT,
   PRIMARY KEY (username, color_id),
   FOREIGN KEY (username) REFERENCES users(username),
   FOREIGN KEY (base_id) REFERENCES bases(base_id)
@@ -30,6 +32,8 @@ CREATE TABLE portals (
   base_id1 INT NOT NULL,
   base_id2 INT NOT NULL,
   flow_rate INT NOT NULL,
+  troops_to_move INT DEFAULT 0,
+  last_move_update BIGINT,
   FOREIGN KEY(username) REFERENCES users(username),
   FOREIGN KEY(base_id1) REFERENCES bases(base_id),
   FOREIGN KEY(base_id2) REFERENCES bases(base_id)

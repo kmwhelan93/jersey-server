@@ -15,6 +15,7 @@ import jsonObjects.Point;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +26,6 @@ import com.google.common.collect.Lists;
 import static jooq.generated.Tables.*;
 import code.DBConn;
 import code.HelloWorld;
-
 import static org.hamcrest.Matchers.*;
 
 public class QueryServiceTest {
@@ -44,29 +44,76 @@ public class QueryServiceTest {
 	
 	public void configureTables() throws SQLException {
 		DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-		create.deleteQuery(PORTALS).execute();
-		create.deleteQuery(BASE_OWNERS).execute();
-		create.deleteQuery(BASES).execute();
-		create.deleteQuery(USERS).execute();
+		List<String> toDrop = Lists.newArrayList("portals", "base_owners", "bases", "users");
+		for (String table : toDrop) {
+			try {
+				create.dropTable(table).execute();
+			} catch(Exception e) {
+				System.out.println("Could not drop table " + table);
+				e.printStackTrace();
+			}
+		}
 		
-		create.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD).values("kevin", "kevin").execute();
+		create.execute("CREATE TABLE users (\r\n" + 
+				"  username varchar(255) PRIMARY KEY,\r\n" + 
+				"  password varchar(255),\r\n" + 
+				"  gold float,\r\n" + 
+				"  last_update BIGINT\r\n" + 
+				")ENGINE=InnoDB;");
+		
+		create.execute("CREATE TABLE bases (\r\n" + 
+				"  base_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\r\n" + 
+				"  prod_rate INT NOT NULL\r\n" + 
+				")ENGINE=InnoDB;");
+		
+		create.execute("CREATE TABLE base_owners (\r\n" + 
+				"  username varchar(255) NOT NULL,\r\n" + 
+				"  color_id INT NOT NULL AUTO_INCREMENT,\r\n" + 
+				"  base_id INT NOT NULL,\r\n" + 
+				"  world_x INT NOT NULL,\r\n" + 
+				"  world_y INT NOT NULL,\r\n" + 
+				"  local_x INT NOT NULL,\r\n" + 
+				"  local_y INT NOT NULL,\r\n" + 
+				"  num_units INT DEFAULT 0,\r\n" + 
+				"  units_to_add INT DEFAULT 0,\r\n" + 
+				"  last_updated BIGINT,\r\n" + 
+				"  PRIMARY KEY (username, color_id),\r\n" + 
+				"  FOREIGN KEY (username) REFERENCES users(username),\r\n" + 
+				"  FOREIGN KEY (base_id) REFERENCES bases(base_id)\r\n" + 
+				")ENGINE=MyIsam;");
+		
+		create.execute("CREATE TABLE portals (\r\n" + 
+				"  portal_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\r\n" + 
+				"  username varchar(255),\r\n" + 
+				"  base_id1 INT NOT NULL,\r\n" + 
+				"  base_id2 INT NOT NULL,\r\n" + 
+				"  flow_rate INT NOT NULL,\r\n" + 
+				"  troops_to_move INT DEFAULT 0,\r\n" + 
+				"  last_move_update BIGINT,\r\n" + 
+				"  FOREIGN KEY(username) REFERENCES users(username),\r\n" + 
+				"  FOREIGN KEY(base_id1) REFERENCES bases(base_id),\r\n" + 
+				"  FOREIGN KEY(base_id2) REFERENCES bases(base_id)\r\n" + 
+				") ENGINE=InnoDB;");
+
+		
+		create.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD, USERS.LAST_UPDATE).values("kevin", "kevin", System.currentTimeMillis()).execute();
 		
 		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(1, 10).execute();
 		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(2, 11).execute();
 		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(3, 12).execute();
 		create.insertInto(BASES, BASES.BASE_ID, BASES.PROD_RATE).values(4, 13).execute();
 		
-		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 1, 1, 0, 0, 1, 0, 100).execute();
-		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 2, 2, 1, 0, -1, -1, 101).execute();
-		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 3, 3, 1, 1, 0, -1, 102).execute();
-		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS)
-			.values("kevin", 4, 4, -1, 0, 0, 0, 103).execute();
+		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS, BASE_OWNERS.LAST_UPDATED)
+			.values("kevin", 1, 1, 0, 0, 1, 0, 100, System.currentTimeMillis()).execute();
+		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS, BASE_OWNERS.LAST_UPDATED)
+			.values("kevin", 2, 2, 1, 0, -1, -1, 101, System.currentTimeMillis()).execute();
+		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS, BASE_OWNERS.LAST_UPDATED)
+			.values("kevin", 3, 3, 1, 1, 0, -1, 102, System.currentTimeMillis()).execute();
+		create.insertInto(BASE_OWNERS, BASE_OWNERS.USERNAME, BASE_OWNERS.BASE_ID, BASE_OWNERS.COLOR_ID, BASE_OWNERS.WORLD_X, BASE_OWNERS.WORLD_Y, BASE_OWNERS.LOCAL_X, BASE_OWNERS.LOCAL_Y, BASE_OWNERS.NUM_UNITS, BASE_OWNERS.LAST_UPDATED)
+			.values("kevin", 4, 4, -1, 0, 0, 0, 103, System.currentTimeMillis()).execute();
 		
-		create.insertInto(PORTALS, PORTALS.PORTAL_ID, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE)
-			.values(1, "kevin", 3, 2, 10).execute();
+		create.insertInto(PORTALS, PORTALS.PORTAL_ID, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.FLOW_RATE, PORTALS.LAST_MOVE_UPDATE)
+			.values(1, "kevin", 3, 2, 10, System.currentTimeMillis()).execute();
 		
 		QueryService.create = create;
 		
