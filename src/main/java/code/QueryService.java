@@ -9,6 +9,7 @@ import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
+import sqlTableObjects.AttackObj;
 import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
 import sqlTableObjects.WormHoleObj;
@@ -429,7 +430,78 @@ public class QueryService {
 			.execute();
 	}
 	
+	
+	///////////////////////////////////////
+	/////////////// ATTACKS ///////////////
+	///////////////////////////////////////
+	public static List<AttackObj> getAttacks(String username) {
+		List<AttackObj> attacks = Lists.newArrayList();
+		Bases attackerBase = BASES.as("attackerBase");
+		BaseOwners attackerBaseOwner = BASE_OWNERS.as("attackerBaseOwner");
+		Bases defenderBase = BASES.as("defenderBase");
+		BaseOwners defenderBaseOwner = BASE_OWNERS.as("defenderBaseOwner");
+		Result<Record> records = create.select()
+			.from(ATTACKS
+					.join(attackerBaseOwner)
+						.on(attackerBaseOwner.BASE_ID.equal(ATTACKS.ATTACKER_BASE_ID))
+					.join(attackerBase)
+						.on(attackerBase.BASE_ID.equal(ATTACKS.ATTACKER_BASE_ID))
+					.join(defenderBase)
+						.on(defenderBase.BASE_ID.equal(ATTACKS.DEFENDER_BASE_ID))
+					.join(defenderBaseOwner)
+						.on(defenderBaseOwner.BASE_ID.equal(ATTACKS.DEFENDER_BASE_ID))
+					)
+			.where(ATTACKS.ATTACKER.equal(username))
+			.fetch();
+		for (Record r : records) {
+			attacks.add(QueryService.getAttackObj(r, attackerBase, attackerBaseOwner, defenderBase, defenderBaseOwner));
+		}
+		return attacks;
+	}
+	
+	public static List<AttackObj> getAttacksDefending(String username) {
+		List<AttackObj> attacks = Lists.newArrayList();
+		Bases attackerBase = BASES.as("attackerBase");
+		BaseOwners attackerBaseOwner = BASE_OWNERS.as("attackerBaseOwner");
+		Bases defenderBase = BASES.as("defenderBase");
+		BaseOwners defenderBaseOwner = BASE_OWNERS.as("defenderBaseOwner");
+		Result<Record> records = create.select()
+			.from(ATTACKS
+					.join(attackerBaseOwner)
+						.on(attackerBaseOwner.BASE_ID.equal(ATTACKS.ATTACKER_BASE_ID))
+					.join(attackerBase)
+						.on(attackerBase.BASE_ID.equal(ATTACKS.ATTACKER_BASE_ID))
+					.join(defenderBase)
+						.on(defenderBase.BASE_ID.equal(ATTACKS.DEFENDER_BASE_ID))
+					.join(defenderBaseOwner)
+						.on(defenderBaseOwner.BASE_ID.equal(ATTACKS.DEFENDER_BASE_ID))
+					)
+			.where(ATTACKS.DEFENDER.equal(username))
+			.fetch();
+		for (Record r : records) {
+			attacks.add(QueryService.getAttackObj(r, attackerBase, attackerBaseOwner, defenderBase, defenderBaseOwner));
+		}
+		return attacks;
+	}
+	
+	public static AttackObj getAttackObj(Record r, Bases attackerBase, BaseOwners attackerBaseOwner, Bases defenderBase, BaseOwners defenderBaseOwner) {
+		return new AttackObj(
+				r.getValue(ATTACKS.ATTACKER),
+				getBase(r, attackerBase, attackerBaseOwner),
+				r.getValue(ATTACKS.ATTACKER_WORMHOLE_ID),
+				r.getValue(ATTACKS.DEFENDER),
+				getBase(r, defenderBase, defenderBaseOwner),
+				r.getValue(ATTACKS.DEFENDER_WORMHOLE_ID),
+				r.getValue(ATTACKS.TIME_INIATED),
+				r.getValue(ATTACKS.TIME_ATTACK_LANDS),
+				r.getValue(ATTACKS.LAST_UPDATE),
+				r.getValue(ATTACKS.NUM_UNITS));
+	}
+	
+	
+	
+	
 	public static void main (String[] args) {
-		System.out.println(getWormholes("kmw8sf"));
+		System.out.println(getAttacks("kmw8sf"));
 	}
 }

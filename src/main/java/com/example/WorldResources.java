@@ -21,12 +21,14 @@ import javax.ws.rs.core.Response;
 
 
 
+
 import jsonObjects.Point;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import sqlTableObjects.AttackObj;
 import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
 import sqlTableObjects.WormHoleObj;
@@ -253,6 +255,32 @@ public class WorldResources {
 			System.out.println("Get WormHoles Request Received for " + username);
 			List<WormHoleObj> wormholes = QueryService.getWormholes(username.trim());
 			return Response.ok().entity(mapper.writeValueAsString(wormholes)).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}
+	
+	@POST
+	@Path("attacks")
+	public Response getAttacks(@FormParam("username") String username) {
+		try {
+			System.out.println("Get Attacks Request Received for " + username);
+			List<AttackObj> attacks = QueryService.getAttacks(username.trim());
+			return Response.ok().entity(mapper.writeValueAsString(attacks)).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}
+	
+	@POST
+	@Path("attacksdefending")
+	public Response getAttacksDefending(@FormParam("username") String username) {
+		try {
+			System.out.println("Get AttacksDefending Request Received for " + username);
+			List<AttackObj> attacksDefending = QueryService.getAttacksDefending(username.trim());
+			return Response.ok().entity(mapper.writeValueAsString(attacksDefending)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.ok().build();

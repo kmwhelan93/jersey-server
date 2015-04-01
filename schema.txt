@@ -57,6 +57,7 @@ CREATE TABLE attacks (
   defender_base_id INT,
   defender_wormhole_id INT,
   time_iniated BIGINT,
+  time_attack_lands BIGINT,
   last_update BIGINT,
   num_units INT,
   FOREIGN KEY(attacker) REFERENCES users(username),

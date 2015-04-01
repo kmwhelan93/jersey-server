@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Attacks extends org.jooq.impl.TableImpl<jooq.generated.tables.records.AttacksRecord> {
 
-	private static final long serialVersionUID = -711128595;
+	private static final long serialVersionUID = 260980826;
 
 	/**
 	 * The reference instance of <code>maimon.attacks</code>
@@ -65,6 +65,11 @@ public class Attacks extends org.jooq.impl.TableImpl<jooq.generated.tables.recor
 	 * The column <code>maimon.attacks.time_iniated</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.AttacksRecord, java.lang.Long> TIME_INIATED = createField("time_iniated", org.jooq.impl.SQLDataType.BIGINT, this, "");
+
+	/**
+	 * The column <code>maimon.attacks.time_attack_lands</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.AttacksRecord, java.lang.Long> TIME_ATTACK_LANDS = createField("time_attack_lands", org.jooq.impl.SQLDataType.BIGINT, this, "");
 
 	/**
 	 * The column <code>maimon.attacks.last_update</code>.
