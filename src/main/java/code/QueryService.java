@@ -135,94 +135,66 @@ public class QueryService {
 	
 	//////////// PORTALS ///////////////
 	
+	// Get all portals for the user
 	public static List<Portal> getPortals(String username) {
 		ArrayList<Portal> retVal = Lists.newArrayList();
-		Bases bases1 = BASES.as("base1");
-		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
-		Bases bases2 = BASES.as("base2");
-		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
 		Result<Record> records = create.select()
-			.from(PORTALS
-					.join(baseOwner1)
-						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(bases1)
-						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(baseOwner2)
-						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
-					.join(bases2)
-						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
-					)
+			.from(PORTALS)
+			.where(PORTALS.USERNAME.equal(username))
 			.fetch();
 		for (Record r : records) {
-			retVal.add(getPortal(r, bases1, baseOwner1, bases2, baseOwner2));
+			retVal.add(getPortal(r));
 		}
 		return retVal;
 	}
 	
-	private static Portal getPortal(Record r, Bases bases1, BaseOwners baseOwner1, Bases bases2, BaseOwners baseOwner2) {
+	// Get portal object from a Record
+	private static Portal getPortal(Record r) {
 		return new Portal(r.getValue(PORTALS.PORTAL_ID), 
 				r.getValue(PORTALS.USERNAME),
-				getBase(r, bases1, baseOwner1),
-				getBase(r, bases2, baseOwner2),
+				r.getValue(PORTALS.BASE_ID1),
+				r.getValue(PORTALS.BASE_ID2),
 				r.getValue(PORTALS.TIME_FINISHED),
 				r.getValue(PORTALS.FLOW_RATE),
 				r.getValue(PORTALS.TROOPS_TO_MOVE),
 				r.getValue(PORTALS.LAST_MOVE_UPDATE));
 	}
 	
+	// Get user's portal with a certain id
 	private static Portal getPortalById(String username, int portalId) {
-		Bases bases1 = BASES.as("base1");
-		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
-		Bases bases2 = BASES.as("base2");
-		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
 		Result<Record> records = create.select()
-			.from(PORTALS
-					.join(baseOwner1)
-						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(bases1)
-						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(baseOwner2)
-						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
-					.join(bases2)
-						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
-					)
+			.from(PORTALS)
 			.where(PORTALS.USERNAME.equal(username))
 			.and(PORTALS.PORTAL_ID.equal(portalId))
 			.fetch();
-		return getPortal(records.get(0), bases1, baseOwner1, bases2, baseOwner2);
+		if (records.isEmpty()) {
+			return null;
+		}
+		return getPortal(records.get(0));
 	}
 	
+	// For starting a troops move: return Portal that troops are moving along, update portal's
+	// move troops attributes in database
 	public static Portal getAndUpdatePortal(String username, int baseId1, int baseId2, int numTroops) {
-		// Get portal
-		Bases bases1 = BASES.as("base1");
-		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
-		Bases bases2 = BASES.as("base2");
-		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
+		// Get portal from baseIds
 		Result<Record> records = create.select()
-			.from(PORTALS
-					.join(baseOwner1)
-						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(bases1)
-						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(baseOwner2)
-						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
-					.join(bases2)
-						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
-					)
+			.from(PORTALS)
 				.where(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId1).and(PORTALS.BASE_ID2.equal(baseId2))))
 				.or(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId2).and(PORTALS.BASE_ID2.equal(baseId1))))
 				.and(PORTALS.TIME_FINISHED.lessOrEqual(System.currentTimeMillis()))
 				.fetch();
-		Portal p = getPortal(records.get(0), bases1, baseOwner1, bases2, baseOwner2);
+		Portal p = getPortal(records.get(0));
 		
 		// Update "troops_to_move" and "last_move_update" values
-		if (p.base1.baseId == baseId2) {
+		if (p.base1Id == baseId2) {
+			// + if troops are moving from Portal's base1 to base2, - otherwise
 			numTroops *= -1;
 		}
 		updatePortalForMove(username, p.portalId, numTroops);
 		return p;
 	}
 	
+	// Update "troops_to_move" and "last_move_update" values
 	public static void updatePortalForMove(String username, int portalId, int numTroops) {
 		create.update(PORTALS)
 				.set(PORTALS.TROOPS_TO_MOVE, numTroops)
@@ -231,29 +203,17 @@ public class QueryService {
 				.execute();
 	}
 	
+	// Get all portals for the user that have move troops actions in progress
 	public static Portal[] getMovePortals(String username) {
 		// Get portals
-		Bases bases1 = BASES.as("base1");
-		BaseOwners baseOwner1 = BASE_OWNERS.as("baseOwner1");
-		Bases bases2 = BASES.as("base2");
-		BaseOwners baseOwner2 = BASE_OWNERS.as("baseOwner2");
 		Result<Record> records = create.select()
-			.from(PORTALS
-					.join(baseOwner1)
-						.on(baseOwner1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(bases1)
-						.on(bases1.BASE_ID.equal(PORTALS.BASE_ID1))
-					.join(baseOwner2)
-						.on(baseOwner2.BASE_ID.equal(PORTALS.BASE_ID2))
-					.join(bases2)
-						.on(bases2.BASE_ID.equal(PORTALS.BASE_ID2))
-					)
+			.from(PORTALS)
 			.where(PORTALS.USERNAME.equal(username))
 			.and(PORTALS.TROOPS_TO_MOVE.notEqual(0))
 			.fetch();
 		Portal[] p = new Portal[records.size()];
 		for (int i = 0; i < records.size(); i++) {
-			p[i] = getPortal(records.get(i), bases1, baseOwner1, bases2, baseOwner2);
+			p[i] = getPortal(records.get(i));
 		}
 		return p;
 	}
@@ -312,14 +272,14 @@ public class QueryService {
 	public static WormHoleObj getWormHole(Record r) {
 		return new WormHoleObj(
 				r.getValue(WORMHOLES.WORMHOLE_ID),
-				getBase(r, BASES, BASE_OWNERS),
+				r.getValue(WORMHOLES.BASE_ID),
 				new Point(r.getValue(WORMHOLES.RELATIVE_COORD_X), r.getValue(WORMHOLES.RELATIVE_COORD_Y)),
 				r.getValue(WORMHOLES.CONNECTED_WORMHOLE_ID));
 	}
 	
 	public static int persistNewWormHole(WormHoleObj wormhole) {
 		int wormholeId = create.insertInto(WORMHOLES, WORMHOLES.BASE_ID, WORMHOLES.RELATIVE_COORD_X, WORMHOLES.RELATIVE_COORD_Y, WORMHOLES.CONNECTED_WORMHOLE_ID)
-			.values(wormhole.b.baseId, wormhole.relativeCoords.x, wormhole.relativeCoords.y, wormhole.connectedWormholeId)
+			.values(wormhole.baseId, wormhole.relativeCoords.x, wormhole.relativeCoords.y, wormhole.connectedWormholeId)
 			.returning(WORMHOLES.WORMHOLE_ID)
 			.fetchOne().getWormholeId();
 		return wormholeId;
@@ -389,7 +349,7 @@ public class QueryService {
 	public static void finishMoveTroops(String username, int portalId) {
 		// Get portal
 		Portal p = getPortalById(username, portalId);
-		moveTroops(username, p.base1.baseId, p.base2.baseId, p.troopsToMove);
+		moveTroops(username, p.base1Id, p.base2Id, p.troopsToMove);
 		updatePortalForMove(username, portalId, 0);
 	}
 	
@@ -487,10 +447,10 @@ public class QueryService {
 	public static AttackObj getAttackObj(Record r, Bases attackerBase, BaseOwners attackerBaseOwner, Bases defenderBase, BaseOwners defenderBaseOwner) {
 		return new AttackObj(
 				r.getValue(ATTACKS.ATTACKER),
-				getBase(r, attackerBase, attackerBaseOwner),
+				r.getValue(ATTACKS.ATTACKER_BASE_ID),
 				r.getValue(ATTACKS.ATTACKER_WORMHOLE_ID),
 				r.getValue(ATTACKS.DEFENDER),
-				getBase(r, defenderBase, defenderBaseOwner),
+				r.getValue(ATTACKS.DEFENDER_BASE_ID),
 				r.getValue(ATTACKS.DEFENDER_WORMHOLE_ID),
 				r.getValue(ATTACKS.TIME_INIATED),
 				r.getValue(ATTACKS.TIME_ATTACK_LANDS),

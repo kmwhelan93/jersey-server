@@ -4,7 +4,7 @@ import jsonObjects.Point;
 
 public class WormHoleObj {
 	public int wormholeId;
-	public BaseObj b;
+	public int baseId;
 	public Point relativeCoords;
 	public int connectedWormholeId;
 	
@@ -12,25 +12,25 @@ public class WormHoleObj {
 		
 	}
 
-	public WormHoleObj(int wormhole_id, BaseObj base,
+	public WormHoleObj(int wormhole_id, int baseId,
 			Point relative_coords, int connected_wormhole_id) {
 		super();
 		this.wormholeId = wormhole_id;
-		this.b = base;
+		this.baseId = baseId;
 		this.relativeCoords = relative_coords;
 		this.connectedWormholeId = connected_wormhole_id;
 	}
-	public WormHoleObj(BaseObj base,
+	public WormHoleObj(int baseId,
 			Point relative_coords, int connected_wormhole_id) {
 		super();
-		this.b = base;
+		this.baseId = baseId;
 		this.relativeCoords = relative_coords;
 		this.connectedWormholeId = connected_wormhole_id;
 	}
 
 	@Override
 	public String toString() {
-		return "WormHoleObj [wormhole_id=" + wormholeId + ", base=" + b
+		return "WormHoleObj [wormhole_id=" + wormholeId + ", baseId=" + baseId
 				+ ", relative_coords=" + relativeCoords
 				+ ", connected_wormhole_id=" + connectedWormholeId + "]";
 	}
@@ -39,7 +39,7 @@ public class WormHoleObj {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((b == null) ? 0 : b.hashCode());
+		result = prime * result + baseId;
 		result = prime * result + connectedWormholeId;
 		result = prime * result
 				+ ((relativeCoords == null) ? 0 : relativeCoords.hashCode());
@@ -56,10 +56,7 @@ public class WormHoleObj {
 		if (getClass() != obj.getClass())
 			return false;
 		WormHoleObj other = (WormHoleObj) obj;
-		if (b == null) {
-			if (other.b != null)
-				return false;
-		} else if (!b.equals(other.b))
+		if (baseId != other.baseId)
 			return false;
 		if (connectedWormholeId != other.connectedWormholeId)
 			return false;
@@ -71,8 +68,6 @@ public class WormHoleObj {
 		if (wormholeId != other.wormholeId)
 			return false;
 		return true;
-	}
-	
-	
+	}	
 	
 }

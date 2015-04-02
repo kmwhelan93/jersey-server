@@ -36,19 +36,19 @@ public class GameLogicService {
 		List<WormHoleObj> toReturn = Lists.newArrayList();
 		if (rand.nextInt(2) == 1) {
 			// TODO: find a random wormhole to match it with
-			toReturn.add(new WormHoleObj(reference, new Point(1, 1), 1));
+			toReturn.add(new WormHoleObj(reference.baseId, new Point(1, 1), 1));
 		}
 		if (rand.nextInt(2) == 1) {
 			// TODO: find a random wormhole to match it with
-			toReturn.add(new WormHoleObj(reference, new Point(-1, 1), 1));
+			toReturn.add(new WormHoleObj(reference.baseId, new Point(-1, 1), 1));
 		}
 		if (rand.nextInt(2) == 1) {
 			// TODO: find a random wormhole to match it with
-			toReturn.add(new WormHoleObj(reference, new Point(-1, -1), 1));
+			toReturn.add(new WormHoleObj(reference.baseId, new Point(-1, -1), 1));
 		}
 		if (rand.nextInt(2) == 1) {
 			// TODO: find a random wormhole to match it with
-			toReturn.add(new WormHoleObj(reference, new Point(1, -1), 1));
+			toReturn.add(new WormHoleObj(reference.baseId, new Point(1, -1), 1));
 		}
 		return toReturn;
 	}
