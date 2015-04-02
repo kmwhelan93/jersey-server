@@ -111,10 +111,10 @@ public class WorldResources {
 	
 	@POST
 	@Path("portals")
-	public Response getPortals(String username) {
+	public Response getPortals(@FormParam("username") String username) {
 		try {
 			System.out.println("Get Portals Request Received");
-			List<Portal> portals = QueryService.getPortals(username);
+			List<Portal> portals = QueryService.getPortals(username.trim());
 			return Response.ok().entity(mapper.writeValueAsString(portals)).build();
 		} catch(Exception e) {
 			e.printStackTrace();
