@@ -23,10 +23,13 @@ import javax.ws.rs.core.Response;
 
 
 import jsonObjects.Point;
+import jsonObjects.AddTroopsCommand;
+import jsonObjects.MoveTroopsCommand;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 
 import sqlTableObjects.AttackObj;
 import sqlTableObjects.BaseObj;
@@ -166,8 +169,8 @@ public class WorldResources {
 	public Response restartAdd(@FormParam("username") String username) {
 		// Get all bases with troops to add
 		try {
-			List<BaseObj> b = QueryService.getAddTroopsBases(username);
-			return Response.ok().entity(mapper.writeValueAsString(b)).build();
+			List<AddTroopsCommand> atcs = QueryService.getAddTroopsBases(username);
+			return Response.ok().entity(mapper.writeValueAsString(atcs)).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 			return Response.ok().build();
@@ -183,7 +186,7 @@ public class WorldResources {
 		// Update move info in Portals table and return portal
 		try {
 			Portal p = QueryService.getAndUpdatePortal(username, baseId1, baseId2, numTroops);
-			return Response.ok().entity(mapper.writeValueAsString(p)).build();
+			return Response.ok().entity(mapper.writeValueAsString(new MoveTroopsCommand(p.portalId, p.troopsToMove))).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 			return Response.ok().build();
@@ -195,8 +198,12 @@ public class WorldResources {
 	public Response restartMove(@FormParam("username") String username) {
 		// Get all portals with troops to move
 		try {
-			Portal[] p = QueryService.getMovePortals(username);
-			return Response.ok().entity(mapper.writeValueAsString(p)).build();
+			Portal[] ps = QueryService.getMovePortals(username);
+			List<MoveTroopsCommand> mtcs = Lists.newArrayList();
+			for (Portal p : ps) {
+				mtcs.add(new MoveTroopsCommand(p.portalId, p.troopsToMove));
+			}
+			return Response.ok().entity(mapper.writeValueAsString(mtcs)).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 			return Response.ok().build();

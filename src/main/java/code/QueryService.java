@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import jooq.generated.tables.BaseOwners;
 import jooq.generated.tables.Bases;
 import jooq.generated.tables.records.BasesRecord;
+import jsonObjects.AddTroopsCommand;
 import jsonObjects.GoldInfo;
 import jsonObjects.Point;
 import static jooq.generated.Tables.*;
@@ -295,18 +296,18 @@ public class QueryService {
 			.execute();
 	}
 	
-	public static List<BaseObj> getAddTroopsBases(String username) {
+	public static List<AddTroopsCommand> getAddTroopsBases(String username) {
 		Result<Record> results = create.select()
 				.from(BASE_OWNERS)
 				.join(BASES)
 					.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
 				.where(BASE_OWNERS.USERNAME.equal(username))
 				.and(BASE_OWNERS.UNITS_TO_ADD.notEqual(0)).fetch();
-		List<BaseObj> baseLocations = Lists.newArrayList();
+		List<AddTroopsCommand> atcs = Lists.newArrayList();
 		for (Record r : results) {
-			baseLocations.add(getBase(r, BASES, BASE_OWNERS));
+			atcs.add(new AddTroopsCommand(r.getValue(BASES.BASE_ID), r.getValue(BASE_OWNERS.UNITS_TO_ADD)));
 		}
-		return baseLocations;
+		return atcs;
 	}
 	
 	public static void finishAddTroops(String username, int baseId) {
