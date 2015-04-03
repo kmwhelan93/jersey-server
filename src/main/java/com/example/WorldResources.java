@@ -186,7 +186,7 @@ public class WorldResources {
 		// Update move info in Portals table and return portal
 		try {
 			Portal p = QueryService.getAndUpdatePortal(username, baseId1, baseId2, numTroops);
-			return Response.ok().entity(mapper.writeValueAsString(new MoveTroopsCommand(p.portalId, p.troopsToMove))).build();
+			return Response.ok().entity(mapper.writeValueAsString(new MoveTroopsCommand(p.portalId, numTroops))).build();
 		} catch(Exception e) {
 			e.printStackTrace();
 			return Response.ok().build();

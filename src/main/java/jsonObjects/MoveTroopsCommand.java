@@ -1,7 +1,7 @@
 package jsonObjects;
 
 public class MoveTroopsCommand {
-	public int pId;
+	public int portalId;
 	public int troopsToMove;
 	
 	public MoveTroopsCommand() {
@@ -9,7 +9,7 @@ public class MoveTroopsCommand {
 	}
 	
 	public MoveTroopsCommand(int pId, int troopsToMove) {
-		this.pId = pId;
+		this.portalId = pId;
 		this.troopsToMove = troopsToMove;
 	}
 }
