@@ -22,6 +22,10 @@ public class Portal {
 		this.troopsToMove = troopsToMove;
 		this.lastMoveUpdate = lastMoveUpdate;
 	}
+	
+	public Portal() {
+		
+	}
 
 	@Override
 	public String toString() {

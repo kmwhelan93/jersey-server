@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import jooq.generated.tables.BaseOwners;
 import jooq.generated.tables.Bases;
 import jooq.generated.tables.records.BasesRecord;
+import jooq.generated.tables.records.PortalsRecord;
 import jsonObjects.AddTroopsCommand;
 import jsonObjects.GoldInfo;
 import jsonObjects.Point;
@@ -219,16 +220,24 @@ public class QueryService {
 		return p;
 	}
 	
-	public static boolean createPortal(String username, int baseId1, int baseId2, long timeFinished) {
+	public static Portal createPortal(String username, int baseId1, int baseId2, long timeFinished) {
 		try {
-			int result = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.TIME_FINISHED, PORTALS.FLOW_RATE, PORTALS.LAST_MOVE_UPDATE)
+			PortalsRecord pr = create.insertInto(PORTALS, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.TIME_FINISHED, PORTALS.FLOW_RATE, PORTALS.LAST_MOVE_UPDATE)
 					.values(username, baseId1, baseId2, timeFinished, 10, System.currentTimeMillis())
-					.execute();
-			return result == 1;
+					.returning(PORTALS.PORTAL_ID, PORTALS.USERNAME, PORTALS.BASE_ID1, PORTALS.BASE_ID2, PORTALS.TIME_FINISHED, PORTALS.FLOW_RATE, PORTALS.LAST_MOVE_UPDATE, PORTALS.TROOPS_TO_MOVE)
+					.fetchOne();
+			return new Portal(pr.getPortalId(), 
+					pr.getUsername(), 
+					pr.getBaseId1(),
+					pr.getBaseId2(),
+					pr.getTimeFinished(),
+					pr.getFlowRate(),
+					pr.getTroopsToMove(),
+					pr.getLastMoveUpdate());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return new Portal();
 	}
 	
 	public static void disownPortals(String username) {

@@ -22,9 +22,11 @@ import javax.ws.rs.core.Response;
 
 
 
+
 import jsonObjects.Point;
 import jsonObjects.AddTroopsCommand;
 import jsonObjects.MoveTroopsCommand;
+import jsonObjects.SuccessObj;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -51,6 +53,7 @@ public class WorldResources {
 		try {
 			System.out.println("Get Bases Request Received");
 			List<BaseObj> bases = QueryService.getUserBases(username);
+			System.out.println("finished getting bases");
 			return Response.ok().entity(mapper.writeValueAsString(bases)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -133,13 +136,14 @@ public class WorldResources {
 		// NOTE: This method consumes the data like this because I don't think
 		// it is capable of receiving a BaseObj[]
 		if (!QueryService.portalExists(username, baseId1, baseId2)) {
-			QueryService.createPortal(username, baseId1, baseId2, timeFinished);
+			Portal toadd = QueryService.createPortal(username, baseId1, baseId2, timeFinished);
 			QueryService.decrementGold(username, cost);
-			return Response.ok().entity("Portal creation started!").build();
+			System.out.println(toadd);
+			return Response.ok().entity(toadd).build();
 		}
 		else {
 			System.out.println("Portal already exists");
-			return Response.ok().entity("Portal already exists").build();
+			return Response.ok().entity(new Portal()).build();
 		}
 	}
 	
