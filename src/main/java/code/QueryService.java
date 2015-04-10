@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -102,11 +103,21 @@ public class QueryService {
 				b.baseId = createBase(b.prodRate);
 			}
 			captureBase(b);
-			return b.baseId;
+			return getBaseColor(b.username, b.baseId);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return -1;
 		}
+	}
+	
+	private static int getBaseColor(String username, int baseId) {
+		Record1<Integer> r = create.select(BASE_OWNERS.COLOR_ID)
+				.from(BASE_OWNERS)
+				.join(BASES)
+					.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+				.where(BASE_OWNERS.USERNAME.equal(username))
+				.and(BASE_OWNERS.BASE_ID.equal(baseId)).fetchOne();
+		return r.value1();
 	}
 	
 	public static void disownBase(int baseId) {
