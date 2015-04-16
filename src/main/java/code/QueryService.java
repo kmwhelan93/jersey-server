@@ -8,6 +8,7 @@ import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
+import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import sqlTableObjects.AttackObj;
@@ -19,6 +20,7 @@ import com.google.common.collect.Lists;
 
 import jooq.generated.tables.BaseOwners;
 import jooq.generated.tables.Bases;
+import jooq.generated.tables.Wormholes;
 import jooq.generated.tables.records.BasesRecord;
 import jooq.generated.tables.records.PortalsRecord;
 import jsonObjects.AddTroopsCommand;
@@ -120,6 +122,16 @@ public class QueryService {
 		return r.value1();
 	}
 	
+	private static int getBaseNumUnits(String username, int baseId) {
+		Record1<Integer> r = create.select(BASE_OWNERS.NUM_UNITS)
+				.from(BASE_OWNERS)
+				.join(BASES)
+					.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+				.where(BASE_OWNERS.USERNAME.equal(username))
+				.and(BASE_OWNERS.BASE_ID.equal(baseId)).fetchOne();
+		return r.value1();
+	}
+	
 	public static void disownBase(int baseId) {
 		create.delete(BASE_OWNERS)
 			.where(BASE_OWNERS.BASE_ID.equal(baseId))
@@ -144,6 +156,14 @@ public class QueryService {
 		}
 		validBaseIds[i] = base1Id;
 		return validBaseIds;
+	}
+	
+	private static void removeUnits(String username, int baseId, int numUnits) {
+		create.update(BASE_OWNERS)
+				.set(BASE_OWNERS.NUM_UNITS, BASE_OWNERS.NUM_UNITS.minus(numUnits))
+				.where(BASE_OWNERS.USERNAME.equal(username))
+				.and(BASE_OWNERS.BASE_ID.equal(baseId))
+				.execute();
 	}
 	
 	//////////// PORTALS ///////////////
@@ -304,6 +324,14 @@ public class QueryService {
 			.returning(WORMHOLES.WORMHOLE_ID)
 			.fetchOne().getWormholeId();
 		return wormholeId;
+	}
+	
+	private static WormHoleObj getWormHoleObj(int wormholeId) {
+		Record r = create.select()
+				.from(WORMHOLES)
+				.where(WORMHOLES.WORMHOLE_ID.equal(wormholeId))
+				.fetchOne();
+		return getWormHole(r);
 	}
 	
 	// TROOPS
@@ -479,7 +507,48 @@ public class QueryService {
 				r.getValue(ATTACKS.NUM_UNITS));
 	}
 	
+	public static AttackObj initiateAttack(String username, int baseId, int wormholeId, int numUnits) {
+		int baseUnits = getBaseNumUnits(username, baseId);
+		if (numUnits <= baseUnits) {
+			// Valid
+			removeUnits(username, baseId, numUnits);
+			AttackObj attackObj = createAttack(username, baseId, wormholeId, numUnits);
+			return attackObj;
+		}
+		else {
+			// Return empty attackObj
+			return new AttackObj();
+		}
+	}
 	
+	public static AttackObj createAttack(String username, int baseId, int wormholeId, int numUnits) {
+		BaseOwners base1 = BASE_OWNERS.as("base1");
+		Wormholes wormholes2 = WORMHOLES.as("wormholes2");
+		
+		Record r = create.select()
+			.from(WORMHOLES)
+				.join(base1)
+					.on(WORMHOLES.BASE_ID.equal(base1.BASE_ID))
+				.join(wormholes2)
+					.on(WORMHOLES.CONNECTED_WORMHOLE_ID.equal(wormholes2.WORMHOLE_ID))
+				.join(BASE_OWNERS)
+					.on(wormholes2.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+			.where(WORMHOLES.WORMHOLE_ID.equal(wormholeId))
+			.and(base1.USERNAME.equal(username))
+			.fetchOne();
+			
+		System.out.println("B1Id 1: " + baseId + " == 2: " + r.getValue(base1.BASE_ID));
+		System.out.println("B2Id: " + r.getValue(BASE_OWNERS.BASE_ID));
+		System.out.println("WH1Id 1: " + wormholeId + " == 2: " + r.getValue(WORMHOLES.WORMHOLE_ID));
+		System.out.println("WH2Id: " + r.getValue(wormholes2.WORMHOLE_ID));
+		
+		long curTimeMillis = System.currentTimeMillis();
+		create.insertInto(ATTACKS, ATTACKS.ATTACKER, ATTACKS.ATTACKER_BASE_ID, ATTACKS.ATTACKER_WORMHOLE_ID, ATTACKS.DEFENDER, ATTACKS.DEFENDER_BASE_ID, ATTACKS.DEFENDER_WORMHOLE_ID, ATTACKS.TIME_INIATED, ATTACKS.TIME_ATTACK_LANDS, ATTACKS.LAST_UPDATE, ATTACKS.NUM_UNITS)
+			.values(username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits)
+			.execute();
+		
+		return new AttackObj(username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits);
+	}
 	
 	
 	public static void main (String[] args) {

@@ -307,4 +307,19 @@ public class WorldResources {
 			return Response.ok().build();
 		}
 	}
+	
+	@POST
+	@Path("attack")
+	public Response initiateAttack(@FormParam("username") String username,
+			@FormParam("baseId") int baseId, @FormParam("wormholeId") int wormholeId,
+			@FormParam("numUnits") int numUnits) {
+		System.out.println("ATTACK");
+		try {
+			AttackObj attackObj = QueryService.initiateAttack(username, baseId, wormholeId, numUnits);
+			return Response.ok().entity(mapper.writeValueAsString(attackObj)).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}
 }
