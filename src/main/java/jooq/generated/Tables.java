@@ -22,6 +22,11 @@ public class Tables {
 	public static final jooq.generated.tables.Attacks ATTACKS = jooq.generated.tables.Attacks.ATTACKS;
 
 	/**
+	 * The table maimon.attack_results
+	 */
+	public static final jooq.generated.tables.AttackResults ATTACK_RESULTS = jooq.generated.tables.AttackResults.ATTACK_RESULTS;
+
+	/**
 	 * The table maimon.bases
 	 */
 	public static final jooq.generated.tables.Bases BASES = jooq.generated.tables.Bases.BASES;
