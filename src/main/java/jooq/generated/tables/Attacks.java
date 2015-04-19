@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Attacks extends org.jooq.impl.TableImpl<jooq.generated.tables.records.AttacksRecord> {
 
-	private static final long serialVersionUID = 260980826;
+	private static final long serialVersionUID = -1155470807;
 
 	/**
 	 * The reference instance of <code>maimon.attacks</code>
@@ -30,6 +30,11 @@ public class Attacks extends org.jooq.impl.TableImpl<jooq.generated.tables.recor
 	public java.lang.Class<jooq.generated.tables.records.AttacksRecord> getRecordType() {
 		return jooq.generated.tables.records.AttacksRecord.class;
 	}
+
+	/**
+	 * The column <code>maimon.attacks.attackId</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.AttacksRecord, java.lang.Integer> ATTACKID = createField("attackId", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>maimon.attacks.attacker</code>.
@@ -101,6 +106,30 @@ public class Attacks extends org.jooq.impl.TableImpl<jooq.generated.tables.recor
 
 	private Attacks(java.lang.String alias, org.jooq.Table<jooq.generated.tables.records.AttacksRecord> aliased, org.jooq.Field<?>[] parameters) {
 		super(alias, jooq.generated.Maimon.MAIMON, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.Identity<jooq.generated.tables.records.AttacksRecord, java.lang.Integer> getIdentity() {
+		return jooq.generated.Keys.IDENTITY_ATTACKS;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.UniqueKey<jooq.generated.tables.records.AttacksRecord> getPrimaryKey() {
+		return jooq.generated.Keys.KEY_ATTACKS_PRIMARY;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public java.util.List<org.jooq.UniqueKey<jooq.generated.tables.records.AttacksRecord>> getKeys() {
+		return java.util.Arrays.<org.jooq.UniqueKey<jooq.generated.tables.records.AttacksRecord>>asList(jooq.generated.Keys.KEY_ATTACKS_PRIMARY);
 	}
 
 	/**

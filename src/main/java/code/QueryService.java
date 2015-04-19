@@ -495,6 +495,7 @@ public class QueryService {
 	
 	public static AttackObj getAttackObj(Record r, Bases attackerBase, BaseOwners attackerBaseOwner, Bases defenderBase, BaseOwners defenderBaseOwner) {
 		return new AttackObj(
+				r.getValue(ATTACKS.ATTACKID),
 				r.getValue(ATTACKS.ATTACKER),
 				r.getValue(ATTACKS.ATTACKER_BASE_ID),
 				r.getValue(ATTACKS.ATTACKER_WORMHOLE_ID),
@@ -536,20 +537,15 @@ public class QueryService {
 			.where(WORMHOLES.WORMHOLE_ID.equal(wormholeId))
 			.and(base1.USERNAME.equal(username))
 			.fetchOne();
-			
-		System.out.println("B1Id 1: " + baseId + " == 2: " + r.getValue(base1.BASE_ID));
-		System.out.println("B2Id: " + r.getValue(BASE_OWNERS.BASE_ID));
-		System.out.println("WH1Id 1: " + wormholeId + " == 2: " + r.getValue(WORMHOLES.WORMHOLE_ID));
-		System.out.println("WH2Id: " + r.getValue(wormholes2.WORMHOLE_ID));
 		
 		long curTimeMillis = System.currentTimeMillis();
-		create.insertInto(ATTACKS, ATTACKS.ATTACKER, ATTACKS.ATTACKER_BASE_ID, ATTACKS.ATTACKER_WORMHOLE_ID, ATTACKS.DEFENDER, ATTACKS.DEFENDER_BASE_ID, ATTACKS.DEFENDER_WORMHOLE_ID, ATTACKS.TIME_INIATED, ATTACKS.TIME_ATTACK_LANDS, ATTACKS.LAST_UPDATE, ATTACKS.NUM_UNITS)
+		int attackId = create.insertInto(ATTACKS, ATTACKS.ATTACKER, ATTACKS.ATTACKER_BASE_ID, ATTACKS.ATTACKER_WORMHOLE_ID, ATTACKS.DEFENDER, ATTACKS.DEFENDER_BASE_ID, ATTACKS.DEFENDER_WORMHOLE_ID, ATTACKS.TIME_INIATED, ATTACKS.TIME_ATTACK_LANDS, ATTACKS.LAST_UPDATE, ATTACKS.NUM_UNITS)
 			.values(username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits)
+			.returning(ATTACKS.ATTACKID)
 			.execute();
 		
-		return new AttackObj(username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits);
+		return new AttackObj(attackId, username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits);
 	}
-	
 	
 	public static void main (String[] args) {
 		System.out.println(getAttacks("kmw8sf"));

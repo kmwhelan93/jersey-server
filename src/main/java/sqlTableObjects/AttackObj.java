@@ -1,6 +1,7 @@
 package sqlTableObjects;
 
 public class AttackObj {
+	public int attackId;
 	public String attacker;
 	public int attackerBaseId;
 	public int attackerWormholeId;
@@ -18,9 +19,10 @@ public class AttackObj {
 	}
 
 
-	public AttackObj(String attacker, int attackerBaseId, int attackerWormholeId, String defender, int defenderBaseId, int defenderWormholeId, long timeInitiated, long timeAttackLands,
+	public AttackObj(int attackId, String attacker, int attackerBaseId, int attackerWormholeId, String defender, int defenderBaseId, int defenderWormholeId, long timeInitiated, long timeAttackLands,
 			long lastUpdate, int numUnits) {
 		super();
+		this.attackId = attackId;
 		this.attacker = attacker;
 		this.attackerBaseId = attackerBaseId;
 		this.attackerWormholeId = attackerWormholeId;
@@ -36,9 +38,10 @@ public class AttackObj {
 
 	@Override
 	public String toString() {
-		return "AttackObj [attacker=" + attacker + ", attackerBase=" + attackerBaseId + ", attackerWormholeId=" + attackerWormholeId + ", defender=" + defender + ", defenderBase=" + defenderBaseId
-				+ ", defenderWormholeId=" + defenderWormholeId + ", timeInitiated=" + timeInitiated + ", timeAttackLands=" + timeAttackLands + ", lastUpdate=" + lastUpdate + ", numUnits=" + numUnits
-				+ "]";
+		return "AttackObj [attackId=" + attackId + ", attacker=" + attacker + ", attackerBase=" + attackerBaseId + 
+				", attackerWormholeId=" + attackerWormholeId + ", defender=" + defender + ", defenderBase=" + defenderBaseId + 
+				", defenderWormholeId=" + defenderWormholeId + ", timeInitiated=" + timeInitiated + ", timeAttackLands=" + 
+				timeAttackLands + ", lastUpdate=" + lastUpdate + ", numUnits=" + numUnits + "]";
 	}
 
 	
