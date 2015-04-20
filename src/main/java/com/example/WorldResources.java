@@ -47,7 +47,6 @@ import code.QueryService;
 @Produces(MediaType.APPLICATION_JSON)
 public class WorldResources {
 	
-	private static Random random = new Random();
 	private static ObjectMapper mapper = new ObjectMapper();
 	
 	@POST
@@ -70,36 +69,7 @@ public class WorldResources {
 	public Response createBase(BaseObj referenceBase) {
 		try {
 			System.out.println("createBase Request Received");
-			String username = referenceBase.username;
-			List<BaseObj> bases = QueryService.getUserBases(username);
-			int magnitude = 1;
-			BaseObj toAdd = null;
-			outer: while (true) {
-				int initialDirection = random.nextInt(4);
-				for (int i = 0; i < 4; i++) {
-					int direction = (i + initialDirection) % 4;
-					Point p = Point.getPoint(direction).scale(magnitude).add(referenceBase.world);
-					BaseObj newBase = new BaseObj(username, p, Point.getRandomDirection());
-					newBase.prodRate = random.nextInt(200) + 10;
-					if (!newBase.isSpaceOccupied(bases)) {
-						toAdd = newBase;
-						break outer;
-					}
-					
-				}
-				magnitude++;
-			}
-			toAdd.lastUpdated = System.currentTimeMillis();
-			int baseColorId = QueryService.persistNewBase(toAdd);
-			toAdd.colorId = baseColorId;
-			Portal p = QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId, System.currentTimeMillis());
-			
-			List<WormHoleObj> newWormholes = GameLogicService.createNewWormholes(toAdd);
-			System.out.println(newWormholes);
-			for (WormHoleObj wormhole : newWormholes) {
-				QueryService.persistNewWormHole(wormhole);
-			}
-			NewBase newBase = new NewBase(toAdd, p);
+			NewBase newBase = QueryService.createBase(referenceBase);
 			return Response.ok().entity(mapper.writeValueAsString(newBase)).build();
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block

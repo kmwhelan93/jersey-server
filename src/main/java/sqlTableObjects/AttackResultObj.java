@@ -1,9 +1,12 @@
 package sqlTableObjects;
 
+import jsonObjects.NewBase;
+
 public class AttackResultObj {
 	public int attackId;
 	public String winnerUsername;
 	public int numUnitsLeft;
+	public NewBase newBase;
 	//public boolean winnerHasViewed;
 	//public boolean loserHasViewed;
 	
@@ -12,11 +15,12 @@ public class AttackResultObj {
 	}
 
 	public AttackResultObj(int attackId, String winnerUsername,
-			int numUnitsLeft/*, boolean winnerHasViewed, boolean loserHasViewed*/) {
+			int numUnitsLeft, NewBase newBase/*, boolean winnerHasViewed, boolean loserHasViewed*/) {
 		super();
 		this.attackId = attackId;
 		this.winnerUsername = winnerUsername;
 		this.numUnitsLeft = numUnitsLeft;
+		this.newBase = newBase;
 		//this.winnerHasViewed = winnerHasViewed;
 		//this.loserHasViewed = loserHasViewed;
 	}

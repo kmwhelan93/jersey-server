@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AttackResults extends org.jooq.impl.TableImpl<jooq.generated.tables.records.AttackResultsRecord> {
 
-	private static final long serialVersionUID = 440009971;
+	private static final long serialVersionUID = 591212888;
 
 	/**
 	 * The reference instance of <code>maimon.attack_results</code>
@@ -45,6 +45,11 @@ public class AttackResults extends org.jooq.impl.TableImpl<jooq.generated.tables
 	 * The column <code>maimon.attack_results.num_units_left</code>.
 	 */
 	public final org.jooq.TableField<jooq.generated.tables.records.AttackResultsRecord, java.lang.Integer> NUM_UNITS_LEFT = createField("num_units_left", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
+	 * The column <code>maimon.attack_results.new_base_id</code>.
+	 */
+	public final org.jooq.TableField<jooq.generated.tables.records.AttackResultsRecord, java.lang.Integer> NEW_BASE_ID = createField("new_base_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>maimon.attack_results.winner_has_viewed</code>.
@@ -76,6 +81,22 @@ public class AttackResults extends org.jooq.impl.TableImpl<jooq.generated.tables
 
 	private AttackResults(java.lang.String alias, org.jooq.Table<jooq.generated.tables.records.AttackResultsRecord> aliased, org.jooq.Field<?>[] parameters) {
 		super(alias, jooq.generated.Maimon.MAIMON, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.UniqueKey<jooq.generated.tables.records.AttackResultsRecord> getPrimaryKey() {
+		return jooq.generated.Keys.KEY_ATTACK_RESULTS_PRIMARY;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public java.util.List<org.jooq.UniqueKey<jooq.generated.tables.records.AttackResultsRecord>> getKeys() {
+		return java.util.Arrays.<org.jooq.UniqueKey<jooq.generated.tables.records.AttackResultsRecord>>asList(jooq.generated.Keys.KEY_ATTACK_RESULTS_PRIMARY);
 	}
 
 	/**

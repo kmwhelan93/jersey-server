@@ -32,6 +32,7 @@ public class Keys {
 	// -------------------------------------------------------------------------
 
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.AttacksRecord> KEY_ATTACKS_PRIMARY = UniqueKeys0.KEY_ATTACKS_PRIMARY;
+	public static final org.jooq.UniqueKey<jooq.generated.tables.records.AttackResultsRecord> KEY_ATTACK_RESULTS_PRIMARY = UniqueKeys0.KEY_ATTACK_RESULTS_PRIMARY;
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord> KEY_BASES_PRIMARY = UniqueKeys0.KEY_BASES_PRIMARY;
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.BaseOwnersRecord> KEY_BASE_OWNERS_PRIMARY = UniqueKeys0.KEY_BASE_OWNERS_PRIMARY;
 	public static final org.jooq.UniqueKey<jooq.generated.tables.records.PortalsRecord> KEY_PORTALS_PRIMARY = UniqueKeys0.KEY_PORTALS_PRIMARY;
@@ -68,6 +69,7 @@ public class Keys {
 
 	private static class UniqueKeys0 extends org.jooq.impl.AbstractKeys {
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.AttacksRecord> KEY_ATTACKS_PRIMARY = createUniqueKey(jooq.generated.tables.Attacks.ATTACKS, jooq.generated.tables.Attacks.ATTACKS.ATTACKID);
+		public static final org.jooq.UniqueKey<jooq.generated.tables.records.AttackResultsRecord> KEY_ATTACK_RESULTS_PRIMARY = createUniqueKey(jooq.generated.tables.AttackResults.ATTACK_RESULTS, jooq.generated.tables.AttackResults.ATTACK_RESULTS.ATTACK_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BasesRecord> KEY_BASES_PRIMARY = createUniqueKey(jooq.generated.tables.Bases.BASES, jooq.generated.tables.Bases.BASES.BASE_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.BaseOwnersRecord> KEY_BASE_OWNERS_PRIMARY = createUniqueKey(jooq.generated.tables.BaseOwners.BASE_OWNERS, jooq.generated.tables.BaseOwners.BASE_OWNERS.USERNAME, jooq.generated.tables.BaseOwners.BASE_OWNERS.COLOR_ID);
 		public static final org.jooq.UniqueKey<jooq.generated.tables.records.PortalsRecord> KEY_PORTALS_PRIMARY = createUniqueKey(jooq.generated.tables.Portals.PORTALS, jooq.generated.tables.Portals.PORTALS.PORTAL_ID);

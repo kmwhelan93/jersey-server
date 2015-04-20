@@ -2,6 +2,7 @@ package code;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -19,6 +20,7 @@ import sqlTableObjects.WormHoleObj;
 
 import com.google.common.collect.Lists;
 
+import com.example.WorldResources;
 import jooq.generated.tables.BaseOwners;
 import jooq.generated.tables.Bases;
 import jooq.generated.tables.Wormholes;
@@ -26,11 +28,14 @@ import jooq.generated.tables.records.BasesRecord;
 import jooq.generated.tables.records.PortalsRecord;
 import jsonObjects.AddTroopsCommand;
 import jsonObjects.GoldInfo;
+import jsonObjects.NewBase;
 import jsonObjects.Point;
 import static jooq.generated.Tables.*;
 
 public class QueryService {
 	public static DSLContext create = DSL.using(DBConn.getInstance().getConnection(), SQLDialect.MYSQL);
+	private static Random random = new Random();
+	private final static Object mutex = new Object();
 	private static int DEFAULT_PROD_RATE = 200;
 	public static List<BaseObj> getUserBases(String username) {
 		Result<Record> results = create.select()
@@ -66,6 +71,40 @@ public class QueryService {
 				.and(BASE_OWNERS.BASE_ID.equal(baseId)).fetch();
 		return new Point(results.get(0).getValue(BASE_OWNERS.WORLD_X), 
 				results.get(0).getValue(BASE_OWNERS.WORLD_Y));
+	}
+	
+	public static NewBase createBase(BaseObj referenceBase) {
+		String username = referenceBase.username;
+		List<BaseObj> bases = QueryService.getUserBases(username);
+		int magnitude = 1;
+		BaseObj toAdd = null;
+		outer: while (true) {
+			int initialDirection = random.nextInt(4);
+			for (int i = 0; i < 4; i++) {
+				int direction = (i + initialDirection) % 4;
+				Point p = Point.getPoint(direction).scale(magnitude).add(referenceBase.world);
+				BaseObj newBase = new BaseObj(username, p, Point.getRandomDirection());
+				newBase.prodRate = random.nextInt(200) + 10;
+				if (!newBase.isSpaceOccupied(bases)) {
+					toAdd = newBase;
+					break outer;
+				}
+				
+			}
+			magnitude++;
+		}
+		toAdd.lastUpdated = System.currentTimeMillis();
+		int baseColorId = QueryService.persistNewBase(toAdd);
+		toAdd.colorId = baseColorId;
+		Portal p = QueryService.createPortal(referenceBase.username, referenceBase.baseId, toAdd.baseId, System.currentTimeMillis());
+		
+		List<WormHoleObj> newWormholes = GameLogicService.createNewWormholes(toAdd);
+		System.out.println(newWormholes);
+		for (WormHoleObj wormhole : newWormholes) {
+			QueryService.persistNewWormHole(wormhole);
+		}
+		NewBase newBase = new NewBase(toAdd, p);
+		return newBase;
 	}
 	
 	public static int createBase(int prodRate) {
@@ -165,6 +204,16 @@ public class QueryService {
 				.where(BASE_OWNERS.USERNAME.equal(username))
 				.and(BASE_OWNERS.BASE_ID.equal(baseId))
 				.execute();
+	}
+	
+	private static BaseObj getBaseById(int baseId) {
+		Record r = create.select()
+			.from(BASE_OWNERS)
+			.join(BASES)
+				.on(BASES.BASE_ID.equal(BASE_OWNERS.BASE_ID))
+			.where(BASE_OWNERS.BASE_ID.equal(baseId))
+			.fetchOne();
+		return getBase(r, BASES, BASE_OWNERS);
 	}
 	
 	//////////// PORTALS ///////////////
@@ -290,6 +339,15 @@ public class QueryService {
 			return true;
 		}
 		return false;
+	}
+	
+	public static Portal getPortalFromBaseId(String username, int baseId) {
+		Record r = create.select()
+				.from(PORTALS)
+				.where(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID1.equal(baseId)))
+				.or(PORTALS.USERNAME.equal(username).and(PORTALS.BASE_ID2.equal(baseId)))
+				.fetchOne();
+		return getPortal(r);
 	}
 	
 	///////////////////////////
@@ -548,8 +606,7 @@ public class QueryService {
 		return new AttackObj(attackId, username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits);
 	}
 	
-	private final static Object mutex = new Object();
-	
+	// TODO: clean this up
 	public static AttackResultObj attackLanded(String username, int attackId) {
 		// Get attack info
 		BaseOwners base1 = BASE_OWNERS.as("base1");
@@ -580,24 +637,46 @@ public class QueryService {
 					String winnerUsername = r.getValue(base2.NUM_UNITS) >= r.getValue(ATTACKS.NUM_UNITS) ? r.getValue(ATTACKS.DEFENDER) : r.getValue(ATTACKS.ATTACKER);
 					boolean isWinner = winnerUsername.equals(username);
 					boolean isAttacker = r.getValue(ATTACKS.ATTACKER).equals(username);
+					boolean attackerWon = (isWinner && isAttacker) || (!isWinner && !isAttacker);
 					int numTroopsLeft = Math.abs(r.getValue(ATTACKS.NUM_UNITS) - r.getValue(base2.NUM_UNITS));
 					
-					// Add results to AttackResults table, with usernameViewed = true
-					create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.WINNER_HAS_VIEWED, ATTACK_RESULTS.LOSER_HAS_VIEWED)
-						.values(attackId, winnerUsername, numTroopsLeft, (byte)(isWinner ? 1 : 0), (byte)(isWinner ? 0 : 1))
-						.execute();
-					
-					// If attacker wins attack
-					if ((isWinner && isAttacker) || (!isWinner && !isAttacker)) {
-						//changeBaseOwnership();
+					// If attacker wins attack - base ownership changes
+					NewBase newBase = null;
+					if (attackerWon) {
+						String newUsername = isWinner ? username : r.getValue(ATTACKS.DEFENDER);
+						int baseIdAttacker = r.getValue(ATTACKS.ATTACKER_BASE_ID);
+						int baseIdDefender = r.getValue(ATTACKS.DEFENDER_BASE_ID);
+						newBase = changeBaseOwnership(newUsername, baseIdAttacker, baseIdDefender, numTroopsLeft);
+					} else {
+						// Base ownership stays as it was, update number of units on base
+						create.update(BASE_OWNERS)
+							.set(BASE_OWNERS.NUM_UNITS, numTroopsLeft)
+							.where(BASE_OWNERS.BASE_ID.equal(r.getValue(ATTACKS.DEFENDER_BASE_ID)))
+							.and(BASE_OWNERS.USERNAME.equal(r.getValue(ATTACKS.DEFENDER)))
+							.execute();
 					}
 					
+					// Add results to AttackResults table, with usernameViewed = true
+					create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.NEW_BASE_ID, ATTACK_RESULTS.WINNER_HAS_VIEWED, ATTACK_RESULTS.LOSER_HAS_VIEWED)
+						.values(attackId, winnerUsername, numTroopsLeft, attackerWon ? newBase.b.baseId : -1, (byte)(isWinner ? 1 : 0), (byte)(isWinner ? 0 : 1))
+						.execute();
+					
 					// Return results in AttackResultObj
-					return new AttackResultObj(attackId, winnerUsername, numTroopsLeft);
+					return new AttackResultObj(attackId, winnerUsername, numTroopsLeft, newBase);
 				} else {
+					System.out.println("attackId: " + r.getValue(ATTACKS.ATTACKID) + " results already there");
 					// If results have already been determined
 					updateAttackRecordViewing(attackRecord, username);
-					return new AttackResultObj(attackId, attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME), attackRecord.getValue(ATTACK_RESULTS.NUM_UNITS_LEFT));
+					// If attacker won and username is the attacker
+					NewBase newBase = null;
+					if (attackRecord.getValue(ATTACK_RESULTS.NEW_BASE_ID) != -1) {
+						BaseObj b = getBaseById(attackRecord.getValue(ATTACK_RESULTS.NEW_BASE_ID));
+						Portal p = getPortalFromBaseId(username, b.baseId);
+						newBase = new NewBase(b, p);
+					}
+					System.out.println("bnid: " + attackRecord.getValue(ATTACK_RESULTS.NEW_BASE_ID));
+					System.out.println("nb: " + newBase);
+					return new AttackResultObj(attackId, attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME), attackRecord.getValue(ATTACK_RESULTS.NUM_UNITS_LEFT), newBase);
 				}
 			// End mutex
 			}
@@ -622,10 +701,33 @@ public class QueryService {
 		}
 	}
 	
-	private static void changeBaseOwnership(String newUsername, int baseId, int numUnitsLeft) {
+	private static NewBase changeBaseOwnership(String newUsername, int baseIdAttacker, int baseIdDefender, int numUnitsLeft) {
 		// Add new base for winner
+		BaseObj refBase = getBaseById(baseIdAttacker);
+		BaseObj defeatedBase = getBaseById(baseIdDefender);
+		NewBase newBase = createBase(refBase);
+		create.update(BASE_OWNERS.join(BASES).on(BASE_OWNERS.BASE_ID.equal(BASES.BASE_ID)))
+			.set(BASE_OWNERS.USERNAME, newUsername)
+			.set(BASE_OWNERS.NUM_UNITS, numUnitsLeft)
+			.set(BASES.PROD_RATE, defeatedBase.prodRate)
+			.where(BASE_OWNERS.BASE_ID.equal(newBase.b.baseId))
+			.execute();
+		
+		// Delete all portals connected to old base
+		create.delete(PORTALS)
+			.where(PORTALS.BASE_ID1.equal(baseIdDefender))
+			.or(PORTALS.BASE_ID2.equal(baseIdDefender))
+			.execute();
 		
 		// Delete defender's old base
+		create.delete(BASE_OWNERS)
+			.where(BASE_OWNERS.BASE_ID.equal(baseIdDefender))
+			.execute();
+		create.delete(BASES)
+			.where(BASES.BASE_ID.equal(baseIdDefender))
+			.execute();
+		
+		return newBase;
 	}
 	
 	public static void main (String[] args) {
