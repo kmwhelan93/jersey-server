@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
 import sqlTableObjects.AttackObj;
+import sqlTableObjects.AttackResultObj;
 import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
 import sqlTableObjects.WormHoleObj;
@@ -315,6 +316,20 @@ public class WorldResources {
 			@FormParam("numUnits") int numUnits) {
 		try {
 			AttackObj attackObj = QueryService.initiateAttack(username, baseId, wormholeId, numUnits);
+			return Response.ok().entity(mapper.writeValueAsString(attackObj)).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.ok().build();
+		}
+	}
+	
+	@POST
+	@Path("attacklanded")
+	public Response attackLanded(@FormParam("username") String username,
+			@FormParam("attackId") int attackId) {
+		System.out.println("Get AttackLanded Request Received for " + username);
+		try {
+			AttackResultObj attackObj = QueryService.attackLanded(username, attackId);
 			return Response.ok().entity(mapper.writeValueAsString(attackObj)).build();
 		} catch (Exception e) {
 			e.printStackTrace();

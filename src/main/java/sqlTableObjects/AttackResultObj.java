@@ -1,11 +1,11 @@
 package sqlTableObjects;
 
 public class AttackResultObj {
-	int attackId;
-	String winnerUsername;
-	int numUnitsLeft;
-	boolean winnerHasViewed;
-	boolean loserHasViewed;
+	public int attackId;
+	public String winnerUsername;
+	public int numUnitsLeft;
+	public boolean winnerHasViewed;
+	public boolean loserHasViewed;
 	
 	public AttackResultObj() {
 		
@@ -21,12 +21,12 @@ public class AttackResultObj {
 		this.loserHasViewed = loserHasViewed;
 	}
 
-	@Override
-	public String toString() {
-		return "AttackResultObj [attackId=" + attackId + ", winnerUsername="
-				+ winnerUsername + ", numUnitsLeft=" + numUnitsLeft
-				+ ", winnerHasViewed=" + winnerHasViewed + ", loserHasViewed="
-				+ loserHasViewed + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "AttackResultObj [attackId=" + attackId + ", winnerUsername="
+//				+ winnerUsername + ", numUnitsLeft=" + numUnitsLeft
+//				+ ", winnerHasViewed=" + winnerHasViewed + ", loserHasViewed="
+//				+ loserHasViewed + "]";
+//	}
 	
 }

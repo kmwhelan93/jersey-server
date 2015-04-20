@@ -12,6 +12,7 @@ import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import sqlTableObjects.AttackObj;
+import sqlTableObjects.AttackResultObj;
 import sqlTableObjects.BaseObj;
 import sqlTableObjects.Portal;
 import sqlTableObjects.WormHoleObj;
@@ -545,6 +546,64 @@ public class QueryService {
 			.execute();
 		
 		return new AttackObj(attackId, username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits);
+	}
+	
+	public static AttackResultObj attackLanded(String username, int attackId) {
+		// Get attack info
+		BaseOwners base1 = BASE_OWNERS.as("base1");
+		BaseOwners base2 = BASE_OWNERS.as("base2");
+		Record r = create.select()
+				.from(ATTACKS)
+				.join(base1)
+					.on(ATTACKS.ATTACKER_BASE_ID.equal(base1.BASE_ID))
+				.join(base2)
+					.on(ATTACKS.DEFENDER_BASE_ID.equal(base2.BASE_ID))
+				.where(ATTACKS.ATTACKID.equal(attackId))
+				.fetchOne();
+		
+		// Check if attack has really landed
+		if (r.getValue(ATTACKS.TIME_ATTACK_LANDS) <= System.currentTimeMillis()) {
+			Record attackRecord = create.select()
+					.from(ATTACK_RESULTS)
+					.where(ATTACK_RESULTS.ATTACK_ID.equal(attackId))
+					.fetchOne();
+			if (attackRecord == null) {
+				// Determine who wins, number of troops left
+				String winnerUsername = r.getValue(base2.NUM_UNITS) >= r.getValue(ATTACKS.NUM_UNITS) ? r.getValue(ATTACKS.DEFENDER) : r.getValue(ATTACKS.ATTACKER);
+				boolean isWinner = winnerUsername.equals(username);
+				// Add results to AttackResults table, with usernameViewed = true
+				int numTroopsLeft = Math.abs(r.getValue(ATTACKS.NUM_UNITS) - r.getValue(base2.NUM_UNITS));
+				
+				create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.WINNER_HAS_VIEWED, ATTACK_RESULTS.LOSER_HAS_VIEWED)
+					.values(attackId, winnerUsername, numTroopsLeft, (byte)(isWinner ? 1 : 0), (byte)(isWinner ? 0 : 1))
+					.onDuplicateKeyIgnore()
+					.execute();
+				// Return results in AttackResultObj
+				// TODO: once winner/loser determination involves chance, change this to return db info if onDuplicateKeyIgnore() triggered
+				return new AttackResultObj(attackId, winnerUsername, numTroopsLeft, isWinner, !isWinner);
+			}
+			updateAttackRecordViewing(attackRecord, username);
+			return new AttackResultObj(attackId, attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME), attackRecord.getValue(ATTACK_RESULTS.NUM_UNITS_LEFT), 
+					attackRecord.getValue(ATTACK_RESULTS.WINNER_HAS_VIEWED) == (byte)0 ? false : true, attackRecord.getValue(ATTACK_RESULTS.LOSER_HAS_VIEWED) == (byte)0 ? false : true);
+		}
+		return new AttackResultObj();
+	}
+	
+	private static void updateAttackRecordViewing(Record attackRecord, String username) {
+		if (attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME).equals(username)) {
+			if (attackRecord.getValue(ATTACK_RESULTS.WINNER_HAS_VIEWED) == (byte)0) {
+				create.update(ATTACK_RESULTS)
+					.set(ATTACK_RESULTS.WINNER_HAS_VIEWED, (byte)1)
+					.execute();
+			}
+		}
+		else {
+			if (attackRecord.getValue(ATTACK_RESULTS.LOSER_HAS_VIEWED) == (byte)0) {
+				create.update(ATTACK_RESULTS)
+					.set(ATTACK_RESULTS.LOSER_HAS_VIEWED, (byte)1)
+					.execute();
+			}
+		}
 	}
 	
 	public static void main (String[] args) {
