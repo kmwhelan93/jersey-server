@@ -548,6 +548,8 @@ public class QueryService {
 		return new AttackObj(attackId, username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits);
 	}
 	
+	private final static Object mutex = new Object();
+	
 	public static AttackResultObj attackLanded(String username, int attackId) {
 		// Get attack info
 		BaseOwners base1 = BASE_OWNERS.as("base1");
@@ -563,28 +565,42 @@ public class QueryService {
 		
 		// Check if attack has really landed
 		if (r.getValue(ATTACKS.TIME_ATTACK_LANDS) <= System.currentTimeMillis()) {
-			Record attackRecord = create.select()
-					.from(ATTACK_RESULTS)
-					.where(ATTACK_RESULTS.ATTACK_ID.equal(attackId))
-					.fetchOne();
-			if (attackRecord == null) {
-				// Determine who wins, number of troops left
-				String winnerUsername = r.getValue(base2.NUM_UNITS) >= r.getValue(ATTACKS.NUM_UNITS) ? r.getValue(ATTACKS.DEFENDER) : r.getValue(ATTACKS.ATTACKER);
-				boolean isWinner = winnerUsername.equals(username);
-				// Add results to AttackResults table, with usernameViewed = true
-				int numTroopsLeft = Math.abs(r.getValue(ATTACKS.NUM_UNITS) - r.getValue(base2.NUM_UNITS));
+			// Use mutex for modifying AttackResults table
+			synchronized(mutex) {
+				// Check to see if attack results have already been determined and stored in AttackResults
+				Record attackRecord = create.select()
+						.from(ATTACK_RESULTS)
+						.where(ATTACK_RESULTS.ATTACK_ID.equal(attackId))
+						.fetchOne();
 				
-				create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.WINNER_HAS_VIEWED, ATTACK_RESULTS.LOSER_HAS_VIEWED)
-					.values(attackId, winnerUsername, numTroopsLeft, (byte)(isWinner ? 1 : 0), (byte)(isWinner ? 0 : 1))
-					.onDuplicateKeyIgnore()
-					.execute();
-				// Return results in AttackResultObj
-				// TODO: once winner/loser determination involves chance, change this to return db info if onDuplicateKeyIgnore() triggered
-				return new AttackResultObj(attackId, winnerUsername, numTroopsLeft, isWinner, !isWinner);
+				// If results not determined yet:
+				if (attackRecord == null) {
+					// Determine who wins, number of troops left
+					// TODO: improve how winner is determined
+					String winnerUsername = r.getValue(base2.NUM_UNITS) >= r.getValue(ATTACKS.NUM_UNITS) ? r.getValue(ATTACKS.DEFENDER) : r.getValue(ATTACKS.ATTACKER);
+					boolean isWinner = winnerUsername.equals(username);
+					boolean isAttacker = r.getValue(ATTACKS.ATTACKER).equals(username);
+					int numTroopsLeft = Math.abs(r.getValue(ATTACKS.NUM_UNITS) - r.getValue(base2.NUM_UNITS));
+					
+					// Add results to AttackResults table, with usernameViewed = true
+					create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.WINNER_HAS_VIEWED, ATTACK_RESULTS.LOSER_HAS_VIEWED)
+						.values(attackId, winnerUsername, numTroopsLeft, (byte)(isWinner ? 1 : 0), (byte)(isWinner ? 0 : 1))
+						.execute();
+					
+					// If attacker wins attack
+					if ((isWinner && isAttacker) || (!isWinner && !isAttacker)) {
+						//changeBaseOwnership();
+					}
+					
+					// Return results in AttackResultObj
+					return new AttackResultObj(attackId, winnerUsername, numTroopsLeft);
+				} else {
+					// If results have already been determined
+					updateAttackRecordViewing(attackRecord, username);
+					return new AttackResultObj(attackId, attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME), attackRecord.getValue(ATTACK_RESULTS.NUM_UNITS_LEFT));
+				}
+			// End mutex
 			}
-			updateAttackRecordViewing(attackRecord, username);
-			return new AttackResultObj(attackId, attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME), attackRecord.getValue(ATTACK_RESULTS.NUM_UNITS_LEFT), 
-					attackRecord.getValue(ATTACK_RESULTS.WINNER_HAS_VIEWED) == (byte)0 ? false : true, attackRecord.getValue(ATTACK_RESULTS.LOSER_HAS_VIEWED) == (byte)0 ? false : true);
 		}
 		return new AttackResultObj();
 	}
@@ -604,6 +620,12 @@ public class QueryService {
 					.execute();
 			}
 		}
+	}
+	
+	private static void changeBaseOwnership(String newUsername, int baseId, int numUnitsLeft) {
+		// Add new base for winner
+		
+		// Delete defender's old base
 	}
 	
 	public static void main (String[] args) {

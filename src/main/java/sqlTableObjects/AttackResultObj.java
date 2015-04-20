@@ -4,21 +4,21 @@ public class AttackResultObj {
 	public int attackId;
 	public String winnerUsername;
 	public int numUnitsLeft;
-	public boolean winnerHasViewed;
-	public boolean loserHasViewed;
+	//public boolean winnerHasViewed;
+	//public boolean loserHasViewed;
 	
 	public AttackResultObj() {
 		
 	}
 
 	public AttackResultObj(int attackId, String winnerUsername,
-			int numUnitsLeft, boolean winnerHasViewed, boolean loserHasViewed) {
+			int numUnitsLeft/*, boolean winnerHasViewed, boolean loserHasViewed*/) {
 		super();
 		this.attackId = attackId;
 		this.winnerUsername = winnerUsername;
 		this.numUnitsLeft = numUnitsLeft;
-		this.winnerHasViewed = winnerHasViewed;
-		this.loserHasViewed = loserHasViewed;
+		//this.winnerHasViewed = winnerHasViewed;
+		//this.loserHasViewed = loserHasViewed;
 	}
 
 //	@Override
