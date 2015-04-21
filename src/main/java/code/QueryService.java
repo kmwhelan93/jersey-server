@@ -643,6 +643,7 @@ public class QueryService {
 					// If attacker wins attack - base ownership changes
 					NewBase newBase = null;
 					if (attackerWon) {
+						// Base ownership changes
 						String newUsername = isWinner ? username : r.getValue(ATTACKS.DEFENDER);
 						int baseIdAttacker = r.getValue(ATTACKS.ATTACKER_BASE_ID);
 						int baseIdDefender = r.getValue(ATTACKS.DEFENDER_BASE_ID);
@@ -681,6 +682,7 @@ public class QueryService {
 			// End mutex
 			}
 		}
+		System.out.println("empty attack obj");
 		return new AttackResultObj();
 	}
 	
@@ -722,9 +724,6 @@ public class QueryService {
 		// Delete defender's old base
 		create.delete(BASE_OWNERS)
 			.where(BASE_OWNERS.BASE_ID.equal(baseIdDefender))
-			.execute();
-		create.delete(BASES)
-			.where(BASES.BASE_ID.equal(baseIdDefender))
 			.execute();
 		
 		return newBase;
