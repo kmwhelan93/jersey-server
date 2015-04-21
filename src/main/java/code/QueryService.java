@@ -350,6 +350,20 @@ public class QueryService {
 		return getPortal(r);
 	}
 	
+	public static List<Integer> getLostPortalIds(int baseId) {
+		List<Integer> portalIds = new ArrayList<Integer>();
+		Result<Record> results = create.select()
+				.from(PORTALS)
+				.where(PORTALS.BASE_ID1.equal(baseId))
+				.or(PORTALS.BASE_ID2.equal(baseId))
+				.fetch();
+		for (Record r : results) {
+			Portal p = getPortal(r);
+			portalIds.add(p.portalId);
+		}
+		return portalIds;
+	}
+	
 	///////////////////////////
 	///////// WORMHOLES////////
 	///////////////////////////
@@ -598,25 +612,21 @@ public class QueryService {
 			.fetchOne();
 		
 		long curTimeMillis = System.currentTimeMillis();
-		int attackId = create.insertInto(ATTACKS, ATTACKS.ATTACKER, ATTACKS.ATTACKER_BASE_ID, ATTACKS.ATTACKER_WORMHOLE_ID, ATTACKS.DEFENDER, ATTACKS.DEFENDER_BASE_ID, ATTACKS.DEFENDER_WORMHOLE_ID, ATTACKS.TIME_INIATED, ATTACKS.TIME_ATTACK_LANDS, ATTACKS.LAST_UPDATE, ATTACKS.NUM_UNITS)
-			.values(username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits)
+		Record record = create.insertInto(ATTACKS, ATTACKS.ATTACKER, ATTACKS.ATTACKER_BASE_ID, ATTACKS.ATTACKER_WORMHOLE_ID, ATTACKS.DEFENDER, ATTACKS.DEFENDER_BASE_ID, ATTACKS.DEFENDER_WORMHOLE_ID, ATTACKS.TIME_INIATED, ATTACKS.TIME_ATTACK_LANDS, ATTACKS.LAST_UPDATE, ATTACKS.NUM_UNITS)
+			.values(username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), 
+					r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, 
+					curTimeMillis, numUnits)
 			.returning(ATTACKS.ATTACKID)
-			.execute();
-		
+			.fetchOne();
+		int attackId = record.getValue(ATTACKS.ATTACKID);
 		return new AttackObj(attackId, username, baseId, wormholeId, r.getValue(BASE_OWNERS.USERNAME), r.getValue(BASE_OWNERS.BASE_ID), r.getValue(wormholes2.WORMHOLE_ID), curTimeMillis, curTimeMillis + GameSettings.attackTimeInMillis, curTimeMillis, numUnits);
 	}
 	
 	// TODO: clean this up
 	public static AttackResultObj attackLanded(String username, int attackId) {
 		// Get attack info
-		BaseOwners base1 = BASE_OWNERS.as("base1");
-		BaseOwners base2 = BASE_OWNERS.as("base2");
 		Record r = create.select()
 				.from(ATTACKS)
-				.join(base1)
-					.on(ATTACKS.ATTACKER_BASE_ID.equal(base1.BASE_ID))
-				.join(base2)
-					.on(ATTACKS.DEFENDER_BASE_ID.equal(base2.BASE_ID))
 				.where(ATTACKS.ATTACKID.equal(attackId))
 				.fetchOne();
 		
@@ -633,21 +643,30 @@ public class QueryService {
 				// If results not determined yet:
 				if (attackRecord == null) {
 					// Determine who wins, number of troops left
+					Record rec = create.select(BASE_OWNERS.NUM_UNITS)
+							.from(BASE_OWNERS)
+							.join(ATTACKS)
+								.on(ATTACKS.DEFENDER_BASE_ID.equal(BASE_OWNERS.BASE_ID))
+							.where(ATTACKS.ATTACKID.equal(attackId))
+							.fetchOne();
+					int numUnitsDefender = rec.getValue(BASE_OWNERS.NUM_UNITS);
 					// TODO: improve how winner is determined
-					String winnerUsername = r.getValue(base2.NUM_UNITS) >= r.getValue(ATTACKS.NUM_UNITS) ? r.getValue(ATTACKS.DEFENDER) : r.getValue(ATTACKS.ATTACKER);
+					String winnerUsername = numUnitsDefender >= r.getValue(ATTACKS.NUM_UNITS) ? r.getValue(ATTACKS.DEFENDER) : r.getValue(ATTACKS.ATTACKER);
 					boolean isWinner = winnerUsername.equals(username);
 					boolean isAttacker = r.getValue(ATTACKS.ATTACKER).equals(username);
 					boolean attackerWon = (isWinner && isAttacker) || (!isWinner && !isAttacker);
-					int numTroopsLeft = Math.abs(r.getValue(ATTACKS.NUM_UNITS) - r.getValue(base2.NUM_UNITS));
+					int numTroopsLeft = Math.abs(r.getValue(ATTACKS.NUM_UNITS) - numUnitsDefender);
 					
 					// If attacker wins attack - base ownership changes
 					NewBase newBase = null;
+					List<Integer> lostPortalIds = null;
 					if (attackerWon) {
 						// Base ownership changes
 						String newUsername = isWinner ? username : r.getValue(ATTACKS.DEFENDER);
 						int baseIdAttacker = r.getValue(ATTACKS.ATTACKER_BASE_ID);
 						int baseIdDefender = r.getValue(ATTACKS.DEFENDER_BASE_ID);
 						newBase = changeBaseOwnership(newUsername, baseIdAttacker, baseIdDefender, numTroopsLeft);
+						lostPortalIds = getLostPortalIds(baseIdDefender);
 					} else {
 						// Base ownership stays as it was, update number of units on base
 						create.update(BASE_OWNERS)
@@ -657,32 +676,48 @@ public class QueryService {
 							.execute();
 					}
 					
+					int[] idArray = null;
+					if (lostPortalIds != null) {
+						idArray = new int[lostPortalIds.size()];
+						for (int i = 0; i < lostPortalIds.size(); i++) {
+							idArray[i] = lostPortalIds.get(i);
+						}
+					}
+					
 					// Add results to AttackResults table, with usernameViewed = true
 					create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.NEW_BASE_ID, ATTACK_RESULTS.WINNER_HAS_VIEWED, ATTACK_RESULTS.LOSER_HAS_VIEWED)
 						.values(attackId, winnerUsername, numTroopsLeft, attackerWon ? newBase.b.baseId : -1, (byte)(isWinner ? 1 : 0), (byte)(isWinner ? 0 : 1))
 						.execute();
 					
 					// Return results in AttackResultObj
-					return new AttackResultObj(attackId, winnerUsername, numTroopsLeft, newBase);
+					return new AttackResultObj(attackId, winnerUsername, numTroopsLeft, newBase.b, newBase.p, idArray);
 				} else {
 					System.out.println("attackId: " + r.getValue(ATTACKS.ATTACKID) + " results already there");
 					// If results have already been determined
 					updateAttackRecordViewing(attackRecord, username);
 					// If attacker won and username is the attacker
 					NewBase newBase = null;
+					List<Integer> lostPortalIds = null;
 					if (attackRecord.getValue(ATTACK_RESULTS.NEW_BASE_ID) != -1) {
 						BaseObj b = getBaseById(attackRecord.getValue(ATTACK_RESULTS.NEW_BASE_ID));
 						Portal p = getPortalFromBaseId(username, b.baseId);
 						newBase = new NewBase(b, p);
+						lostPortalIds = getLostPortalIds(r.getValue(ATTACKS.DEFENDER_BASE_ID));
 					}
-					System.out.println("bnid: " + attackRecord.getValue(ATTACK_RESULTS.NEW_BASE_ID));
-					System.out.println("nb: " + newBase);
-					return new AttackResultObj(attackId, attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME), attackRecord.getValue(ATTACK_RESULTS.NUM_UNITS_LEFT), newBase);
+					
+					int[] idArray = null;
+					if (lostPortalIds != null) {
+						idArray = new int[lostPortalIds.size()];
+						for (int i = 0; i < lostPortalIds.size(); i++) {
+							idArray[i] = lostPortalIds.get(i);
+						}
+					}
+					
+					return new AttackResultObj(attackId, attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME), attackRecord.getValue(ATTACK_RESULTS.NUM_UNITS_LEFT), newBase.b, newBase.p, idArray);
 				}
 			// End mutex
 			}
 		}
-		System.out.println("empty attack obj");
 		return new AttackResultObj();
 	}
 	
@@ -714,6 +749,9 @@ public class QueryService {
 			.set(BASES.PROD_RATE, defeatedBase.prodRate)
 			.where(BASE_OWNERS.BASE_ID.equal(newBase.b.baseId))
 			.execute();
+		newBase.b.username = newUsername;
+		newBase.b.units = numUnitsLeft;
+		newBase.b.prodRate = defeatedBase.prodRate;
 		
 		// Delete all portals connected to old base
 		create.delete(PORTALS)

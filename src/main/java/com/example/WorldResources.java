@@ -119,7 +119,6 @@ public class WorldResources {
 		if (!QueryService.portalExists(username, baseId1, baseId2)) {
 			Portal toadd = QueryService.createPortal(username, baseId1, baseId2, timeFinished);
 			QueryService.decrementGold(username, cost);
-			System.out.println(toadd);
 			return Response.ok().entity(toadd).build();
 		}
 		else {
