@@ -16,7 +16,7 @@ package jooq.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.generated.tables.records.AttackResultsRecord> implements org.jooq.Record6<java.lang.Integer, java.lang.String, java.lang.Integer, java.lang.Integer, java.lang.Byte, java.lang.Byte> {
 
-	private static final long serialVersionUID = -1253337944;
+	private static final long serialVersionUID = 1327943690;
 
 	/**
 	 * Setter for <code>maimon.attack_results.attack_id</code>.
@@ -75,30 +75,30 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	}
 
 	/**
-	 * Setter for <code>maimon.attack_results.winner_has_viewed</code>.
+	 * Setter for <code>maimon.attack_results.attacker_has_viewed</code>.
 	 */
-	public void setWinnerHasViewed(java.lang.Byte value) {
+	public void setAttackerHasViewed(java.lang.Byte value) {
 		setValue(4, value);
 	}
 
 	/**
-	 * Getter for <code>maimon.attack_results.winner_has_viewed</code>.
+	 * Getter for <code>maimon.attack_results.attacker_has_viewed</code>.
 	 */
-	public java.lang.Byte getWinnerHasViewed() {
+	public java.lang.Byte getAttackerHasViewed() {
 		return (java.lang.Byte) getValue(4);
 	}
 
 	/**
-	 * Setter for <code>maimon.attack_results.loser_has_viewed</code>.
+	 * Setter for <code>maimon.attack_results.defender_has_viewed</code>.
 	 */
-	public void setLoserHasViewed(java.lang.Byte value) {
+	public void setDefenderHasViewed(java.lang.Byte value) {
 		setValue(5, value);
 	}
 
 	/**
-	 * Getter for <code>maimon.attack_results.loser_has_viewed</code>.
+	 * Getter for <code>maimon.attack_results.defender_has_viewed</code>.
 	 */
-	public java.lang.Byte getLoserHasViewed() {
+	public java.lang.Byte getDefenderHasViewed() {
 		return (java.lang.Byte) getValue(5);
 	}
 
@@ -171,7 +171,7 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Byte> field5() {
-		return jooq.generated.tables.AttackResults.ATTACK_RESULTS.WINNER_HAS_VIEWED;
+		return jooq.generated.tables.AttackResults.ATTACK_RESULTS.ATTACKER_HAS_VIEWED;
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Byte> field6() {
-		return jooq.generated.tables.AttackResults.ATTACK_RESULTS.LOSER_HAS_VIEWED;
+		return jooq.generated.tables.AttackResults.ATTACK_RESULTS.DEFENDER_HAS_VIEWED;
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	 */
 	@Override
 	public java.lang.Byte value5() {
-		return getWinnerHasViewed();
+		return getAttackerHasViewed();
 	}
 
 	/**
@@ -227,7 +227,7 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	 */
 	@Override
 	public java.lang.Byte value6() {
-		return getLoserHasViewed();
+		return getDefenderHasViewed();
 	}
 
 	/**
@@ -271,7 +271,7 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	 */
 	@Override
 	public AttackResultsRecord value5(java.lang.Byte value) {
-		setWinnerHasViewed(value);
+		setAttackerHasViewed(value);
 		return this;
 	}
 
@@ -280,7 +280,7 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	 */
 	@Override
 	public AttackResultsRecord value6(java.lang.Byte value) {
-		setLoserHasViewed(value);
+		setDefenderHasViewed(value);
 		return this;
 	}
 
@@ -306,14 +306,14 @@ public class AttackResultsRecord extends org.jooq.impl.UpdatableRecordImpl<jooq.
 	/**
 	 * Create a detached, initialised AttackResultsRecord
 	 */
-	public AttackResultsRecord(java.lang.Integer attackId, java.lang.String winnerUsername, java.lang.Integer numUnitsLeft, java.lang.Integer newBaseId, java.lang.Byte winnerHasViewed, java.lang.Byte loserHasViewed) {
+	public AttackResultsRecord(java.lang.Integer attackId, java.lang.String winnerUsername, java.lang.Integer numUnitsLeft, java.lang.Integer newBaseId, java.lang.Byte attackerHasViewed, java.lang.Byte defenderHasViewed) {
 		super(jooq.generated.tables.AttackResults.ATTACK_RESULTS);
 
 		setValue(0, attackId);
 		setValue(1, winnerUsername);
 		setValue(2, numUnitsLeft);
 		setValue(3, newBaseId);
-		setValue(4, winnerHasViewed);
-		setValue(5, loserHasViewed);
+		setValue(4, attackerHasViewed);
+		setValue(5, defenderHasViewed);
 	}
 }

@@ -517,6 +517,8 @@ public class QueryService {
 	/////////////// ATTACKS ///////////////
 	///////////////////////////////////////
 	public static List<AttackObj> getAttacks(String username) {
+		// Get all attacks whose results haven't been generated, or whose results haven't been
+		// viewed by attacker yet
 		List<AttackObj> attacks = Lists.newArrayList();
 		Bases attackerBase = BASES.as("attackerBase");
 		BaseOwners attackerBaseOwner = BASE_OWNERS.as("attackerBaseOwner");
@@ -533,7 +535,10 @@ public class QueryService {
 					.join(defenderBaseOwner)
 						.on(defenderBaseOwner.BASE_ID.equal(ATTACKS.DEFENDER_BASE_ID))
 					)
+					.leftOuterJoin(ATTACK_RESULTS)
+						.on(ATTACKS.ATTACKID.equal(ATTACK_RESULTS.ATTACK_ID))
 			.where(ATTACKS.ATTACKER.equal(username))
+			.and((ATTACK_RESULTS.ATTACKER_HAS_VIEWED.notEqual((byte)1)).or(ATTACK_RESULTS.ATTACKER_HAS_VIEWED.isNull()))
 			.fetch();
 		for (Record r : records) {
 			attacks.add(QueryService.getAttackObj(r, attackerBase, attackerBaseOwner, defenderBase, defenderBaseOwner));
@@ -542,6 +547,8 @@ public class QueryService {
 	}
 	
 	public static List<AttackObj> getAttacksDefending(String username) {
+		// Get all attacks defending whose results haven't been generated, or whose results haven't 
+		// been viewed by defender yet
 		List<AttackObj> attacks = Lists.newArrayList();
 		Bases attackerBase = BASES.as("attackerBase");
 		BaseOwners attackerBaseOwner = BASE_OWNERS.as("attackerBaseOwner");
@@ -558,7 +565,10 @@ public class QueryService {
 					.join(defenderBaseOwner)
 						.on(defenderBaseOwner.BASE_ID.equal(ATTACKS.DEFENDER_BASE_ID))
 					)
+					.leftOuterJoin(ATTACK_RESULTS)
+						.on(ATTACKS.ATTACKID.equal(ATTACK_RESULTS.ATTACK_ID))
 			.where(ATTACKS.DEFENDER.equal(username))
+			.and((ATTACK_RESULTS.DEFENDER_HAS_VIEWED.notEqual((byte)1)).or(ATTACK_RESULTS.DEFENDER_HAS_VIEWED.isNull()))
 			.fetch();
 		for (Record r : records) {
 			attacks.add(QueryService.getAttackObj(r, attackerBase, attackerBaseOwner, defenderBase, defenderBaseOwner));
@@ -685,8 +695,8 @@ public class QueryService {
 					}
 					
 					// Add results to AttackResults table, with usernameViewed = true
-					create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.NEW_BASE_ID, ATTACK_RESULTS.WINNER_HAS_VIEWED, ATTACK_RESULTS.LOSER_HAS_VIEWED)
-						.values(attackId, winnerUsername, numTroopsLeft, attackerWon ? newBase.b.baseId : -1, (byte)(isWinner ? 1 : 0), (byte)(isWinner ? 0 : 1))
+					create.insertInto(ATTACK_RESULTS, ATTACK_RESULTS.ATTACK_ID, ATTACK_RESULTS.WINNER_USERNAME, ATTACK_RESULTS.NUM_UNITS_LEFT, ATTACK_RESULTS.NEW_BASE_ID, ATTACK_RESULTS.ATTACKER_HAS_VIEWED, ATTACK_RESULTS.DEFENDER_HAS_VIEWED)
+						.values(attackId, winnerUsername, numTroopsLeft, attackerWon ? newBase.b.baseId : -1, (byte)(isAttacker ? 1 : 0), (byte)(isAttacker ? 0 : 1))
 						.execute();
 					
 					// Return results in AttackResultObj
@@ -694,7 +704,7 @@ public class QueryService {
 				} else {
 					System.out.println("attackId: " + r.getValue(ATTACKS.ATTACKID) + " results already there");
 					// If results have already been determined
-					updateAttackRecordViewing(attackRecord, username);
+					updateAttackRecordViewing(attackRecord, username, r.getValue(ATTACKS.ATTACKER).equals(username));
 					// If attacker won and username is the attacker
 					NewBase newBase = null;
 					List<Integer> lostPortalIds = null;
@@ -721,18 +731,18 @@ public class QueryService {
 		return new AttackResultObj();
 	}
 	
-	private static void updateAttackRecordViewing(Record attackRecord, String username) {
-		if (attackRecord.getValue(ATTACK_RESULTS.WINNER_USERNAME).equals(username)) {
-			if (attackRecord.getValue(ATTACK_RESULTS.WINNER_HAS_VIEWED) == (byte)0) {
+	private static void updateAttackRecordViewing(Record attackRecord, String username, boolean isAttacker) {
+		if (isAttacker) {
+			if (attackRecord.getValue(ATTACK_RESULTS.ATTACKER_HAS_VIEWED) == (byte)0) {
 				create.update(ATTACK_RESULTS)
-					.set(ATTACK_RESULTS.WINNER_HAS_VIEWED, (byte)1)
+					.set(ATTACK_RESULTS.ATTACKER_HAS_VIEWED, (byte)1)
 					.execute();
 			}
 		}
 		else {
-			if (attackRecord.getValue(ATTACK_RESULTS.LOSER_HAS_VIEWED) == (byte)0) {
+			if (attackRecord.getValue(ATTACK_RESULTS.DEFENDER_HAS_VIEWED) == (byte)0) {
 				create.update(ATTACK_RESULTS)
-					.set(ATTACK_RESULTS.LOSER_HAS_VIEWED, (byte)1)
+					.set(ATTACK_RESULTS.DEFENDER_HAS_VIEWED, (byte)1)
 					.execute();
 			}
 		}

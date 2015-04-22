@@ -13,16 +13,13 @@ public class AttackResultObj {
 	public BaseObj newBase;
 	public Portal newPortal;
 	public int[] lostPortalIds;
-	//public boolean winnerHasViewed;
-	//public boolean loserHasViewed;
 	
 	public AttackResultObj() {
 		
 	}
 
 	public AttackResultObj(int attackId, String winnerUsername,
-			int numUnitsLeft, BaseObj newBase, Portal newPortal, int[] lostPortalIds
-			/*, boolean winnerHasViewed, boolean loserHasViewed*/) {
+			int numUnitsLeft, BaseObj newBase, Portal newPortal, int[] lostPortalIds) {
 		super();
 		this.attackId = attackId;
 		this.winnerUsername = winnerUsername;
@@ -30,8 +27,6 @@ public class AttackResultObj {
 		this.newBase = newBase;
 		this.newPortal = newPortal;
 		this.lostPortalIds = lostPortalIds;
-		//this.winnerHasViewed = winnerHasViewed;
-		//this.loserHasViewed = loserHasViewed;
 	}
 
 	@Override

@@ -16,7 +16,7 @@ package jooq.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AttackResults extends org.jooq.impl.TableImpl<jooq.generated.tables.records.AttackResultsRecord> {
 
-	private static final long serialVersionUID = 591212888;
+	private static final long serialVersionUID = 572620568;
 
 	/**
 	 * The reference instance of <code>maimon.attack_results</code>
@@ -52,14 +52,14 @@ public class AttackResults extends org.jooq.impl.TableImpl<jooq.generated.tables
 	public final org.jooq.TableField<jooq.generated.tables.records.AttackResultsRecord, java.lang.Integer> NEW_BASE_ID = createField("new_base_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>maimon.attack_results.winner_has_viewed</code>.
+	 * The column <code>maimon.attack_results.attacker_has_viewed</code>.
 	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.AttackResultsRecord, java.lang.Byte> WINNER_HAS_VIEWED = createField("winner_has_viewed", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<jooq.generated.tables.records.AttackResultsRecord, java.lang.Byte> ATTACKER_HAS_VIEWED = createField("attacker_has_viewed", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>maimon.attack_results.loser_has_viewed</code>.
+	 * The column <code>maimon.attack_results.defender_has_viewed</code>.
 	 */
-	public final org.jooq.TableField<jooq.generated.tables.records.AttackResultsRecord, java.lang.Byte> LOSER_HAS_VIEWED = createField("loser_has_viewed", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<jooq.generated.tables.records.AttackResultsRecord, java.lang.Byte> DEFENDER_HAS_VIEWED = createField("defender_has_viewed", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * Create a <code>maimon.attack_results</code> table reference
