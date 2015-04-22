@@ -354,8 +354,7 @@ public class QueryService {
 		List<Integer> portalIds = new ArrayList<Integer>();
 		Result<Record> results = create.select()
 				.from(PORTALS)
-				.where(PORTALS.BASE_ID1.equal(baseId))
-				.or(PORTALS.BASE_ID2.equal(baseId))
+				.where((PORTALS.BASE_ID1.equal(baseId)).or(PORTALS.BASE_ID2.equal(baseId)))
 				.fetch();
 		for (Record r : results) {
 			Portal p = getPortal(r);
@@ -672,11 +671,11 @@ public class QueryService {
 					List<Integer> lostPortalIds = null;
 					if (attackerWon) {
 						// Base ownership changes
-						String newUsername = isWinner ? username : r.getValue(ATTACKS.DEFENDER);
+						String newUsername = r.getValue(ATTACKS.ATTACKER);
 						int baseIdAttacker = r.getValue(ATTACKS.ATTACKER_BASE_ID);
 						int baseIdDefender = r.getValue(ATTACKS.DEFENDER_BASE_ID);
-						newBase = changeBaseOwnership(newUsername, baseIdAttacker, baseIdDefender, numTroopsLeft);
 						lostPortalIds = getLostPortalIds(baseIdDefender);
+						newBase = changeBaseOwnership(newUsername, baseIdAttacker, baseIdDefender, numTroopsLeft);
 					} else {
 						// Base ownership stays as it was, update number of units on base
 						create.update(BASE_OWNERS)
@@ -700,7 +699,9 @@ public class QueryService {
 						.execute();
 					
 					// Return results in AttackResultObj
-					return new AttackResultObj(attackId, winnerUsername, numTroopsLeft, newBase.b, newBase.p, idArray);
+					BaseObj b = newBase == null ? null : newBase.b;
+					Portal p = newBase == null ? null : newBase.p;
+					return new AttackResultObj(attackId, winnerUsername, numTroopsLeft, b, p, idArray);
 				} else {
 					System.out.println("attackId: " + r.getValue(ATTACKS.ATTACKID) + " results already there");
 					// If results have already been determined
